@@ -2,7 +2,7 @@ using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace Bouvet.Developer.Survey.Backend.Swagger;
+namespace Bouvet.Developer.Survey.Api.Swagger;
 
 public class SwaggerUIConfigurator : IConfigureOptions<SwaggerUIOptions>
 {
@@ -21,7 +21,7 @@ public class SwaggerUIConfigurator : IConfigureOptions<SwaggerUIOptions>
         {
             options.SwaggerEndpoint(
                 $"/swagger/{description.GroupName}/swagger.json",
-                $"Bouvet.Developer.Survey.Backend {description.ApiVersion}"
+                $"Bouvet.Developer.Survey.Api {description.ApiVersion}"
             );
         }
 

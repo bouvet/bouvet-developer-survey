@@ -5,10 +5,13 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Azure.Identity;
-using Bouvet.Developer.Survey.Backend.Swagger;
+using Bouvet.Developer.Survey.Api.Swagger;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 var endpoint = builder.Configuration["AppConfig"];
 if (!string.IsNullOrEmpty(endpoint))
@@ -46,6 +49,7 @@ builder.Services.AddCors(options =>
     )
 );
 
+
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 
@@ -71,11 +75,6 @@ builder.Services.AddSwaggerGen()
     // resolve their IApiVersionDescriptionProvider dependency through the DI system.
     .AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerGenConfigurator>()
     .AddTransient<IConfigureOptions<SwaggerUIOptions>, SwaggerUIConfigurator>();
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration).CreateLogger();
-
-builder.Host.UseSerilog();
 
 var app = builder.Build();
 

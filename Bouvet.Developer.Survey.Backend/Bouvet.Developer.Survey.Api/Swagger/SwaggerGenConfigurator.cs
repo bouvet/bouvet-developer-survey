@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
-namespace Bouvet.Developer.Survey.Backend.Swagger;
+namespace Bouvet.Developer.Survey.Api.Swagger;
 
 public class SwaggerGenConfigurator : IConfigureOptions<SwaggerGenOptions>
 {
@@ -23,7 +23,7 @@ public class SwaggerGenConfigurator : IConfigureOptions<SwaggerGenOptions>
         {
             c.SwaggerDoc(description.GroupName, new OpenApiInfo
             {
-                Title = "Bouvet.Developer.Survey.Backend",
+                Title = "Bouvet.Developer.Survey.Api",
                 Version = description.ApiVersion.ToString()
             });
         }
@@ -41,7 +41,7 @@ public class SwaggerGenConfigurator : IConfigureOptions<SwaggerGenOptions>
                     {
                         {
                             $"api://{_config["AzureAd:ClientId"]}/user_impersonation",
-                            "Access Bouvet.Developer.Survey.Backend"
+                            "Access Bouvet.Developer.Survey.Api"
                         }
                     }
                 }
