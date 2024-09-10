@@ -5,7 +5,10 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Azure.Identity;
+using Bouvet.Developer.Survey.Api.Extensions;
 using Bouvet.Developer.Survey.Api.Swagger;
+using Bouvet.Developer.Survey.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,9 +52,15 @@ builder.Services.AddCors(options =>
     )
 );
 
+//Db connection
+var connectionString = builder.Configuration["ConnectionString"];
+builder.Services.AddDbContext<DeveloperSurveyContext>(opt =>
+    opt.UseSqlServer(connectionString));
 
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
+//Service layer
+builder.Services.AddServices();
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -68,15 +77,27 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen()
-    // configre SwaggerGen and SwaggerUI with typed configurators to properly
-    // resolve their IApiVersionDescriptionProvider dependency through the DI system.
     .AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerGenConfigurator>()
     .AddTransient<IConfigureOptions<SwaggerUIOptions>, SwaggerUIConfigurator>();
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    Console.WriteLine("Migrating database...");
+    var context = services.GetRequiredService<DeveloperSurveyContext>();
+    context.Database.Migrate();
+    Console.WriteLine("Database migrated.");
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred creating the DB.");
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

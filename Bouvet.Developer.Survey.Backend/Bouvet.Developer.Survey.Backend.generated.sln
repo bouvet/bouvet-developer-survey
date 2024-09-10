@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bouvet.Developer.Survey.Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bouvet.Developer.Survey.Infrastructure", "Bouvet.Developer.Survey.Infrastructure\Bouvet.Developer.Survey.Infrastructure.csproj", "{F7C28355-A90A-4CDA-8CE5-4FFEA7484401}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bouvet.Developer.Survey.Tests", "Bouvet.Developer.Survey.Tests\Bouvet.Developer.Survey.Tests.csproj", "{BA3875E2-DEA5-4A53-977A-4C996B7EE327}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{F7C28355-A90A-4CDA-8CE5-4FFEA7484401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7C28355-A90A-4CDA-8CE5-4FFEA7484401}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7C28355-A90A-4CDA-8CE5-4FFEA7484401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA3875E2-DEA5-4A53-977A-4C996B7EE327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA3875E2-DEA5-4A53-977A-4C996B7EE327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA3875E2-DEA5-4A53-977A-4C996B7EE327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA3875E2-DEA5-4A53-977A-4C996B7EE327}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

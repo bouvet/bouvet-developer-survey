@@ -5,5 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
 
+    <ItemGroup>
+      <ProjectReference Include="..\Bouvet.Developer.Survey.Domain\Bouvet.Developer.Survey.Domain.csproj" />
+      <ProjectReference Include="..\Bouvet.Developer.Survey.Infrastructure\Bouvet.Developer.Survey.Infrastructure.csproj" />
+    </ItemGroup>
 </Project>
