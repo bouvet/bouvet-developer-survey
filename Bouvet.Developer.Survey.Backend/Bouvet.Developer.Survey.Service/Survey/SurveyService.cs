@@ -1,6 +1,8 @@
+using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bouvet.Developer.Survey.Service.Survey;
 
@@ -13,7 +15,7 @@ public class SurveyService : ISurveyService
         _context = context;
     }
     
-    public async Task<SurveyDto> CreateSurveyAsync(NewSurveyDto newSurveyDto)
+    public async Task CreateSurveyAsync(NewSurveyDto newSurveyDto)
     {
         var survey = new Domain.Entities.Survey
         {
@@ -26,36 +28,57 @@ public class SurveyService : ISurveyService
         
         await _context.Surveys.AddAsync(survey);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<SurveyListDto>> GetSurveysAsync()
+    {
+        var surveys = await _context.Surveys.ToListAsync();
+
+        var surveyList = surveys.Select(SurveyListDto.CreateFromEntity).ToList();
         
+        return surveyList;
+    }
+
+    public async Task<SurveyDto> GetSurveyAsync(Guid surveyId)
+    {
+        var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
+
+        if (survey == null) throw new NotFoundException("Survey not found");
         
-        var surveyDto = new SurveyDto
-        {
-            Name = survey.Name,
-            CreatedAt = survey.CreatedAt,
-            UpdatedAt = survey.UpdatedAt,
-            LastSyncedAt = survey.LastSyncedAt
-        };
-        
+
+        var surveyDto = SurveyDto.CreateFromEntity(survey);
+
         return surveyDto;
     }
 
-    public Task<IEnumerable<SurveyDto>> GetSurveysAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public async Task<SurveyDto> UpdateSurveyAsync(Guid surveyId, NewSurveyDto newSurveyDto)
+        {
+            var surveyToBeUpdated = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
+            
+            if (surveyToBeUpdated == null) throw new NotFoundException("Survey not found");
+            
+            surveyToBeUpdated.Name = newSurveyDto.Name;
+            surveyToBeUpdated.SurveyId = newSurveyDto.SurveyId;
+            surveyToBeUpdated.SurveyUrl = newSurveyDto.SurveyUrl;
+            surveyToBeUpdated.UpdatedAt = DateTimeOffset.Now;
+            
+            _context.Surveys.Update(surveyToBeUpdated);
+            await _context.SaveChangesAsync();
+            
+            var dto = SurveyDto.CreateFromEntity(surveyToBeUpdated);
+            
+            return dto;
+        }
 
-    public Task<SurveyDto> GetSurveyAsync(Guid surveyId)
+    public async Task DeleteSurveyAsync(Guid surveyId)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<SurveyDto> UpdateSurveyAsync(Guid surveyId, NewSurveyDto newSurveyDto)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteSurveyAsync(Guid surveyId)
-    {
-        throw new NotImplementedException();
+        var surveyToBeDeleted = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
+        
+        if (surveyToBeDeleted == null) throw new NotFoundException("Survey not found");
+        
+        surveyToBeDeleted.DeletedAt = DateTimeOffset.Now;
+        _context.Surveys.Update(surveyToBeDeleted);
+        await _context.SaveChangesAsync();
+        
     }
 }

@@ -10,5 +10,5 @@ public class Survey
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    public ICollection<Block>? Blocks { get; set; }
+    public virtual ICollection<Block>? Blocks { get; set; }
 }

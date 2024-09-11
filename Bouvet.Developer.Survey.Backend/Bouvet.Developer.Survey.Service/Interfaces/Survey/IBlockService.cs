@@ -5,7 +5,7 @@ namespace Bouvet.Developer.Survey.Service.Interfaces.Survey;
 public interface IBlockService
 {
     public Task<BlockDto> CreateBlockAsync(NewBlockDto newBlockDto);
-    public Task<IEnumerable<BlockDto>> GetBlocksAsync(Guid surveyId);
+    public Task<SurveyDto> GetBlocksToSurveyAsync(Guid surveyId);
     public Task<BlockDto> GetBlockAsync(Guid blockId);
     public Task<BlockDto> UpdateBlockAsync(Guid blockId, NewBlockDto newBlockDto);
     public Task DeleteBlockAsync(Guid blockId);

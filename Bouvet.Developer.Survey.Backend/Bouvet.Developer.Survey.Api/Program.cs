@@ -55,7 +55,7 @@ builder.Services.AddCors(options =>
 //Db connection
 var connectionString = builder.Configuration["ConnectionString"];
 builder.Services.AddDbContext<DeveloperSurveyContext>(opt =>
-    opt.UseSqlServer(connectionString));
+    opt.UseLazyLoadingProxies().UseSqlServer(connectionString));
 
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();

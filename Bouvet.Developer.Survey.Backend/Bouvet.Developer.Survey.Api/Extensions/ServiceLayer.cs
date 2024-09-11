@@ -9,5 +9,7 @@ public static class ServiceLayer
     public static void AddServices(this IServiceCollection services)
     {
         services.AddTransient<ISurveyService, SurveyService>();
+        services.AddTransient<IBlockService, BlockService>();
+        services.AddTransient<IOptionService, OptionService>();
     }
 }
