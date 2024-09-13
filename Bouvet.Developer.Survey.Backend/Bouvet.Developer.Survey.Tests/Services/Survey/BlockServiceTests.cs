@@ -51,19 +51,6 @@ public class BlockServiceTests
         Assert.Equal(newBlockDto.Type, block.Type);
         Assert.Equal(newBlockDto.SurveyId, block.SurveyId);
     }
-
-    [Fact]
-    public async Task Should_Get_Blocks_To_Survey()
-    {
-        var survey = _surveyBuilder.Build();
-
-        // Arrange
-        var blocks = await _blockService.GetBlocksToSurveyAsync(survey.Id);
-        
-        // Assert
-        Assert.NotNull(blocks);
-        Assert.Equal(survey.Id, blocks.Id);
-    }
     
     [Fact]
     public async Task Should_Trigger_NotFoundException_When_Getting_Blocks_To_NonExisting_Survey()

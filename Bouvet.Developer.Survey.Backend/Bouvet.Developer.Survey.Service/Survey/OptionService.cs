@@ -18,6 +18,10 @@ public class OptionService : IOptionService
     
     public async Task<OptionDto> CreateOptionAsync(NewOptionDto newOptionDto)
     {
+        var findBlock = await _context.Blocks.FirstOrDefaultAsync(b => b.Id == newOptionDto.BlockId);
+        
+        if(findBlock == null) throw new NotFoundException("Block not found");
+        
        var option = new Option
        {
            Value = newOptionDto.Value,
@@ -31,14 +35,14 @@ public class OptionService : IOptionService
         return dto;
     }
 
-    public async Task<BlockDto> GetOptionsToBlockAsync(Guid blockId)
+    public async Task<BlockOptionListDto> GetOptionsToBlockAsync(Guid blockId)
     {
         var block = await _context.Blocks
             .FirstOrDefaultAsync(b => b.Id == blockId);
         
         if(block == null) throw new NotFoundException("Options to block not found");
         
-        var blockDto = BlockDto.CreateFromEntity(block);
+        var blockDto = BlockOptionListDto.CreateFromEntity(block);
         
         return blockDto;
     }

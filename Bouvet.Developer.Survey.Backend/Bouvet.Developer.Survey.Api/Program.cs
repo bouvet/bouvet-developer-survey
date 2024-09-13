@@ -42,6 +42,12 @@ builder.Services.AddAuthorization(options =>
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
+    
+    // options.AddPolicy("Read", policy =>
+    // {
+    //     policy.RequireAuthenticatedUser();
+    //     policy.RequireRole("YourRoleName"); // Replace with the role name
+    // });
 });
 
 builder.Services.AddCors(options =>
@@ -108,6 +114,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();

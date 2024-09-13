@@ -12,10 +12,13 @@ namespace Bouvet.Developer.Survey.Tests.Services.Survey;
 public class OptionServiceTests
 {
     private readonly IOptionService _optionService;
+    private readonly IBlockService _blockService;
     private readonly SurveyBuilder _surveyBuilder = new();
-    private readonly BlockBuilder _blockBuilder = new();
+    
     private readonly DeveloperSurveyContext _context;
     private const string OptionValue = "Test survey";
+    private const string BlockQuestion = "Test question";
+    private const string BlockText = "Text";
 
 
     public OptionServiceTests()
@@ -29,13 +32,23 @@ public class OptionServiceTests
 
         // Injecting the in-memory context into the service
         _optionService = new OptionService(_context);
+        _blockService = new BlockService(_context);
+        
     }
     
     [Fact]
     public async Task Should_Create_Option()
     {
-        var block = _blockBuilder.Build();
-        _surveyBuilder.Build();
+        var survey = _surveyBuilder.Build();
+        
+        // Arrange
+        var newBlockDto = new NewBlockDto
+        {
+            Question = BlockQuestion,
+            Type = BlockText,
+            SurveyId = survey.Id
+        };
+        var block = await _blockService.CreateBlockAsync(newBlockDto);
         
         // Arrange
         var newOptionDto = new NewOptionDto
@@ -56,8 +69,16 @@ public class OptionServiceTests
     [Fact]
     public async Task Should_Get_Options_To_Block()
     {
-        _surveyBuilder.Build();
-        var block = _blockBuilder.Build();
+        var survey = _surveyBuilder.Build();
+        
+        // Arrange
+        var newBlockDto = new NewBlockDto
+        {
+            Question = BlockQuestion,
+            Type = BlockText,
+            SurveyId = survey.Id
+        };
+        var block = await _blockService.CreateBlockAsync(newBlockDto);
         
         // Arrange
         var newOptionDto = new NewOptionDto
@@ -79,7 +100,16 @@ public class OptionServiceTests
     [Fact]
     public async Task Should_Get_Option_By_Id()
     {
-        var block = _blockBuilder.Build();
+        var survey = _surveyBuilder.Build();
+        
+        // Arrange
+        var newBlockDto = new NewBlockDto
+        {
+            Question = BlockQuestion,
+            Type = BlockText,
+            SurveyId = survey.Id
+        };
+        var block = await _blockService.CreateBlockAsync(newBlockDto);
 
         // Arrange
         var newOptionDto = new NewOptionDto
@@ -102,7 +132,16 @@ public class OptionServiceTests
     [Fact]
     public async Task Should_Update_Option()
     {
-        var block = _blockBuilder.Build();
+        var survey = _surveyBuilder.Build();
+        
+        // Arrange
+        var newBlockDto = new NewBlockDto
+        {
+            Question = BlockQuestion,
+            Type = BlockText,
+            SurveyId = survey.Id
+        };
+        var block = await _blockService.CreateBlockAsync(newBlockDto);
 
         // Arrange
         var newOptionDto = new NewOptionDto
@@ -130,7 +169,16 @@ public class OptionServiceTests
     [Fact]
     public async Task Should_Delete_Option()
     {
-        var block = _blockBuilder.Build();
+        var survey = _surveyBuilder.Build();
+        
+        // Arrange
+        var newBlockDto = new NewBlockDto
+        {
+            Question = BlockQuestion,
+            Type = BlockText,
+            SurveyId = survey.Id
+        };
+        var block = await _blockService.CreateBlockAsync(newBlockDto);
 
         // Arrange
         var newOptionDto = new NewOptionDto

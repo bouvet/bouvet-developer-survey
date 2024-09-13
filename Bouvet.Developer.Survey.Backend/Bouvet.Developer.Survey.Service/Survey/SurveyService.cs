@@ -15,7 +15,7 @@ public class SurveyService : ISurveyService
         _context = context;
     }
     
-    public async Task CreateSurveyAsync(NewSurveyDto newSurveyDto)
+    public async Task<SurveyListDto> CreateSurveyAsync(NewSurveyDto newSurveyDto)
     {
         var survey = new Domain.Entities.Survey
         {
@@ -28,6 +28,10 @@ public class SurveyService : ISurveyService
         
         await _context.Surveys.AddAsync(survey);
         await _context.SaveChangesAsync();
+        
+        var dto = SurveyListDto.CreateFromEntity(survey);
+        
+        return dto;
     }
 
     public async Task<IEnumerable<SurveyListDto>> GetSurveysAsync()
@@ -51,24 +55,24 @@ public class SurveyService : ISurveyService
         return surveyDto;
     }
 
-        public async Task<SurveyDto> UpdateSurveyAsync(Guid surveyId, NewSurveyDto newSurveyDto)
-        {
-            var surveyToBeUpdated = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
+    public async Task<SurveyDto> UpdateSurveyAsync(Guid surveyId, NewSurveyDto newSurveyDto)
+    {
+        var surveyToBeUpdated = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
             
-            if (surveyToBeUpdated == null) throw new NotFoundException("Survey not found");
+        if (surveyToBeUpdated == null) throw new NotFoundException("Survey not found");
             
-            surveyToBeUpdated.Name = newSurveyDto.Name;
-            surveyToBeUpdated.SurveyId = newSurveyDto.SurveyId;
-            surveyToBeUpdated.SurveyUrl = newSurveyDto.SurveyUrl;
-            surveyToBeUpdated.UpdatedAt = DateTimeOffset.Now;
+        surveyToBeUpdated.Name = newSurveyDto.Name;
+        surveyToBeUpdated.SurveyId = newSurveyDto.SurveyId;
+        surveyToBeUpdated.SurveyUrl = newSurveyDto.SurveyUrl;
+        surveyToBeUpdated.UpdatedAt = DateTimeOffset.Now;
             
-            _context.Surveys.Update(surveyToBeUpdated);
-            await _context.SaveChangesAsync();
+        _context.Surveys.Update(surveyToBeUpdated);
+        await _context.SaveChangesAsync();
             
-            var dto = SurveyDto.CreateFromEntity(surveyToBeUpdated);
+        var dto = SurveyDto.CreateFromEntity(surveyToBeUpdated);
             
-            return dto;
-        }
+        return dto;
+    }
 
     public async Task DeleteSurveyAsync(Guid surveyId)
     {
