@@ -35,7 +35,11 @@ The application consists of two main parts. A backend built with .NET and a fron
 
 ## Project Workflow and Methology
 
-- Describe our workflow
+- Scrum, 2 weeks sprints
+- Sprint planning at the start of each sprint
+- Sprint revew at the end of each sprint
+- Demo on demand
+- Retrospective on demand
 
 ## Daily Git workflow for trunk based development
 
