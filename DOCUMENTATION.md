@@ -1,12 +1,12 @@
 # Project Documentation
 
-- [Application architecture](#architecture)
-- [Project Workflow & Methology](#workflow)
-- [Daily git workflow for trunk based development](#gitworkflow)
+- [Application architecture](#application-architecture)
+- [Project Workflow & Methology](#project-workflow-and-methology)
+- [Daily git workflow for trunk based development](#daily-git-workflow-for-trunk-based-development)
 - [Containerization](#containerization)
-- [CI/CD](#pipeline)
+- [CI/CD](#ci/cd)
 - [Hosting](#hosting)
-- [IAC](#pipeline)
+- [IaC](#iac)
 - [Release strategy](#release-strategy)
 - [Tools](#tools)
 
@@ -31,7 +31,7 @@ The application consists of two main parts. A backend built with .NET and a fron
 - Provides a REST API which is exposed for frontend application
 - Runs in a Docker container on Azure Container Apps
 
-## Project Workflow & Methology
+## Project Workflow and Methology
 
 - Describe our workflow
 
