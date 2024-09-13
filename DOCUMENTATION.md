@@ -20,7 +20,7 @@ The application consists of two main parts. A backend built with .NET and a fron
 - Uses ESLint for linting
 - Deployed through Github Actions pipeline
 - Runs in a Docker container on Azure Container Apps
-- Purpose: Retreive and present survey results from backend api.
+- Purpose: Retreive and present survey results using charts etc, in a responsive layout
 
 ### Backend
 
@@ -29,7 +29,9 @@ The application consists of two main parts. A backend built with .NET and a fron
 - Uses an Azure SQL Database for storing survey results
 - Uses Azure AI for analysis on survey results
 - Provides a REST API which is exposed for frontend application
+- Deployed through Github Actions pipeline
 - Runs in a Docker container on Azure Container Apps
+- Purpose: Provide a platform for storing survey results, manipulating them with AI and serving to frontend through an API
 
 ## Project Workflow and Methology
 
