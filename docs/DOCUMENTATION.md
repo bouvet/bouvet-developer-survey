@@ -42,11 +42,21 @@ The application consists of two main parts. A backend built with .NET and a fron
 - Demo on demand
 - Retrospective on demand
 
-## Daily Git workflow for trunk based development
+## Daily workflow for trunk based development
+
+### Quick rundown:
+1.	Morning Sync: Pull the latest trunk, review the updates.
+2.	Work on Task: Focus on a small task, implement a feature or fix a bug.
+3.	Local Testing: Run tests locally to ensure functionality.
+4.	Commit Changes: Make small commits with clear messages.
+5.	Merge to Trunk: Sync with the latest trunk and resolve conflicts, if any.
+6.	Pull Request/Code Review: Open a pull request and address feedback.
+7.	Monitor CI/CD: Check for successful builds and fix any issues promptly.
+8.	End the Day: Ensure no work-in-progress code affects the trunk.
 
 Suggestion of daily git work flow. Please comment :)
 
-**Create and work on feature branch**
+### Create and work on feature branch
 
 1. Chekout main branch:
 `git checkout main`
@@ -61,7 +71,7 @@ Suggestion of daily git work flow. Please comment :)
 `git add .`
 `git commit -m "Add my feature"`
 
-**Push your work to main and create PR**
+### Push your work to main and create PR
 
 6. Before merging your branch back into main, pull the latest change to make sure your branch is up to date, and resolve any conflicts:
 
