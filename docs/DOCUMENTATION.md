@@ -5,7 +5,8 @@
 - [Daily git workflow for trunk based development](#daily-git-workflow-for-trunk-based-development)
 - [Containerization](#containerization)
 - [CI/CD](#ci/cd)
-- [Hosting](#hosting)
+- [Azure hosting and services](#azure-hosting-and-services)
+- [Authentication and security](#authentication-and-security)
 - [IaC](#iac)
 - [Release strategy](#release-strategy)
 - [Tools](#tools)
@@ -110,9 +111,39 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 
 - Describe pipeline
 
-## Hosting
+## Azure hosting and services
 
-- Describe Azure hosting
+Please see Bicep file for infrastructure documentation.
+
+1. Azure Container Apps (ACA)
+    - Used to host the containerized frontend and backend applications
+    - Handles scaling, load balancing and managing the containers
+    - Frontend and backend services are deployed as separate microservices, but operate as part of the same overall application
+    - Ingress is used to expose container apps to each other, and www
+
+2. Azure Container Registry (ACR)
+    - ACR is used to store and manage the docker images for frontend and backend
+    - Docker images are build and pushed to ACR with Github Actions
+    - ACA pulls the images from ACR to run the application
+
+3. Azure Key Vault (AKV)
+    - Secrets like connection string, api keys and credtionals are stored in AKV.
+    - Frontend and backend containers receive secrets from here during runtime
+    - 
+
+4. Azure SQL Database
+    - Used for storage and querying of survey data.
+
+5. Resource group
+    - Name: 
+    - A dedicated resource group is created for this project
+
+6. Subscription
+    - A dedicated subscription is created for this project
+
+## Authentication and security
+
+- Describe authentication and security
 
 ## IAC
 
