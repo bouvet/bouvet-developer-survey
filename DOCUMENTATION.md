@@ -10,11 +10,9 @@
 
 ## Architecture
 
-**Suggestion for high level description of project arhictecture**
-
 The application consists of two main parts. A backend built with .NET and a frontend using Next.js. Both the backend and frontend are packaged as separate Docker containers. The Docker images are stored in Azure Container Registry and deployed to Azure Container Apps Service
 
-**Frontend**
+### Frontend
 
 - The frontend application is build using Next.js with TailwindCSS.
 - Uses ESLint for linting
@@ -22,7 +20,7 @@ The application consists of two main parts. A backend built with .NET and a fron
 - Runs in a Docker container on Azure Container Apps
 - Purpose: Retreive and present survey results from backend api.
 
-**Backend**
+### Backend
 
 - The backend application is built on ASP.NET with Entity Framework Core
 - Fetches survey results from Qualtrics API regularly, async.
@@ -31,11 +29,11 @@ The application consists of two main parts. A backend built with .NET and a fron
 - Provides a REST API which is exposed for frontend application
 - Runs in a Docker container on Azure Container Apps
 
-**Workflow**
+## Workflow
 
 - Describe our workflow
 
-**Daily Git workflow for trunk based development**
+## Daily Git workflow for trunk based development
 
 Suggestion of daily git work flow. Please comment :)
 
@@ -96,19 +94,19 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 `git branch -d feature/my-feature`
 `git push origin --delete feature/my-feature`
 
-**Containerization**
+## Containerization
 
 - Describe Docker containerization
 
-**CI/CD**
+## CI/CD
 
 - Describe pipeline
 
-**Hosting**
+## Hosting
 
 - Describe Azure hosting
 
-**IAC**
+## IAC
 
 - Describe IAC
 
