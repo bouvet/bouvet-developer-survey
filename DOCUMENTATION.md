@@ -1,14 +1,16 @@
 # Project Documentation
 
-- [Architecture](#architecture)
-- [Workflow](#workflow)
+- [Application architecture](#architecture)
+- [Project Workflow & Methology](#workflow)
 - [Daily git workflow for trunk based development](#gitworkflow)
-- [Work methology](#work-methology)
-- [Pipeline](#pipeline)
+- [Containerization](#containerization)
+- [CI/CD](#pipeline)
+- [Hosting](#hosting)
+- [IAC](#pipeline)
 - [Release strategy](#release-strategy)
 - [Tools](#tools)
 
-## Architecture
+## Application architecture
 
 The application consists of two main parts. A backend built with .NET and a frontend using Next.js. Both the backend and frontend are packaged as separate Docker containers. The Docker images are stored in Azure Container Registry and deployed to Azure Container Apps Service
 
@@ -29,7 +31,7 @@ The application consists of two main parts. A backend built with .NET and a fron
 - Provides a REST API which is exposed for frontend application
 - Runs in a Docker container on Azure Container Apps
 
-## Workflow
+## Project Workflow & Methology
 
 - Describe our workflow
 
@@ -109,5 +111,15 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 ## IAC
 
 - Describe IAC
+
+## Release strategy
+
+- Describe our release strategy
+
+## Tools
+
+- Describe common tools used in the project
+
+
 
 
