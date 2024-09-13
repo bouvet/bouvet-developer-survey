@@ -36,65 +36,57 @@ public class OptionServiceTests
         
     }
     
+    private async Task<BlockDto> CreateTestBlockAsync(Guid surveyId)
+    {
+        var newBlockDto = new NewBlockDto
+        {
+            Question = BlockQuestion,
+            Type = BlockText,
+            SurveyId = surveyId
+        };
+
+        return await _blockService.CreateBlockAsync(newBlockDto);
+    }
+
+    private async Task<OptionDto> CreateTestOptionAsync(Guid blockId)
+    {
+        var newOptionDto = new NewOptionDto
+        {
+            Value = OptionValue,
+            BlockId = blockId
+        };
+
+        return await _optionService.CreateOptionAsync(newOptionDto);
+    }
+    
     [Fact]
     public async Task Should_Create_Option()
     {
         var survey = _surveyBuilder.Build();
-        
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
-        var block = await _blockService.CreateBlockAsync(newBlockDto);
-        
-        // Arrange
-        var newOptionDto = new NewOptionDto
-        {
-            Value = OptionValue,
-            BlockId = block.Id
-        };
-        
+        var block = await CreateTestBlockAsync(survey.Id);
+
         // Act
-        var option = await _optionService.CreateOptionAsync(newOptionDto);
-        
+        var option = await CreateTestOptionAsync(block.Id);
+
         // Assert
         Assert.NotNull(option);
-        Assert.Equal(newOptionDto.Value, option.Value);
-        Assert.Equal(newOptionDto.BlockId, option.BlockId);
+        Assert.Equal(OptionValue, option.Value);
+        Assert.Equal(block.Id, option.BlockId);
     }
-    
+
     [Fact]
     public async Task Should_Get_Options_To_Block()
     {
         var survey = _surveyBuilder.Build();
-        
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
-        var block = await _blockService.CreateBlockAsync(newBlockDto);
-        
-        // Arrange
-        var newOptionDto = new NewOptionDto
-        {
-            Value = OptionValue,
-            BlockId = block.Id
-        };
+        var block = await CreateTestBlockAsync(survey.Id);
+        await CreateTestOptionAsync(block.Id);
 
-        await _optionService.CreateOptionAsync(newOptionDto);
-        
         // Act
         var optionsToBlock = await _optionService.GetOptionsToBlockAsync(block.Id);
-        
+
         // Assert
         Assert.NotNull(optionsToBlock);
-        Assert.Equal(1, optionsToBlock.Options.Count);
+        Assert.Single(optionsToBlock.Options!);
     }
     
     [Fact]
@@ -102,31 +94,16 @@ public class OptionServiceTests
     {
         var survey = _surveyBuilder.Build();
         
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
-        var block = await _blockService.CreateBlockAsync(newBlockDto);
-
-        // Arrange
-        var newOptionDto = new NewOptionDto
-        {
-            Value = OptionValue,
-            BlockId = block.Id
-        };
-
-        var newOption = await _optionService.CreateOptionAsync(newOptionDto);
+        var block = await CreateTestBlockAsync(survey.Id);
+        var newOption = await CreateTestOptionAsync(block.Id);
         
         // Act
         var option = await _optionService.GetOptionAsync(newOption.Id);
         
         // Assert
         Assert.NotNull(option);
-        Assert.Equal(newOptionDto.Value, option.Value);
-        Assert.Equal(newOptionDto.BlockId, option.BlockId);
+        Assert.Equal(newOption.Value, option.Value);
+        Assert.Equal(newOption.BlockId, option.BlockId);
     }
     
     [Fact]
@@ -134,23 +111,8 @@ public class OptionServiceTests
     {
         var survey = _surveyBuilder.Build();
         
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
-        var block = await _blockService.CreateBlockAsync(newBlockDto);
-
-        // Arrange
-        var newOptionDto = new NewOptionDto
-        {
-            Value = OptionValue,
-            BlockId = block.Id
-        };
-
-        var newOption = await _optionService.CreateOptionAsync(newOptionDto);
+        var block = await CreateTestBlockAsync(survey.Id);
+        var newOption = await CreateTestOptionAsync(block.Id);
         
         var updatedOptionDto = new NewOptionDto
         {
@@ -171,23 +133,8 @@ public class OptionServiceTests
     {
         var survey = _surveyBuilder.Build();
         
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
-        var block = await _blockService.CreateBlockAsync(newBlockDto);
-
-        // Arrange
-        var newOptionDto = new NewOptionDto
-        {
-            Value = OptionValue,
-            BlockId = block.Id
-        };
-
-        var newOption = await _optionService.CreateOptionAsync(newOptionDto);
+        var block = await CreateTestBlockAsync(survey.Id);
+        var newOption = await CreateTestOptionAsync(block.Id);
         
         // Act
         await _optionService.DeleteOptionAsync(newOption.Id);

@@ -28,28 +28,32 @@ public class BlockServiceTests
         // Injecting the in-memory context into the service
         _blockService = new BlockService(_context);
     }
+    
+    private async Task<BlockDto> CreateTestBlockAsync(Guid surveyId)
+    {
+        var newBlockDto = new NewBlockDto
+        {
+            Question = BlockQuestion,
+            Type = BlockText,
+            SurveyId = surveyId
+        };
+
+        return await _blockService.CreateBlockAsync(newBlockDto);
+    }
 
     [Fact]
     public async Task Should_Create_Block()
     {
         var survey = _surveyBuilder.Build();
         
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
-        
         // Act
-        var block = await _blockService.CreateBlockAsync(newBlockDto);
+        var block = await CreateTestBlockAsync(survey.Id);
         
         // Assert
         Assert.NotNull(block);
-        Assert.Equal(newBlockDto.Question, block.Question);
-        Assert.Equal(newBlockDto.Type, block.Type);
-        Assert.Equal(newBlockDto.SurveyId, block.SurveyId);
+        Assert.Equal(BlockQuestion, block.Question);
+        Assert.Equal(BlockText, block.Type);
+        Assert.Equal(survey.Id, block.SurveyId);
     }
     
     [Fact]
@@ -70,16 +74,8 @@ public class BlockServiceTests
     {
         var survey = _surveyBuilder.Build();
         
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
-        
         // Act
-        var newBlock = await _blockService.CreateBlockAsync(newBlockDto);
+        var newBlock = await CreateTestBlockAsync(survey.Id);
         var blockDto = await _blockService.GetBlockAsync(newBlock.Id);
         
         // Assert
@@ -93,12 +89,6 @@ public class BlockServiceTests
         var survey = _surveyBuilder.Build();
 
         // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
 
         var updateBlock = new NewBlockDto
         {
@@ -106,7 +96,7 @@ public class BlockServiceTests
         };
         
         // Act
-        var newBlock = await _blockService.CreateBlockAsync(newBlockDto);
+        var newBlock = await CreateTestBlockAsync(survey.Id);
         var updatedBlockDto = await _blockService.UpdateBlockAsync(newBlock.Id, updateBlock);
         
         var getUpdatedBlock = await _blockService.GetBlockAsync(newBlock.Id);
@@ -114,8 +104,8 @@ public class BlockServiceTests
         // Assert
         Assert.NotNull(updatedBlockDto);
         Assert.Equal(updateBlock.Question, updatedBlockDto.Question);
-        Assert.Equal(newBlockDto.Type, getUpdatedBlock.Type);
-        Assert.Equal(newBlockDto.SurveyId, getUpdatedBlock.SurveyId);
+        Assert.Equal(newBlock.Type, getUpdatedBlock.Type);
+        Assert.Equal(newBlock.SurveyId, getUpdatedBlock.SurveyId);
     }
     
     [Fact]
@@ -139,17 +129,9 @@ public class BlockServiceTests
     public async Task Should_Delete_Block()
     {
         var survey = _surveyBuilder.Build();
-
-        // Arrange
-        var newBlockDto = new NewBlockDto
-        {
-            Question = BlockQuestion,
-            Type = BlockText,
-            SurveyId = survey.Id
-        };
         
         // Act
-        var newBlock = await _blockService.CreateBlockAsync(newBlockDto);
+        var newBlock = await CreateTestBlockAsync(survey.Id);
         
         await _blockService.DeleteBlockAsync(newBlock.Id);
         

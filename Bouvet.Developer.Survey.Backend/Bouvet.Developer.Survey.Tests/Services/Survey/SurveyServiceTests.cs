@@ -31,32 +31,40 @@ public class SurveyServiceTests
         _surveyService = new SurveyService(_context);
     }
     
-    [Fact]
-    public async Task Should_Get_All_Surveys()
+    private async Task DeleteAllSurveys()
     {
-        // Arrange
-        var newSurveyDto1 = new NewSurveyDto
+        var surveys = await _context.Surveys.ToListAsync();
+        _context.Surveys.RemoveRange(surveys);
+        await _context.SaveChangesAsync();
+    }
+    
+    private async Task<SurveyListDto> CreateTestSurvey()
+    {
+        var newSurveyDto = new NewSurveyDto
         {
             Name = SurveyName,
             SurveyId = SurveyId,
             SurveyUrl = SurveyUrl
         };
+
+        return await _surveyService.CreateSurveyAsync(newSurveyDto);
+    }
     
-        var newSurveyDto2 = new NewSurveyDto
-        {
-            Name = "Test",
-            SurveyId = "2345",
-            SurveyUrl = "https://vg.com"
-        };
-    
-        await _surveyService.CreateSurveyAsync(newSurveyDto1);
-        await _surveyService.CreateSurveyAsync(newSurveyDto2);
+    [Fact]
+    public async Task Should_Get_All_Surveys()
+    {
+        await DeleteAllSurveys();
+        
+        // Arrange
+        await CreateTestSurvey();
+        await CreateTestSurvey();
         
         // Act
         var surveys = await _surveyService.GetSurveysAsync();
         
         // Assert
         Assert.NotNull(surveys);
+        Assert.Equal(2, surveys.Count());
         
     }
     
@@ -64,18 +72,10 @@ public class SurveyServiceTests
     public async Task Should_Get_Survey_By_Id()
     {
         // Arrange
-        
-        var newSurveyDto = new NewSurveyDto
-        {
-            Name = SurveyName,
-            SurveyId = SurveyId,
-            SurveyUrl = SurveyUrl
-        };
-        
-        var newSurvey = await _surveyService.CreateSurveyAsync(newSurveyDto);
+        var testSurvey = await CreateTestSurvey();
         
         // Act
-        var survey = await _surveyService.GetSurveyAsync(newSurvey.Id);
+        var survey = await _surveyService.GetSurveyAsync(testSurvey.Id);
         
         // Assert
         Assert.NotNull(survey);
@@ -85,14 +85,7 @@ public class SurveyServiceTests
     public async Task Should_Update_Survey()
     {
         // Arrange
-        var newSurveyDto = new NewSurveyDto
-        {
-            Name = SurveyName,
-            SurveyId = SurveyId,
-            SurveyUrl = SurveyUrl
-        };
-        
-        var newSurvey = await _surveyService.CreateSurveyAsync(newSurveyDto);
+        var testSurvey = await CreateTestSurvey();
         
         var updatedSurveyDto = new NewSurveyDto
         {
@@ -102,7 +95,7 @@ public class SurveyServiceTests
         };
         
         // Act
-        var updatedSurvey = await _surveyService.UpdateSurveyAsync(newSurvey.Id, updatedSurveyDto);
+        var updatedSurvey = await _surveyService.UpdateSurveyAsync(testSurvey.Id, updatedSurveyDto);
         
         // Assert
         Assert.NotNull(updatedSurvey);
@@ -124,20 +117,13 @@ public class SurveyServiceTests
     public async Task Should_Delete_Survey_And_ThrowError_When_Getting_DeletedSurvey()
     {
         // Arrange
-        var newSurveyDto = new NewSurveyDto
-        {
-            Name = SurveyName,
-            SurveyId = SurveyId,
-            SurveyUrl = SurveyUrl
-        };
-        
-        var newSurvey = await _surveyService.CreateSurveyAsync(newSurveyDto);
+        var testSurvey = await CreateTestSurvey();
         
         // Act
-        await _surveyService.DeleteSurveyAsync(newSurvey.Id);
+        await _surveyService.DeleteSurveyAsync(testSurvey.Id);
         
         // Assert
-        var survey = await Assert.ThrowsAsync<NotFoundException>(() => _surveyService.GetSurveyAsync(newSurvey.Id));
+        var survey = await Assert.ThrowsAsync<NotFoundException>(() => _surveyService.GetSurveyAsync(testSurvey.Id));
         Assert.Equal("Survey not found", survey.Message);
     }
     
