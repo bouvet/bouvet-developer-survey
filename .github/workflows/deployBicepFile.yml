@@ -19,7 +19,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: infra/main.bicep
-        parameters: infra/main.parameters.json
+        parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
         failOnStdErr: false
       # azcliversion: latest
       # inlineScript: |
