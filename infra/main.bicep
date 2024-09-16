@@ -1,33 +1,52 @@
-@minLength(3)
-@maxLength(11)
-param storagePrefix string
+@description('Storage account name')
+param storageAccountName string
+
+@description('Storage account name')
+param storageAccountNameCopy string
 
 @allowed([
   'Standard_LRS'
   'Standard_GRS'
-  'Standard_RAGRS'
-  'Standard_ZRS'
-  'Premium_LRS'
-  'Premium_ZRS'
-  'Standard_GZRS'
-  'Standard_RAGZRS'
 ])
-param storageSKU string = 'Standard_LRS'
+@description('Storage account sku')
+param storageAccountSku string
 
+@description('Storage account location')
 param location string = resourceGroup().location
 
-var uniqueStorageName = '${storagePrefix}${uniqueString(resourceGroup().id)}'
+@description('is Hierarchical namespace enabled')
+param isHnsEnabled bool = true
 
-resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
-  name: uniqueStorageName
-  location: location
-  sku: {
-    name: storageSKU
-  }
-  kind: 'StorageV2'
-  properties: {
-    supportsHttpsTrafficOnly: true
+@description('is https traffic only enabled')
+param supportsHttpsTrafficOnly bool = true
+
+module storageAccount 'modules/storage-account.bicep' = {
+  name: 'deploy-${storageAccountName}'
+  params: {
+    storageAccountName: storageAccountName 
+    storageAccountSku: storageAccountSku
+    location: location
+    isHnsEnabled: isHnsEnabled
+    supportsHttpsTrafficOnly: supportsHttpsTrafficOnly
+
   }
 }
 
-output storageEndpoint object = stg.properties.primaryEndpoints
+
+module storageAccountCopy 'modules/storage-account.bicep' = {
+  name: 'deploy-${storageAccountNameCopy}'
+  params: {
+    storageAccountName: storageAccountNameCopy
+    storageAccountSku: storageAccountSku
+    location: location
+    isHnsEnabled: isHnsEnabled
+    supportsHttpsTrafficOnly: supportsHttpsTrafficOnly
+
+  }
+}
+
+output storageAccountName string = storageAccount.outputs.storageAccountName
+output storageAccountNameId string = storageAccount.outputs.storageAccountId
+
+output storageAccountNameCopy string = storageAccountCopy.outputs.storageAccountName
+output storageAccountNameCopyId string = storageAccountCopy.outputs.storageAccountId
