@@ -1,5 +1,5 @@
-name: Deploy Bicep file
 on: [push]
+name: Deploy Bicep file
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
