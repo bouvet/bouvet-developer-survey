@@ -146,7 +146,7 @@ Please see Bicep templates at /infra for infrastructure documentation.
 5. Resource group
     - A dedicated resource group is created for this project
 
-6. Subscription
+6. Subscriptiong
     - A dedicated subscription is created for this project
 
 ## Authentication and security
