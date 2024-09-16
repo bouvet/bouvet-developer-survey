@@ -115,7 +115,7 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 
 ## Containerization
 
-- Describe Docker containerization
+- Docker is used for containerization. Image is built from Github Actions workflow and pushed to Azure container registry. Please reference Dockerfile and workflow .yml file for details.
 
 ## CI/CD
 
@@ -123,7 +123,7 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 
 ## Azure hosting and services
 
-Please see Bicep file for infrastructure documentation.
+Please see Bicep templates at /infra for infrastructure documentation.
 
 1. Azure Container Apps (ACA)
     - Used to host the containerized frontend and backend applications
@@ -139,13 +139,11 @@ Please see Bicep file for infrastructure documentation.
 3. Azure Key Vault (AKV)
     - Secrets like connection string, api keys and credtionals are stored in AKV.
     - Frontend and backend containers receive secrets from here during runtime
-    - 
 
 4. Azure SQL Database
     - Used for storage and querying of survey data.
 
 5. Resource group
-    - Name: 
     - A dedicated resource group is created for this project
 
 6. Subscription
@@ -157,7 +155,7 @@ Please see Bicep file for infrastructure documentation.
 
 ## IAC
 
-- Describe IAC
+- This project uses Bicep for IaC. Please find more information and templates under /infra
 
 ## Release strategy
 
