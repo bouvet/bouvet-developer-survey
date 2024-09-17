@@ -1,5 +1,10 @@
-on: [push]
-name: Deploy Bicep file
+on: 
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+name: Deploy to Azure resource group
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -13,7 +18,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy Bicep file
+    - name: Deploy storage account
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
@@ -21,8 +26,3 @@ jobs:
         template: infra/main.bicep
         parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
         failOnStdErr: false
-      # azcliversion: latest
-      # inlineScript: |
-      #       az deployment group create --resource-group ${{ secrets.AZURE_RG }} \
-      #       --template-file ../infra/main.bicep \
-      #       --parameters ../infra/main.parameters.json
