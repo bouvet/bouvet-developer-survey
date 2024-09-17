@@ -1,3 +1,4 @@
+param storageName string
 
 @allowed([
   'Standard_LRS'
@@ -13,7 +14,6 @@ param storageSKU string = 'Standard_LRS'
 
 param location string = 'norwayeast'
 
-var storageName = 'teststorageaccount'
 
 resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   name: storageName

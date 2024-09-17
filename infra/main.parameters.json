@@ -7,7 +7,10 @@
       },
       "location": {
         "value": "norwayeast"
-      }
+      },
+      "storageName": {
+      "value": "uniqueaccountname2024"
+    }
     }
   }
   
