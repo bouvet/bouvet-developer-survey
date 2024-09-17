@@ -18,6 +18,7 @@ The application consists of two main parts. A backend built with .NET and a fron
 ### Frontend
 
 - The frontend application is build using Next.js with TailwindCSS.
+- Uses a charts js library for visualizing survey results
 - Uses ESLint for linting
 - Deployed through Github Actions pipeline
 - Runs in a Docker container on Azure Container Apps
@@ -115,7 +116,7 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 
 ## Containerization
 
-- Docker is used for containerization. Image is built from Github Actions workflow and pushed to Azure container registry. Please reference Dockerfile and workflow .yml file for details.
+- Docker is used for containerization. Image is built from Github Actions workflow and pushed to Azure container registry. Please reference Dockerfiles and workflow .yml file for details.
 
 ## CI/CD
 
@@ -163,8 +164,5 @@ Please see Bicep templates at /infra for infrastructure documentation.
 
 ## Tools
 
-- Describe common tools used in the project
-
-
-
-
+- ESLint
+- Prettier
