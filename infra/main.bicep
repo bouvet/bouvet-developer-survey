@@ -1,7 +1,3 @@
-@minLength(3)
-@maxLength(11)
-param storagePrefix string
-
 @allowed([
   'Standard_LRS'
   'Standard_GRS'
