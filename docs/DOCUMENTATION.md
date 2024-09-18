@@ -160,7 +160,19 @@ Please see Bicep templates at /infra for infrastructure documentation.
 
 ## Release strategy
 
-- Describe our release strategy
+### Environmensts
+
+#### Pull Request Environment: ####
+- Temporary deployments created on PRs.
+- Containers dynamically deployed to Azure Container Apps when a PR is opened and destroyed when the PR is closed.
+
+#### Testing Environment: ####
+- Stable environment used for integration testing and QA.
+- Always runs the latest main branch
+
+#### Production Environment: ####
+ - table environment running the live, production version of the application.
+ - Only updated via manual approvals, releases, or deployment pipelines from the production branch.
 
 ## Tools
 
