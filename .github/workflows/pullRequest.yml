@@ -53,39 +53,39 @@ jobs:
           cache: "yarn"
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
       - run: yarn install --immutable
-  # # Lint job
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   needs: [set_up]
-  #   steps:
-  #     - name: Checkout repo
-  #       uses: actions/checkout@v4
-  #       working-directory: "./frontend"
-  #     - name: Setup node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         cache: "yarn"
-  #     - run: yarn install
-  #     # Lint files
-  #     - name: Lint files
-  #       run: yarn lint
-  #     # Check typescript files
-  #     - name: Lint ts files
-  #       run: yarn lint:ts
-  # # Tests
-  # tests:
-  #   name: Tests
-  #   runs-on: ubuntu-latest
-  #   needs: [set_up]
-  #   steps:
-  #     - name: Checkout repo
-  #       uses: actions/checkout@v4
-  #       working-directory: "./frontend"
-  #     - name: Setup node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         cache: "yarn"
-  #     - run: yarn install
-  #     - name: Tests
-  #       run: yarn test
+  # Lint job
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: [set_up]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        working-directory: "./frontend"
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          cache: "yarn"
+      - run: yarn install
+      # Lint files
+      - name: Lint files
+        run: yarn lint
+      # Check typescript files
+      - name: Lint ts files
+        run: yarn lint:ts
+  # Tests
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    needs: [set_up]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        working-directory: "./frontend"
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          cache: "yarn"
+      - run: yarn install
+      - name: Tests
+        run: yarn test
