@@ -18,7 +18,7 @@ The application consists of two main parts. A backend built with .NET and a fron
 ### Frontend
 
 - The frontend application is build using Next.js with TailwindCSS.
-- Uses a charts js library for visualizing survey results
+- Uses a charts js library for visualizing survey results. Plotly is chosen for PoC.
 - Uses ESLint for linting and Prettier for code formatting. Enforced pre commit with Husky
 - Deployed through Github Actions pipeline
 - Runs in a Docker container on Azure Container Apps
@@ -152,7 +152,7 @@ Please see Bicep templates at /infra for infrastructure documentation.
 
 ## Authentication and security
 
-- Describe authentication and security
+- The application is integrated with Bouvet SSO for authentication
 
 ## IAC
 
