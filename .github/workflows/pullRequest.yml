@@ -70,10 +70,12 @@ jobs:
       - run: yarn install --immutable
       # Lint files
       - name: Lint files
-        run: yarn lint
+        uses: ${{github.workspace}}/frontend/package.json
+      - run: yarn lint
       # Check typescript files
       - name: Lint ts files
-        run: yarn lint:ts
+        uses: ${{github.workspace}}/frontend/package.json
+      - run: yarn lint:ts
   # Tests
   tests:
     name: Tests
