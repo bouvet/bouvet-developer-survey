@@ -46,8 +46,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
+          with:
+            repository: bouvet/frontend
+            path: frontend
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -61,8 +62,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
+          with:
+            repository: bouvet/frontend
+            path: frontend
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -82,8 +84,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:           
-          submodules: 'true'
+          with:
+            repository: bouvet/frontend
+            path: frontend
       - name: Setup node
         uses: actions/setup-node@v4
         with:
