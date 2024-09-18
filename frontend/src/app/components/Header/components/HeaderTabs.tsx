@@ -26,7 +26,7 @@ export default function HeaderTabs({
   return (
     <PopoverGroup className="hidden lg:flex lg:gap-x-12">
       {tabs.map((tab) => (
-        <Popover className="relative">
+        <Popover className="relative" key={tab.name}>
           <PopoverButton
             onClick={() => onClickTab}
             className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
