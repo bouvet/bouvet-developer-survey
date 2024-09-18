@@ -92,4 +92,5 @@ jobs:
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
       - run: yarn install --immutable
       - name: Tests
-        run: yarn test
+        uses: "./frontend/package.json"
+      - run: yarn test
