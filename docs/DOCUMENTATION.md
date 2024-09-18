@@ -19,7 +19,7 @@ The application consists of two main parts. A backend built with .NET and a fron
 
 - The frontend application is build using Next.js with TailwindCSS.
 - Uses a charts js library for visualizing survey results
-- Uses ESLint for linting
+- Uses ESLint for linting and Prettier for code formatting. Enforced pre commit with Husky
 - Deployed through Github Actions pipeline
 - Runs in a Docker container on Azure Container Apps
 - Purpose: Retreive and present survey results using charts etc, in a responsive layout
@@ -147,7 +147,7 @@ Please see Bicep templates at /infra for infrastructure documentation.
 5. Resource group
     - A dedicated resource group is created for this project
 
-6. Subscriptiong
+6. Subscription
     - A dedicated subscription is created for this project
 
 ## Authentication and security
@@ -166,3 +166,4 @@ Please see Bicep templates at /infra for infrastructure documentation.
 
 - ESLint
 - Prettier
+- Husky
