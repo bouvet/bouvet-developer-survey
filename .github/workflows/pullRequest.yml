@@ -72,7 +72,7 @@ jobs:
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
 
       - name: Install packages
-        run: yarn install --pure-lockfile
+        run: yarn install
 
       - name: Linters
         working-directory: ./frontend
