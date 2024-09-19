@@ -176,6 +176,9 @@ Please see Bicep templates at /infra for infrastructure documentation.
 
 ## Release strategy
 
+- Small, freqent releases
+- Feature flags
+
 ### Environmensts
 
 #### Pull Request Environment: ####
