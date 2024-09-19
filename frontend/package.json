@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:ts": "next lint:ts"
+    "lint:ts": "next lint:ts",
+    "test": "next test"
   },
   "dependencies": {
     "next": "14.2.11",
