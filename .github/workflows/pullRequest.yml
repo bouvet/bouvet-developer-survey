@@ -55,28 +55,25 @@ jobs:
       - run: yarn install --immutable
   # Lint job
   lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    needs: [set_up]
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    strategy:
+      fail-fast: true
 
-      - name: Setup node
-        uses: actions/setup-node@v4
+    name: Lint Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        # The linter won't run on submodules
+        # with:
+        #   submodules: recursive
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "yarn"
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
-      - run: yarn install --immutable
-
-      # Lint files
-      - name: Lint files
+      - run: yarn install --frozen-lockfile
+      - name: Run lint
         run: yarn lint
-
-      # Check typescript files
-      - name: Lint ts files
-        run: yarn lint:ts
+        id: lint
 
   # Tests
   tests:
