@@ -75,7 +75,7 @@ jobs:
           yarn install --pure-lockfile
 
       - name: Linters
-        run: yarn lint-staged --diff="origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF}"
+        run: yarn lint
 
   # Tests
   tests:
