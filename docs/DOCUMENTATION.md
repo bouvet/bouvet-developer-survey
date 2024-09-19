@@ -120,7 +120,23 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 
 ## CI/CD
 
-- Describe pipeline
+### Initial thoughts ###
+
+- Source code, linting locally with ESLint, Prettier, pre-commit with Husky
+- Commit code
+- Linting and tests run by Actions on Push and PR
+- Compiling and build Docker images
+- Run integration tests?
+- Monitor, review and report test results
+- Image scanning (Azure security center?)
+- Ship images to Azure container registry.
+- Deploy containers to PR / test / prod environments, use IaC to manage
+
+### Components ###
+
+- Dockerfile
+- Github Actions Workflow .yml file
+- Documentation
 
 ## Azure hosting and services
 
