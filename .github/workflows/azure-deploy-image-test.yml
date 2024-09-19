@@ -3,7 +3,7 @@ name: Build and Push Docker Image to Azure Container Registry
 on:
   push:
     branches:
-      - 'feature/**'
+      - 'feat/**'
     paths:
       - 'Bouvet.Developer.Survey.Backend/**'  
 
