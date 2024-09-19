@@ -1,0 +1,32 @@
+on: 
+  push:
+    branches:
+      # - main
+      - 'feature/**'
+    # paths:
+    #   - 'infra/**'
+
+name: Deploy to Azure Resource Group
+
+
+jobs:
+  deploy-azure-resources-test:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log into Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
+
+    - name: Deploy Azure Resources test
+      uses: azure/arm-deploy@v2
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+        template: infra/main.bicep
+        parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}"
+        failOnStdErr: false    
