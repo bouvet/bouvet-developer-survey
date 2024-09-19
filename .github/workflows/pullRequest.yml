@@ -72,7 +72,7 @@ jobs:
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
       - run: yarn install --frozen-lockfile
       - name: Run lint
-        uses: ${{github.workspace}}/frontend/package.json
+        uses: ./frontend/package.json
       - run: yarn lint
         id: lint
 
