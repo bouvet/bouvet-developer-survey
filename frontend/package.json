@@ -11,7 +11,8 @@
     "test": "next test"
   },
   "dependencies": {
-    "next": "14.2.11",
+    "next": "^14.2.12",
+    "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18"
   },
