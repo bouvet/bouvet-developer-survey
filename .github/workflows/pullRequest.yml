@@ -49,32 +49,33 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: "yarn"
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
       - run: yarn install --immutable
   # Lint job
   lint:
-    strategy:
-      fail-fast: true
-
-    name: Lint Files
-    runs-on: ubuntu-latest
+    name: Lint
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-        # The linter won't run on submodules
-        # with:
-        #   submodules: recursive
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
-          node-version: 20
-          cache: "yarn"
+          fetch-depth: 0 
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
-      - run: yarn install --frozen-lockfile
-      - name: Run lint
-        uses: ./frontend/package.json
-      - run: yarn lint
-        id: lint
+
+      - name: Install packages
+        run: |
+          yarn install --pure-lockfile
+
+      - name: Linters
+        run: yarn lint-staged --diff="origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF}"
 
   # Tests
   tests:
