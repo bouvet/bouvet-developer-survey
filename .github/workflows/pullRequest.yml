@@ -61,6 +61,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -68,14 +69,15 @@ jobs:
           cache: "yarn"
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
       - run: yarn install --immutable
+
       # Lint files
       - name: Lint files
-        uses: "./frontend/package.json"
-      - run: yarn lint
+        run: yarn lint
+
       # Check typescript files
       - name: Lint ts files
-        uses: "./frontend/package.json"
-      - run: yarn lint:ts
+        run: yarn lint:ts
+
   # Tests
   tests:
     name: Tests
