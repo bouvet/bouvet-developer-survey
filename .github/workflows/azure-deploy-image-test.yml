@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - 'feat/**'
-    paths:
-      - 'Bouvet.Developer.Survey.Backend/**'  
+    # paths:
+    #   - 'Bouvet.Developer.Survey.Backend/**'  
 
 env:
   DOTNET_VERSION: "8.0"
