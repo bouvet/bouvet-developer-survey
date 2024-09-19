@@ -73,7 +73,7 @@ jobs:
         working-directory: ./frontend
         run: yarn install
 
-      - name: Linters
+      - name: Run lint
         working-directory: ./frontend
         run: yarn lint
 
@@ -91,7 +91,9 @@ jobs:
           node-version: 20
           cache: "yarn"
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
-      - run: yarn install --immutable
+      - name: Install packages
+        working-directory: ./frontend
+        run: yarn install --immutable
       - name: Tests
         working-directory: ./frontend
         run: yarn test
