@@ -57,11 +57,11 @@ module sqlServer 'modules/sqlServer.bicep' = {
   }
 }
 
-module openAi 'modules/openAiService.bicep' = {
-  name: aiServiceName
-  params: {
-    aiServicesName: aiServiceName
-    location: openAiLocation
-    deploymentName: deploymentName
-  }
-} 
+// module openAi 'modules/openAiService.bicep' = {
+//   name: aiServiceName
+//   params: {
+//     aiServicesName: aiServiceName
+//     location: openAiLocation
+//     deploymentName: deploymentName
+//   }
+// } 

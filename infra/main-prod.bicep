@@ -2,7 +2,7 @@
 param acrName string = 'bouvetSurveyContainerRegistryProd'
 
 @description('Key Vault module name')
-param keyVaultName string = 'bds-prod-kv'
+param keyVaultName string = 'bds-prod-keyvault'
 
 @description('The location for the registry.')
 param location string = 'norwayeast'
@@ -58,11 +58,11 @@ module sqlServer 'modules/sqlServer.bicep' = {
   }
 }
 
-module openAi 'modules/openAiService.bicep' = {
-  name: aiServiceName
-  params: {
-    aiServicesName: aiServiceName
-    location: openAiLocation
-    deploymentName: deploymentName
-  }
-} 
+// module openAi 'modules/openAiService.bicep' = {
+//   name: aiServiceName
+//   params: {
+//     aiServicesName: aiServiceName
+//     location: openAiLocation
+//     deploymentName: deploymentName
+//   }
+// } 
