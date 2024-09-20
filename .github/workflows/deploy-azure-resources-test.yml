@@ -27,6 +27,6 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
-        template: infra/main.bicep
+        template: infra/main-test.bicep
         parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}"
         failOnStdErr: false    
