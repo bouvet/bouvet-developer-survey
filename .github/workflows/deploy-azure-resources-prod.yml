@@ -9,7 +9,7 @@ on:
 name: Deploy to Azure Resource Group
 
 jobs:
-    deploy-azure-resources-test:
+    deploy-azure-resources-prod:
       runs-on: ubuntu-latest
       steps:
   
