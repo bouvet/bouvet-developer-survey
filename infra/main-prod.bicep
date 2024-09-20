@@ -24,7 +24,7 @@ param sqlServerUsername string = 'bdsadmin'
 param sqlServerPassword string
 
 @description('The deployment name of the AI Services.')
-param aiServiceName string = 'bds-prod-openai'
+param aiServiceName string = 'bds-prod-ai'
 
 @description('The deployment name of the AI Services.')
 param deploymentName string = 'gpt-4o-mini'
