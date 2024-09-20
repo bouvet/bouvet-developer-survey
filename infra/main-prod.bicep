@@ -1,8 +1,8 @@
 @description('The name of the Azure Container Registry.')
-param acrName string = 'bouvetSurveyContainerRegistryTest'
+param acrName string = 'bouvetSurveyContainerRegistryProd'
 
 @description('Key Vault module name')
-param keyVaultName string = 'bds-test-kv'
+param keyVaultName string = 'bds-prod-kv'
 
 @description('The location for the registry.')
 param location string = 'norwayeast'
@@ -11,10 +11,10 @@ param location string = 'norwayeast'
 param openAiLocation string = 'swedencentral'
 
 @description('The name of the SQL Server.')
-param serverName string = 'bds-test-sqlserver'
+param serverName string = 'bds-prod-sqlserver'
 
 @description('The name of the SQL Database.')
-param sqlDBName string = 'bds-test-sqldb'
+param sqlDBName string = 'bds-prod-sqldb'
 
 @description('The username for the SQL Server.')
 param sqlServerUsername string = 'bdsadmin'
@@ -24,10 +24,11 @@ param sqlServerUsername string = 'bdsadmin'
 param sqlServerPassword string
 
 @description('The deployment name of the AI Services.')
-param aiServiceName string = 'bds-test-openai'
+param aiServiceName string = 'bds-prod-openai'
 
 @description('The deployment name of the AI Services.')
 param deploymentName string = 'gpt-4o-mini'
+
 
 
 module containerRegistry 'modules/containerRegistry.bicep' = {
