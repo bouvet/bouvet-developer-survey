@@ -52,11 +52,11 @@ module sqlServer 'modules/sqlServer.bicep' = {
   }
 }
 
-module openAi 'modules/openAiService.bicep' = {
-  name: 'bds-test-openai'
-  params: {
-    aiServicesName: 'bds-test-openai'
-    location: openAiLocation
-    deploymentName: 'gpt-4o-mini'
-  }
-} 
+// module openAi 'modules/openAiService.bicep' = {
+//   name: 'bds-test-openai'
+//   params: {
+//     aiServicesName: 'bds-test-openai'
+//     location: openAiLocation
+//     deploymentName: 'gpt-4o-mini'
+//   }
+// } 
