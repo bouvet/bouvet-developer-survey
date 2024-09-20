@@ -1,5 +1,5 @@
 @description('The name of the Azure Container Registry.')
-param acrName string = 'bouvedscontainerregistry'
+param acrName string = 'bouvetSurveyContainerRegistryTest'
 
 @description('Key Vault module name')
 param keyVaultName string = 'bds-test-kv'
@@ -52,7 +52,7 @@ module sqlServer 'modules/sqlServer.bicep' = {
   }
 }
 
-module openAi 'modules/openAi.bicep' = {
+module openAi 'modules/openAiService.bicep' = {
   name: 'bds-test-openai'
   params: {
     aiServicesName: 'bds-test-openai'
