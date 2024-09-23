@@ -16,10 +16,10 @@ param containerAppEnvironmentName string = 'env${appSuffix}'
 param logAnalyticsWorkspaceName string
 
 @description('The name of the ACR login server.')
-param acrLoginServer string
+param acrLoginServer string = 'bouvetsurveycontainerregistry.azurecr.io'
 
 @description('The image tag for the container.')
-param imageTag string
+param imageTag string = 'db43b23399997696e6d34a170bf15df1391b1ca0'
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: logAnalyticsWorkspaceName
@@ -75,7 +75,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         }
       ]
       scale: {
-        minReplicas: 0
+        minReplicas: 1
         maxReplicas: 3
       }
     }
