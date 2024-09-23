@@ -1,5 +1,5 @@
 @description('The name of the Azure Container Registry.')
-param acrName string = 'bouvetSurveyContainerRegistryProd'
+param acrName string = 'bouvetSurveyContainerRegistry'
 
 @description('Key Vault module name')
 param keyVaultName string = 'bds-prod-keyvault'
