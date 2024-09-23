@@ -111,8 +111,6 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
           template: infra/azure-containerApps.bicep
-          parameters: |
-            acrLoginServer=bouvetsurveycontainerregistry.azurecr.io
-            imageTag=${{ env.IMAGE_TAG }}
+          parameters: "acrLoginServer=bouvetsurveycontainerregistry.azurecr.io imageTag=${{ env.IMAGE_TAG }}"
           failOnStdErr: true  
 
