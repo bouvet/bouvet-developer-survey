@@ -110,10 +110,9 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
-          template: infra/main-test.bicep
+          template: infra/azure-containerApps.bicep
           parameters: |
             acrLoginServer=${{ secrets.AZURE_CONTAINER_REGISTRY_NAME_TEST }}.azurecr.io
             imageTag=${{ env.IMAGE_TAG }}
-            sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}
           failOnStdErr: false  
 
