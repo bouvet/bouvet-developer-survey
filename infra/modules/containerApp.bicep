@@ -15,6 +15,12 @@ param containerAppEnvironmentName string = 'env${appSuffix}'
 @description('Log analytics workspace name')
 param logAnalyticsWorkspaceName string
 
+@description('The name of the ACR login server.')
+param acrLoginServer string
+
+@description('The image tag for the container.')
+param imageTag string
+
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: logAnalyticsWorkspaceName
   location: location
@@ -61,7 +67,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
       containers: [
         {
           name: containerAppName
-          image: 'mcr.microsoft.com/k8se/quickstart:latest'
+          image: '${acrLoginServer}/backend-image:${imageTag}'
           resources: {
             cpu: json('1.0')
             memory: '2Gi'

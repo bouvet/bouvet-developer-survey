@@ -5,9 +5,9 @@ on:
   workflow_call:
   pull_request:
     branches:
-      - 'main'
-    paths:
-      - 'Bouvet.Developer.Survey.Backend/**'  
+      - 'feat/**'
+    # paths:
+    #   - 'Bouvet.Developer.Survey.Backend/**'  
       
 env:
   DOTNET_VERSION: "8.0"
@@ -97,5 +97,22 @@ jobs:
       # Push the image to ACR
       - name: Push Docker image to ACR
         run: docker push ${{ secrets.AZURE_CONTAINER_REGISTRY_NAME_TEST }}.azurecr.io/backend-image:${{ env.IMAGE_TAG }}
-  
-  # deploy-container-apps:
+
+      - name: Log into Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}    
+
+      # Deploy the container app using the new image
+      - name: Deploy to Azure Container App
+        uses: azure/arm-deploy@v2
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+          template: infra/main-test.bicep
+          parameters: |
+            acrLoginServer=${{ secrets.AZURE_CONTAINER_REGISTRY_NAME_TEST }}.azurecr.io
+            imageTag=${{ env.IMAGE_TAG }}
+            sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}
+          failOnStdErr: false  
+
