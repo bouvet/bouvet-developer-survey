@@ -7,9 +7,6 @@ param keyVaultName string = 'bds-test-kv'
 @description('The location for the registry.')
 param location string = 'norwayeast'
 
-@description('OpenAi location for the AI Services.')
-param openAiLocation string = 'swedencentral'
-
 @description('The name of the SQL Server.')
 param serverName string = 'bds-test-sqlserver'
 
@@ -23,11 +20,26 @@ param sqlServerUsername string = 'bdsadmin'
 @description('The administrator password used for the sql server instance created.')
 param sqlServerPassword string
 
-@description('The deployment name of the AI Services.')
-param aiServiceName string = 'bds-test-openai'
+@description('The name of the container app.')
+param containerName string = 'bds-test-container'
 
-@description('The deployment name of the AI Services.')
-param deploymentName string = 'gpt-4o-mini'
+@description('The name of the container app.')
+param containerAppName string = 'bds-test-containerapp'
+
+@description('The name of the Log Analytics workspace.')
+param logAnalyticsWorkspaceName string = 'bds-test-loganalytics'
+
+@description('The name of the app insights.')
+param appInsightsName string = 'bds-test-appinsights'
+
+// @description('OpenAi location for the AI Services.')
+// param openAiLocation string = 'swedencentral'
+
+// @description('The deployment name of the AI Services.')
+// param aiServiceName string = 'bds-test-openai'
+
+// @description('The deployment name of the AI Services.')
+// param deploymentName string = 'gpt-4o-mini'
 
 
 module containerRegistry 'modules/containerRegistry.bicep' = {
@@ -54,6 +66,24 @@ module sqlServer 'modules/sqlServer.bicep' = {
     location: location
     administratorLogin: sqlServerUsername
     administratorLoginPassword: sqlServerPassword
+  }
+}
+
+module appInsights 'modules/appInsights.bicep' = {
+  name: appInsightsName
+  params: {
+    appInsightsName: appInsightsName
+    location: location
+  }
+}
+
+module containerApps 'modules/containerApp.bicep' = {
+  name: containerName
+  params: {
+    location: location
+    appSuffix: containerName
+    containerAppName: containerAppName
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
 }
 
