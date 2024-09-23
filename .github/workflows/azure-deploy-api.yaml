@@ -74,7 +74,7 @@ jobs:
     needs: [build-container-image]
     defaults:
       run:
-        working-directory: './BlueGreenDeployments/src/WeatherApi/'
+        working-directory: ./Bouvet.Developer.Survey.Backend
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
