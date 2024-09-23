@@ -6,7 +6,7 @@ on:
   # pull_request:
   push:  
     branches:
-      - 'feat/**'
+      - 'feataa/**'
     # paths:
     #   - 'Bouvet.Developer.Survey.Backend/**'  
       
