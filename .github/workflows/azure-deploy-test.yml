@@ -72,9 +72,7 @@ jobs:
   build-container-image:
     runs-on: ubuntu-latest
     needs: [build]
-    outputs:
-      image_tag: ${{ steps.get_image_tag.outputs.image_tag }}
-      acr_name: ${{ steps.get_acr_name.outputs.acr_name }}
+    
     defaults:
       run:
         working-directory: ./Bouvet.Developer.Survey.Backend
@@ -121,9 +119,6 @@ jobs:
     needs: build-container-image
     runs-on: ubuntu-latest
     name: Deploy Azure Container App 🚀
-    env:
-      ACR_NAME: ${{ needs.build-container-image.outputs.acr_name }}
-      IMAGE_TAG_GENERATED: ${{ needs.build-container-image.outputs.image_tag }}
 
     steps:
       - name: 'Checkout GitHub Action'
@@ -139,7 +134,7 @@ jobs:
           az containerapp update \
           --name bds-test-containerapp \
           --resource-group ${{ secrets.AZURE_RG_TEST }} \
-          --image ${{ env.ACR_NAME }}.azurecr.io/backend-image:${{ env.IMAGE_TAG_GENERATED }} \
+          --image bouvetsurveycontainerregistry.azurecr.io/backend-image:${{ github.sha }} \
           --set-env-vars "ASPNETCORE_HTTP_PORTS=5001"
   
 
