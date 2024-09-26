@@ -132,7 +132,7 @@ jobs:
       - name: 'Update Azure Container App'
         run: |
           az containerapp update \
-          --name bds-test-containerapp \
+          --name bod-api-qa \
           --resource-group ${{ secrets.AZURE_RG_TEST }} \
           --image bouvetsurveycontainerregistry.azurecr.io/backend-image:${{ github.sha }} \
           --set-env-vars "ASPNETCORE_HTTP_PORTS=5001"

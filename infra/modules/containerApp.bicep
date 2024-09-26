@@ -51,6 +51,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   properties: {
     managedEnvironmentId: env.id
     configuration: {
+      activeRevisionsMode: 'multiple'
       ingress: {
         external: true
         targetPort: 5001
