@@ -32,11 +32,11 @@ param containerAppName string = 'bds-test-containerapp'
 @description('The name of the Log Analytics workspace.')
 param logAnalyticsWorkspaceName string = 'bds-test-loganalytics'
 
-@description('The name of the ACR login server.')
-param acrLoginServer string
+// @description('The name of the ACR login server.')
+// param acrLoginServer string
 
-@description('The image tag for the container.')
-param imageTag string
+// @description('The image tag for the container.')
+// param imageTag string
 
 // @description('OpenAi location for the AI Services.')
 // param openAiLocation string = 'swedencentral'
