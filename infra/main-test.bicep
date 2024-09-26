@@ -23,6 +23,21 @@ param sqlServerPassword string
 @description('The name of the app insights.')
 param appInsightsName string = 'bds-test-appinsights'
 
+@description('The name of the container app.')
+param containerName string = 'bds-test-container'
+
+@description('The name of the container app.')
+param containerAppName string = 'bds-test-containerapp'
+
+@description('The name of the Log Analytics workspace.')
+param logAnalyticsWorkspaceName string = 'bds-test-loganalytics'
+
+@description('The name of the ACR login server.')
+param acrLoginServer string
+
+@description('The image tag for the container.')
+param imageTag string
+
 // @description('OpenAi location for the AI Services.')
 // param openAiLocation string = 'swedencentral'
 
@@ -68,7 +83,17 @@ module appInsights 'modules/appInsights.bicep' = {
   }
 }
 
-
+module containerApps 'modules/containerApp.bicep' = {
+  name: containerName
+  params: {
+    location: location
+    appSuffix: containerName
+    containerAppName: containerAppName
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+    // acrLoginServer: acrLoginServer
+    // imageTag: imageTag             
+  }
+}
 
 // module openAi 'modules/openAiService.bicep' = {
 //   name: aiServiceName
