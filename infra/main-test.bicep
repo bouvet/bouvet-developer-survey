@@ -83,17 +83,17 @@ module keyVault 'modules/keyVault.bicep' = {
 //   }
 // }
 
-module containerApps 'modules/containerApp.bicep' = {
-  name: containerName
-  params: {
-    location: location
-    appSuffix: containerName
-    containerAppName: containerAppName
-    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
-    // acrLoginServer: acrLoginServer
-    // imageTag: imageTag             
-  }
-}
+// module containerApps 'modules/containerApp.bicep' = {
+//   name: containerName
+//   params: {
+//     location: location
+//     appSuffix: containerName
+//     containerAppName: containerAppName
+//     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+//     // acrLoginServer: acrLoginServer
+//     // imageTag: imageTag             
+//   }
+// }
 
 // module openAi 'modules/openAiService.bicep' = {
 //   name: aiServiceName
