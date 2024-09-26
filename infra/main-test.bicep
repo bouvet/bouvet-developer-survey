@@ -75,13 +75,13 @@ module sqlServer 'modules/sqlServer.bicep' = {
   }
 }
 
-module appInsights 'modules/appInsights.bicep' = {
-  name: appInsightsName
-  params: {
-    appInsightsName: appInsightsName
-    location: location
-  }
-}
+// module appInsights 'modules/appInsights.bicep' = {
+//   name: appInsightsName
+//   params: {
+//     appInsightsName: appInsightsName
+//     location: location
+//   }
+// }
 
 module containerApps 'modules/containerApp.bicep' = {
   name: containerName
