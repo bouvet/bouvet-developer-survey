@@ -122,8 +122,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Azure Container App 🚀
     env:
-      IMAGE_TAG_GENERATED: ${{ needs.build-container-image.outputs.image_tag }}
       ACR_NAME: ${{ needs.build-container-image.outputs.acr_name }}
+      IMAGE_TAG_GENERATED: ${{ needs.build-container-image.outputs.image_tag }}
 
     steps:
       - name: 'Checkout GitHub Action'
