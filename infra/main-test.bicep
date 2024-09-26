@@ -64,16 +64,16 @@ module keyVault 'modules/keyVault.bicep' = {
   }
 }
 
-module sqlServer 'modules/sqlServer.bicep' = {
-  name: serverName
-  params: {
-    serverName: serverName
-    sqlDBName: sqlDBName
-    location: location
-    administratorLogin: sqlServerUsername
-    administratorLoginPassword: sqlServerPassword
-  }
-}
+// module sqlServer 'modules/sqlServer.bicep' = {
+//   name: serverName
+//   params: {
+//     serverName: serverName
+//     sqlDBName: sqlDBName
+//     location: location
+//     administratorLogin: sqlServerUsername
+//     administratorLoginPassword: sqlServerPassword
+//   }
+// }
 
 // module appInsights 'modules/appInsights.bicep' = {
 //   name: appInsightsName
