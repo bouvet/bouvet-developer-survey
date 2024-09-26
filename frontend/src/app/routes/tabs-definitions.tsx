@@ -8,6 +8,8 @@ import {
   SquaresPlusIcon,
   GlobeAsiaAustraliaIcon,
 } from "@heroicons/react/24/outline";
+import { useClientTranslation } from '../../../shared/i18n/src';
+
 
 // Tabs definition type
 export type TabsDefinitionType = {
@@ -22,16 +24,22 @@ export type TabsDefinitionType = {
 // Tabs definition
 const tabs: TabsDefinitionType[] = [
   {
-    name: "Developer Profile",
+    name: "Developer profile",
     path: ROUTES.DEVELOPER_PROFILE,
     showHeader: true,
     icon: <ChartPieIcon />,
   },
   {
-    name: "Technology",
-    path: ROUTES.TECHNOLOGY,
+    name: "Languages and frameworks",
+    path: ROUTES.LANGUAGES_AND_FRAMEWORKS,
     showHeader: true,
     icon: <CursorArrowRaysIcon />,
+  },
+  {
+    name: "Database",
+    path: ROUTES.DATABASE,
+    showHeader: true,
+    icon: <SquaresPlusIcon />,
   },
   {
     name: "AI",
@@ -40,26 +48,20 @@ const tabs: TabsDefinitionType[] = [
     icon: <FingerPrintIcon />,
   },
   {
-    name: "Work",
-    path: ROUTES.WORK,
-    showHeader: true,
-    icon: <SquaresPlusIcon />,
-  },
-  {
-    name: "Community",
-    path: ROUTES.COMMUNITY,
+    name: "Security",
+    path: ROUTES.SECURITY,
     showHeader: true,
     icon: <ArrowPathIcon />,
   },
   {
-    name: "Professional Developers",
-    path: ROUTES.PROFESSIONAL_DEVELOPERS,
+    name: "Tools",
+    path: ROUTES.TOOLS,
     showHeader: true,
     icon: <GlobeAsiaAustraliaIcon />,
   },
   {
-    name: "Methodology",
-    path: ROUTES.METHODOLOGY,
+    name: "About the Survey",
+    path: ROUTES.ABOUT,
     showHeader: true,
     icon: <GlobeAsiaAustraliaIcon />,
   },
