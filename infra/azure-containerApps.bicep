@@ -1,5 +1,5 @@
 @description('The name of the container app.')
-param containerName string = 'bds-test-container'
+param containerName string = 'envbds-test-container'
 
 @description('The name of the container app.')
 param containerAppName string = 'bds-test-containerapp'
