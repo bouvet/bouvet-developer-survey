@@ -117,32 +117,29 @@ jobs:
       
 
     
-  Create-Container-App:
+  Update-Container-App:
     needs: build-container-image
     runs-on: ubuntu-latest
     name: Deploy Azure Container App 🚀
     env:
       IMAGE_TAG_GENERATED: ${{ needs.build-container-image.outputs.image_tag }}
       ACR_NAME: ${{ needs.build-container-image.outputs.acr_name }}
-    
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Log into Azure
-        uses: azure/login@v2
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@main
+        
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}    
+          creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
 
-      # Deploy the container app using the new image
-      - name: Deploy to Azure Container App
-        uses: azure/arm-deploy@v2
-        with:
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
-          template: infra/azure-containerApps.bicep
-          parameters: >
-            acrLoginServer=${{ env.ACR_NAME }}.azurecr.io
-            imageTag=${{ env.IMAGE_TAG_GENERATED }}
-          failOnStdErr: true  
+      - name: 'Update Azure Container App'
+        run: |
+          az containerapp update \
+          --name bds-test-containerapp \
+          --resource-group ${{ secrets.AZURE_RG_TEST }} \
+          --image ${{ env.ACR_NAME }}.azurecr.io/backend-image:${{ env.IMAGE_TAG_GENERATED }} \
+          --set-env-vars "ASPNETCORE_HTTP_PORTS=5001"
+  
 
