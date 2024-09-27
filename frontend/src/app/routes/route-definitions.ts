@@ -8,12 +8,12 @@ export enum ROUTES {
   ROOT = "/:lng",
   HOME = "/:lng/home",
   DEVELOPER_PROFILE = "/:lng/developer_profile",
-  TECHNOLOGY = "/:lng/technology",
+  LANGUAGES_AND_FRAMEWORKS = "/:lng/languages_and_frameworks",
+  DATABASE = "/:lng/database",
   AI = "/:lng/ai",
-  WORK = "/:lng/work",
-  COMMUNITY = "/:lng/community",
-  PROFESSIONAL_DEVELOPERS = "/:lng/professional_developers",
-  METHODOLOGY = "/:lng/methodology",
+  SECURITY = "/:lng/security",
+  TOOLS = "/:lng/tools",
+  ABOUT = "/:lng/about"
 }
 
 /**

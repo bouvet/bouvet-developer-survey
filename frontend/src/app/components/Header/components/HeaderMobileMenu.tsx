@@ -47,19 +47,43 @@ export default function MobileMenu({
                 href="#"
                 className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
               >
-                Features
+                Utviklerprofil
               </a>
               <a
                 href="#"
                 className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
               >
-                Marketplace
+                Språk og rammeverk
               </a>
               <a
                 href="#"
                 className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
               >
-                Company
+                Database
+              </a>
+              <a
+                href="#"
+                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+              >
+                AI
+              </a>
+              <a
+                href="#"
+                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+              >
+                Sikkerhet
+              </a>
+              <a
+                href="#"
+                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+              >
+                Verktøy
+              </a>
+              <a
+                href="#"
+                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+              >
+                Om undersøkelsen
               </a>
             </div>
             <div className="py-6">
@@ -67,7 +91,7 @@ export default function MobileMenu({
                 href="#"
                 className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
               >
-                Log in
+                Logg inn
               </a>
             </div>
           </div>
