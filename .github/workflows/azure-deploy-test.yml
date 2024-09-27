@@ -123,7 +123,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
           template: infra/container-qa.bicep
-          parameters: "acrServer=${{ env.LOGIN_SERVER }} acrUsername=${{ env.LOGIN_NAME }} acrPassword=${{ env.PASSWORD }} containerImage=${{ env.IMAGE_TAG }}"
+          parameters: "acrServer=${{ env.LOGIN_SERVER }} acrUsername=${{ env.LOGIN_NAME }} acrPassword=${{ env.PASSWORD }} containerImage=d062b71e9542587fb2720eabc12f3d1e9d74d99e"
           failOnStdErr: false    
                 
   # deploy-container-app:
