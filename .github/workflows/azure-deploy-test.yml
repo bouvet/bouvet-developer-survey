@@ -141,8 +141,8 @@ jobs:
         id: getacrcreds
         run: |
           loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
-          loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
-          password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
+          loginName=$(az acr credential show -n $acrName --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
+          password=$(az acr credential show -n $acrName --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
           echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
           echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
           echo "PASSWORD=$password" >> $GITHUB_ENV
@@ -159,6 +159,7 @@ jobs:
             acrPassword=${{ env.PASSWORD }}
             containerImage=${{ env.IMAGE_TAG }}
           failOnStdErr: false
+
 
   
 
