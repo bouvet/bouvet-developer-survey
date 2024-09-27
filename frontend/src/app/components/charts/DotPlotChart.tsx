@@ -1,25 +1,24 @@
 "use client";
-import Plot from 'react-plotly.js';
+import dynamic from 'next/dynamic';
 
-/*
-type chartProps = {
-    data: { name: string; value: number };
-};
-*/
+// lazy load 'react-plotly.js'
+const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
-export default function DotPlotChart() {
+interface chartProps {
+    x1: number[];
+    x2: number[];
+    y: string[];
+  }
 
-    const tech = ['C#','Typescript','Python','Javascript','SQL','HTML/CSS','Rust','Bash/Shell','PoweShell','Go'].reverse();
-    const admired = [46,40].reverse();
-    const desired = [68,65,68,44,53,53,86,52,39,35].reverse();
+export default function DotPlotChart(data: chartProps) {
     
     const trace1 = {
       type: 'scatter',
-      x: admired,
-      y: tech,
+      x: data.x1,
+      y: data.y,
       mode: 'markers+text',
       name: 'Ønsket',
-      text: admired.map(value => value + ' %'),
+      text: data.x1.map(value => value + ' %'),
       textposition: 'left',
       marker: {
         color: 'rgba(156, 165, 196, 0.95)',
@@ -33,11 +32,11 @@ export default function DotPlotChart() {
     };
     
     const trace2 = {
-      x: desired,
-      y: tech,
+      x: data.x2,
+      y: data.y,
       mode: 'markers+text',
       name: 'Beundret',
-      text: desired.map(value => value + ' %'),
+      text: data.y.map(value => value + ' %'),
       textposition: 'right',
       marker: {
         color: 'rgba(204, 204, 204, 0.95)',
@@ -76,11 +75,11 @@ export default function DotPlotChart() {
     };
     
     const config = {responsive: true}
-    const data = [trace1, trace2];
+    const plot = [trace1, trace2];
 
     return (
         <Plot
-            data={data}
+            data={plot}
             layout={layout}
             config={config}
         />
