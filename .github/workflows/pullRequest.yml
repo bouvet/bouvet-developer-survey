@@ -38,6 +38,7 @@ jobs:
   #       with:
   #         header: pr-title-lint-error
   #         delete: true
+
   # Set up tests
   set_up:
     name: Set up
@@ -53,6 +54,7 @@ jobs:
           cache: "yarn"
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
       - run: yarn install --immutable
+
   # Lint job
   lint:
     name: Lint
@@ -93,7 +95,7 @@ jobs:
           cache-dependency-path: ${{github.workspace}}/frontend/package-lock.json
       - name: Install packages
         working-directory: ./frontend
-        run: yarn install --immutable
-      - name: Tests
+        run: yarn install
+      - name: Run tests
         working-directory: ./frontend
         run: yarn test
