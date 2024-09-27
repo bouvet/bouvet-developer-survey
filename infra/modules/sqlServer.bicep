@@ -35,7 +35,6 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2022-05-01-preview' = {
   }
   properties:{
     autoPauseDelay: 60
-    minCapacity: 0.5
-    maxCapacity: 2
+    minCapacity: 1
   }
 }
