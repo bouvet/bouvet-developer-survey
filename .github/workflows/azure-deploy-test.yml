@@ -103,7 +103,7 @@ jobs:
           loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
           password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
           echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
-          echo "LGOGIN_NAME=$loginName" >> $GITHUB_ENV
+          echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
           echo "PASSWORD=$password" >> $GITHUB_ENV
 
       - name: 'Build and Push API Image to ACR'
