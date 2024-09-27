@@ -13,10 +13,12 @@
     "@heroicons/react": "^2.1.5",
     "i18next": "^23.15.1",
     "next": "14.2.11",
+    "plotly.js": "^2.35.2",
     "plotly.js-dist-min": "^2.35.2",
     "react": "^18",
     "react-dom": "^18",
-    "react-i18next": "^15.0.2"
+    "react-i18next": "^15.0.2",
+    "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
     "@types/node": "^20",
