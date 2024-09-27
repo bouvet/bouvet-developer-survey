@@ -16,8 +16,17 @@ param containerAppEnvironmentName string = 'env${appSuffix}'
 param logAnalyticsWorkspaceName string
 
 @description('The name of the ACR login server.')
-param acrLoginServer string = 'bouvetsurveycontainerregistry.azurecr.io'
+param acrLoginServer string
 
+@description('The name of the ACR username.')
+param acrUsername string
+
+@secure()
+@description('The name of the ACR password.')
+param acrPassword string
+
+@description('The name of the container image.')
+param containerImage string
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: logAnalyticsWorkspaceName
@@ -49,24 +58,25 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   properties: {
     managedEnvironmentId: env.id
     configuration: {
-      activeRevisionsMode: 'multiple'
+      activeRevisionsMode: 'Multiple'
       ingress: {
         external: true
         targetPort: 5001
         allowInsecure: false
-        traffic: [
-          {
-            latestRevision: true
-            weight: 100
-          }
-        ]
       }
+      registries: [
+        {
+          server: acrLoginServer
+          passwordSecretRef: acrPassword
+          username: acrUsername
+        }
+      ]
     }
     template: {
       containers: [
         {
           name: containerAppName
-          image: '${acrLoginServer}/backend-image:latest'
+          image: containerImage
           resources: {
             cpu: json('1.0')
             memory: '2Gi'

@@ -16,31 +16,9 @@ env:
 
 jobs:
 
-  deploy-azure-resources-test:
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Log into Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
-
-    - name: Deploy Azure Resources test
-      uses: azure/arm-deploy@v2
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
-        template: infra/main-test.bicep
-        parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}"
-        failOnStdErr: false    
-
-  build:
+  build-project:
     runs-on: ubuntu-latest
     name: Build 🛠️
-    needs: deploy-azure-resources-test
     container:
       image: mcr.microsoft.com/dotnet/sdk:8.0
     steps:
@@ -66,7 +44,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-project
     name: Test 🧪
     container:
       image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -94,14 +72,14 @@ jobs:
   
   build-container-image:
     runs-on: ubuntu-latest
-    needs: [build, test]
+    needs: test
     
     defaults:
       run:
         working-directory: ./Bouvet.Developer.Survey.Backend
     steps:
       - name: 'Checkout GitHub Action'
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
@@ -116,50 +94,79 @@ jobs:
         id: getacrname
         run: |
           acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].name" -o tsv)
-          echo "::set-output name=acrName::$acrName"
+          echo "ACR_NAME=$acrName" >> $GITHUB_ENV
 
       - name: Get ACR Credentials
         id: getacrcreds
         run: |
           loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
-          loginName=$(az acr credential show -n ${{ steps.getacrname.outputs.acrName }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
-          password=$(az acr credential show -n ${{ steps.getacrname.outputs.acrName }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
-          echo "::set-output name=loginServer::$loginServer"
-          echo "::set-output name=loginName::$loginName"
-          echo "::set-output name=password::$password"
+          loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
+          password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
+          echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
+          echo "LGOGIN_NAME=$loginName" >> $GITHUB_ENV
+          echo "PASSWORD=$password" >> $GITHUB_ENV
 
       - name: 'Build and Push API Image to ACR'
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ steps.getacrcreds.outputs.loginServer }}
-          username: ${{ steps.getacrname.outputs.acrName }}
-          password: ${{ steps.getacrcreds.outputs.password }}
+          login-server: ${{ env.LOGIN_SERVER }}
+          username: ${{ env.LOGIN_NAME }}
+          password: ${{ env.PASSWORD }}
       - run: |
-          docker build . -t ${{ steps.getacrcreds.outputs.loginServer }}/backend-image:${{ github.sha }}
-          docker push ${{ steps.getacrcreds.outputs.loginServer }}/backend-image:${{ github.sha }}
-          echo "::set-output name=image_tag::${{ github.sha }}"
-          echo "::set-output name=acr_name::${{ steps.getacrname.outputs.acrName }}"
-        
-  Update-Container-App:
+          docker build . -t ${{ env.LOGIN_SERVER }}/backend-image:${{ github.sha }}
+          docker push ${{ env.LOGIN_SERVER }}/backend-image:${{ github.sha }}
+          echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
+                
+  deploy-container-app:
     needs: build-container-image
     runs-on: ubuntu-latest
     name: Deploy Azure Container App 🚀
-
+    
     steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@main
-        
-      - name: 'Login via Azure CLI'
-        uses: azure/login@v1
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
+      - name: Log into Azure
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
+  
+      - name: Deploy Azure Resources test
+        uses: azure/arm-deploy@v2
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+          template: infra/container-qa.bicep
+          parameters: |
+            acrServer=${{ env.LOGIN_SERVER }}
+            acrUsername=${{ env.LOGIN_NAME }}
+            acrPassword=${{ env.PASSWORD }}
+            containerImage=${{ env.IMAGE_TAG }}
+          failOnStdErr: false
 
-      - name: 'Update Azure Container App'
-        run: |
-          az containerapp update \
-          --name bds-test-containerapp \
-          --resource-group ${{ secrets.AZURE_RG_TEST }} \
-          --image bouvetsurveycontainerregistry.azurecr.io/backend-image:${{ github.sha }} \
-          --set-env-vars "ASPNETCORE_HTTP_PORTS=5001"
+  
+
+
+  # Update-Container-App:
+  #   needs: build-container-image
+  #   runs-on: ubuntu-latest
+  #   name: Update Azure Container App 🚀
+
+  #   steps:
+  #     - name: 'Checkout GitHub Action'
+  #       uses: actions/checkout@main
+        
+  #     - name: 'Login via Azure CLI'
+  #       uses: azure/login@v1
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
+
+  #     - name: 'Update Azure Container App'
+  #       run: |
+  #         az containerapp update \
+  #         --name bds-test-containerapp \
+  #         --resource-group ${{ secrets.AZURE_RG_TEST }} \
+  #         --image bouvetsurveycontainerregistry.azurecr.io/backend-image:${{ github.sha }} \
+  #         --set-env-vars "ASPNETCORE_HTTP_PORTS=5001"          
   
 

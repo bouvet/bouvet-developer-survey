@@ -28,7 +28,14 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2022-05-01-preview' = {
   name: sqlDBName
   location: location
   sku: {
-    name: 'S0'
-    tier: 'Standard'
+    name: 'GP_S_Gen5_1'
+    tier: 'GeneralPurpose'
+    capacity: 1
+    family: 'Gen5'
+  }
+  properties:{
+    autoPauseDelay: 60
+    minCapacity: 0.5
+    maxCapacity: 2
   }
 }
