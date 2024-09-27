@@ -116,36 +116,6 @@ jobs:
           docker build . -t ${{ env.LOGIN_SERVER }}/backend-image:${{ github.sha }}
           docker push ${{ env.LOGIN_SERVER }}/backend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
-                
-  deploy-container-app:
-    needs: build-container-image
-    runs-on: ubuntu-latest
-    name: Deploy Azure Container App 🚀
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-  
-      - name: Log into Azure
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
-      
-      - name: Get ACR name
-        id: getacrname
-        run: |
-          acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].name" -o tsv)
-          echo "ACR_NAME=$acrName" >> $GITHUB_ENV
-
-      - name: Get ACR Credentials
-        id: getacrcreds
-        run: |
-          loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
-          loginName=$(az acr credential show -n $acrName --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
-          password=$(az acr credential show -n $acrName --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
-          echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
-          echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
-          echo "PASSWORD=$password" >> $GITHUB_ENV
 
       - name: Deploy Azure Resources test
         uses: azure/arm-deploy@v2
@@ -158,8 +128,50 @@ jobs:
             acrUsername=${{ env.LOGIN_NAME }}
             acrPassword=${{ env.PASSWORD }}
             containerImage=${{ env.IMAGE_TAG }}
-          failOnStdErr: false
+          failOnStdErr: false    
+                
+  # deploy-container-app:
+  #   needs: build-container-image
+  #   runs-on: ubuntu-latest
+  #   name: Deploy Azure Container App 🚀
+    
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  
+  #     - name: Log into Azure
+  #       uses: azure/login@v2
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
+      
+  #     - name: Get ACR name
+  #       id: getacrname
+  #       run: |
+  #         acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].name" -o tsv)
+  #           echo "ACR_NAME=$acrName" >> $GITHUB_ENV
 
+  #     - name: Get ACR Credentials
+  #       id: getacrcreds
+  #       run: |
+  #         loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
+  #         loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
+  #         password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
+  #         echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
+  #         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
+  #         echo "PASSWORD=$password" >> $GITHUB_ENV
+
+  #     - name: Deploy Azure Resources test
+  #       uses: azure/arm-deploy@v2
+  #       with:
+  #         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+  #         resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+  #         template: infra/container-qa.bicep
+  #         parameters: |
+  #           acrServer=${{ env.LOGIN_SERVER }}
+  #           acrUsername=${{ env.LOGIN_NAME }}
+  #           acrPassword=${{ env.PASSWORD }}
+  #           containerImage=${{ env.IMAGE_TAG }}
+  #         failOnStdErr: false
 
   
 
