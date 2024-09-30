@@ -23,21 +23,12 @@ param acrPassword string
 @description('The name of the container image.')
 param containerImage string
 
-module logAnalytics 'modules/logAnalytics.bicep' = {
-  name: logAnalyticsWorkspaceName
-  params: {
-    location: location
-    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
-  }
-}
-
 module containerEnv 'modules/containerEnv.bicep' = {
   name: containerName
   params: {
     containerAppEnvironmentName: containerName
     location: location
-    logAnalyticsClientId: logAnalytics.outputs.logAnalyticsWorkspaceId
-    logAnalyticsSharedKey: logAnalytics.outputs.clientSecret
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
 }
 

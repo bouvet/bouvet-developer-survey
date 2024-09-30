@@ -4,11 +4,18 @@ param containerAppEnvironmentName string
 @description('The location to deploy resource')
 param location string
 
-@description('The Log Analytics workspace ID')
-param logAnalyticsClientId string
+@description('Log analytics workspace name')
+param logAnalyticsWorkspaceName string
 
-@description('The Log Analytics workspace shared key')
-param logAnalyticsSharedKey string
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: logAnalyticsWorkspaceName
+  location: location
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+  }
+}
 
 resource env 'Microsoft.App/managedEnvironments@2023-08-01-preview' = {
   name: containerAppEnvironmentName
@@ -17,8 +24,8 @@ resource env 'Microsoft.App/managedEnvironments@2023-08-01-preview' = {
     appLogsConfiguration: {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
-        customerId: logAnalyticsClientId
-        sharedKey: logAnalyticsSharedKey
+        customerId: logAnalytics.properties.customerId
+        sharedKey: logAnalytics.listKeys().primarySharedKey
       }
     }
   }
