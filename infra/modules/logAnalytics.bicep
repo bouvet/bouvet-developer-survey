@@ -7,10 +7,16 @@ param location string
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: logAnalyticsWorkspaceName
   location: location
-  properties: {
+  properties: any({
+    retentionInDays: 30
+    features: {
+      searchVersion: 1
+    }
     sku: {
       name: 'PerGB2018'
     }
-  }
+  })
 }
 
+output logAnalyticsWorkspaceId string = logAnalytics.properties.customerId
+output clientSecret string = logAnalytics.listKeys().primarySharedKey
