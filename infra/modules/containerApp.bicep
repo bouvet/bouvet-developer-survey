@@ -42,9 +42,9 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
       ]      
       registries: [
         {
-          server: 'bouvetsurveycontainerregistry.azurecr.io'
+          server: acrLoginServer
           passwordSecretRef: 'container-registry-password'
-          username: 'bouvetSurveyContainerRegistry'
+          username: acrUsername
         }
       ]
     }
@@ -52,7 +52,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
       containers: [
         {
           name: containerAppName
-          image: 'bouvetsurveycontainerregistry.azurecr.io/backend-image:3bfb05120ccb6ae843a3b0c65132c174509805e6'
+          image: '${acrLoginServer}/backend-image:${containerImage}'
           resources: {
             cpu: json('1.0')
             memory: '2Gi'
