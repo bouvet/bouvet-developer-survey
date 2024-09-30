@@ -2,9 +2,9 @@ on:
     push:
         branches:
         # - main
-        - 'feataa/**'
-      # paths:
-      #   - 'infra/**'
+        - 'feat/**'
+      paths:
+        - 'infra/**'
   
 name: Deploy to Azure Resource Group
 
