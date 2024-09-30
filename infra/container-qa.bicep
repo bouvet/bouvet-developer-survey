@@ -32,17 +32,17 @@ module containerEnv 'modules/containerEnv.bicep' = {
   }
 }
 
-module containerApp 'modules/containerApp.bicep' = {
-  name: containerAppName
-  params: {
-    location: location
-    containerAppName: containerAppName
-    containerAppEnvironmentId: containerEnv.outputs.id
-    acrLoginServer: acrServer
-    acrUsername: acrUsername
-    acrPassword: acrPassword
-    containerImage: containerImage
-  }
-}
+// module containerApp 'modules/containerApp.bicep' = {
+//   name: containerAppName
+//   params: {
+//     location: location
+//     containerAppName: containerAppName
+//     containerAppEnvironmentId: containerEnv.outputs.id
+//     acrLoginServer: acrServer
+//     acrUsername: acrUsername
+//     acrPassword: acrPassword
+//     containerImage: containerImage
+//   }
+// }
 
-output fqdn string = containerApp.outputs.fqdn
+// output fqdn string = containerApp.outputs.fqdn
