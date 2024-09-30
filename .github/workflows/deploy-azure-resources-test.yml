@@ -5,7 +5,7 @@ on:
     paths:
       - 'infra/**'
 
-name: Deploy to Azure Resource Group
+name: Deploy to Azure Resource Group QA
 
 
 jobs:

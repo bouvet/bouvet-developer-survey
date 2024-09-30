@@ -1,12 +1,12 @@
 on: 
-    push:
-        branches:
+  push:
+      branches:
         # - main
         - 'feat/**'
       paths:
         - 'infra/**'
   
-name: Deploy to Azure Resource Group
+name: Deploy to Azure Resource Group Prod
 
 jobs:
     deploy-azure-resources-prod:
