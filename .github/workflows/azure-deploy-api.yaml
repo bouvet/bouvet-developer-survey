@@ -67,7 +67,7 @@ jobs:
         working-directory: ./Bouvet.Developer.Survey.Backend
         run: dotnet test
   
-  deploy-azure-resources-prod:
+  deploy-to-prod:
     runs-on: ubuntu-latest
     needs: test
     environment: Production
