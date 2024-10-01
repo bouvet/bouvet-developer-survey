@@ -1,9 +1,9 @@
 on: 
   push:
     branches:
-      - feat/**
-    # paths:
-    #   - 'infra/**'
+      - main/**
+    paths:
+      - 'infra/**'
 
 name: Deploy to Azure Resource Group Prod
 
