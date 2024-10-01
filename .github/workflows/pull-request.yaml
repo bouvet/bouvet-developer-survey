@@ -1,0 +1,66 @@
+name: Run on PR from feat/** to main
+on:
+    pull_request:
+        branches:
+            - main
+        paths:
+            - 'Bouvet.Developer.Survey.Backend/**'
+            
+env:
+    DOTNET_VERSION: "8.0"
+    
+jobs:
+  
+  build-project:
+    runs-on: ubuntu-latest
+    name: Build 🛠️
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Dotnet restore
+        working-directory: ./Bouvet.Developer.Survey.Backend
+        run: dotnet restore Bouvet.Developer.Survey.Backend.generated.sln
+      
+      - name: Build with dotnet
+        working-directory: ./Bouvet.Developer.Survey.Backend
+        run: dotnet build Bouvet.Developer.Survey.Backend.generated.sln --configuration Release --no-restore
+                    
+      - name: Publish
+        working-directory: ./Bouvet.Developer.Survey.Backend
+        run: dotnet publish Bouvet.Developer.Survey.Backend.generated.sln --configuration Release --no-build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build-project
+    name: Test 🧪
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Dotnet restore
+        working-directory: ./Bouvet.Developer.Survey.Backend
+        run: dotnet restore Bouvet.Developer.Survey.Backend.generated.sln
+
+      - name: Build with dotnet
+        working-directory: ./Bouvet.Developer.Survey.Backend
+        run: dotnet build Bouvet.Developer.Survey.Backend.generated.sln --configuration Release --no-restore
+
+      - name: Test with dotnet
+        working-directory: ./Bouvet.Developer.Survey.Backend
+        run: dotnet test
