@@ -25,10 +25,6 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-       - name: Dotnet restore (Intentional Failure)
-        working-directory: ./Bouvet.Developer.Survey.Backend
-        run: dotnet restore Bouvet.Developer.Survey.Backend.INVALID.sln      
-      
       - name: Dotnet restore
         working-directory: ./Bouvet.Developer.Survey.Backend
         run: dotnet restore Bouvet.Developer.Survey.Backend.generated.sln
