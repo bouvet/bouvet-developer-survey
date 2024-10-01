@@ -1,0 +1,57 @@
+on: 
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+
+name: Deploy to Azure Resource Group
+
+
+jobs:
+  deploy-azure-resources-qa:
+    runs-on: ubuntu-latest
+    name: Deploy Azure Resources QA
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log into Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy Azure Resources test
+      uses: azure/arm-deploy@v2
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+        template: infra/main-test.bicep
+        parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}"
+        failOnStdErr: false
+  
+  deploy-azure-resources-prod:
+    runs-on: ubuntu-latest
+    name: Deploy Azure Resources Prod
+    needs: deploy-azure-resources-qa
+    environment: Production
+      
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log into Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy Azure Resources prod
+      uses: azure/arm-deploy@v2
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ secrets.AZURE_RG }}
+        template: infra/main-prod.bicep
+        parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD }}"
+        failOnStdErr: false      
