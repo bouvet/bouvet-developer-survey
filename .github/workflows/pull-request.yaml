@@ -1,10 +1,10 @@
 name: Run on PR from feat/** to main
 on:
-    pull_request:
-        branches:
-            - main
-        paths:
-            - 'Bouvet.Developer.Survey.Backend/**'
+  pull_request:
+    branches:
+        - main
+    paths:
+        - 'Bouvet.Developer.Survey.Backend/**'
             
 env:
     DOTNET_VERSION: "8.0"
@@ -24,6 +24,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+
+       - name: Dotnet restore (Intentional Failure)
+        working-directory: ./Bouvet.Developer.Survey.Backend
+        run: dotnet restore Bouvet.Developer.Survey.Backend.INVALID.sln      
       
       - name: Dotnet restore
         working-directory: ./Bouvet.Developer.Survey.Backend
