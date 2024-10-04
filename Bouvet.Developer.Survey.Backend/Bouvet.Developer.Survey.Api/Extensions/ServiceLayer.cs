@@ -1,3 +1,5 @@
+using Bouvet.Developer.Survey.Service.Import;
+using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
 using Bouvet.Developer.Survey.Service.Survey;
 
@@ -11,5 +13,7 @@ public static class ServiceLayer
         services.AddTransient<ISurveyService, SurveyService>();
         services.AddTransient<IBlockService, BlockService>();
         services.AddTransient<IOptionService, OptionService>();
+        services.AddTransient<ICsvToJsonService, CsvToJsonService>();
+        services.AddTransient<IImportSurveyService, ImportSurveyService>();
     }
 }

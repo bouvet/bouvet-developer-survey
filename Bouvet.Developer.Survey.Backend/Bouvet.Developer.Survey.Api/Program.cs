@@ -105,13 +105,13 @@ using var scope = app.Services.CreateScope();
 //     logger.LogError(ex, "An error occurred creating the DB.");
 // }
 
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.UseDeveloperExceptionPage();
-app.UseSwagger();
-app.UseSwaggerUI();
 app.UseCors();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSerilogRequestLogging();

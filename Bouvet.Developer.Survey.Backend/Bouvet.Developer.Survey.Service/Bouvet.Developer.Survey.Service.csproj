@@ -11,4 +11,9 @@
       <ProjectReference Include="..\Bouvet.Developer.Survey.Domain\Bouvet.Developer.Survey.Domain.csproj" />
       <ProjectReference Include="..\Bouvet.Developer.Survey.Infrastructure\Bouvet.Developer.Survey.Infrastructure.csproj" />
     </ItemGroup>
+    
+
+    <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="33.0.1" />
+    </ItemGroup>
 </Project>

@@ -43,19 +43,19 @@ public class SurveyService : ISurveyService
         return surveyList;
     }
 
-    public async Task<SurveyDto> GetSurveyAsync(Guid surveyId)
+    public async Task<TransferObjects.Survey.SurveyDto> GetSurveyAsync(Guid surveyId)
     {
         var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
 
         if (survey == null) throw new NotFoundException("Survey not found");
         
 
-        var surveyDto = SurveyDto.CreateFromEntity(survey);
+        var surveyDto = TransferObjects.Survey.SurveyDto.CreateFromEntity(survey);
 
         return surveyDto;
     }
 
-    public async Task<SurveyDto> UpdateSurveyAsync(Guid surveyId, NewSurveyDto newSurveyDto)
+    public async Task<TransferObjects.Survey.SurveyDto> UpdateSurveyAsync(Guid surveyId, NewSurveyDto newSurveyDto)
     {
         var surveyToBeUpdated = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
             
@@ -69,7 +69,7 @@ public class SurveyService : ISurveyService
         _context.Surveys.Update(surveyToBeUpdated);
         await _context.SaveChangesAsync();
             
-        var dto = SurveyDto.CreateFromEntity(surveyToBeUpdated);
+        var dto = TransferObjects.Survey.SurveyDto.CreateFromEntity(surveyToBeUpdated);
             
         return dto;
     }

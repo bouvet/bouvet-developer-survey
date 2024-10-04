@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
+using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
 using Microsoft.AspNetCore.Authorization;
@@ -15,10 +16,15 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 public class SurveysController : ControllerBase
 {
     private readonly ISurveyService _surveyService;
+    private readonly ICsvToJsonService _csvToJsonService;
+    private readonly IImportSurveyService _importSurveyService;
     
-    public SurveysController(ISurveyService surveyService)
+    public SurveysController(ISurveyService surveyService, ICsvToJsonService csvToJsonService, 
+        IImportSurveyService importSurveyService)
     {
         _surveyService = surveyService;
+        _csvToJsonService = csvToJsonService;
+        _importSurveyService = importSurveyService;
     }
     
     /// <summary>
@@ -71,6 +77,62 @@ public class SurveysController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(e.Message);
+        }
+    }
+    
+    // POST: api/file/upload
+    [HttpPost("upload")]
+    public async Task<IActionResult> UploadFile(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("No file uploaded or file is empty.");
+        }
+
+        using (var stream = new MemoryStream())
+        {
+            await file.CopyToAsync(stream);
+            stream.Position = 0;
+            var survey = await _importSurveyService.FindSurveyBlocks(stream);
+            return Ok(survey);
+        }
+    }
+    
+    // POST: api/file/upload
+    [HttpPost("uploadQuestions")]
+    public async Task<IActionResult> UploadQuestions(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("No file uploaded or file is empty.");
+        }
+
+        using (var stream = new MemoryStream())
+        {
+            await file.CopyToAsync(stream);
+            stream.Position = 0;
+            var survey = await _importSurveyService.FindSurveyQuestions(stream);
+            return Ok(survey);
+        }
+    }
+    
+    /// <summary>
+    /// Import a survey from CSV
+    /// </summary>
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportCsv(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("No file uploaded.");
+        }
+
+        using (var stream = new MemoryStream())
+        {
+            await file.CopyToAsync(stream);
+            stream.Position = 0;
+            var json = _csvToJsonService.ConvertCsvToJson(stream);
+            return Ok(json);
         }
     }
 }
