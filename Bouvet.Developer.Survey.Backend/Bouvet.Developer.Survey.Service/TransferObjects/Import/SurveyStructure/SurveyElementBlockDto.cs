@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Bouvet.Developer.Survey.Service.Interfaces.Import;
 
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 

@@ -1,8 +1,10 @@
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
-using Bouvet.Developer.Survey.Service.Survey;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -15,7 +17,7 @@ public class SurveyServiceTests
     private readonly DeveloperSurveyContext _context;
     private const string SurveyName = "Test survey";
     private const string SurveyId = "gaf2345";
-    private const string SurveyUrl = "https://todo.com";
+    private const string SurveyLanguage = "English";
 
 
     public SurveyServiceTests()
@@ -38,13 +40,13 @@ public class SurveyServiceTests
         await _context.SaveChangesAsync();
     }
     
-    private async Task<SurveyListDto> CreateTestSurvey()
+    private async Task<SurveyDto> CreateTestSurvey()
     {
         var newSurveyDto = new NewSurveyDto
         {
             Name = SurveyName,
             SurveyId = SurveyId,
-            SurveyUrl = SurveyUrl
+            Language = SurveyLanguage
         };
 
         return await _surveyService.CreateSurveyAsync(newSurveyDto);
@@ -91,7 +93,7 @@ public class SurveyServiceTests
         {
             Name = "Updated survey",
             SurveyId = "updated",
-            SurveyUrl = "https://updated.com"
+            Language = "Language"
         };
         
         // Act

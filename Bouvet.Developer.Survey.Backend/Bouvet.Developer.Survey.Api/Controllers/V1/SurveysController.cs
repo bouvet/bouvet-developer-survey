@@ -3,6 +3,7 @@ using Bouvet.Developer.Survey.Api.Constants;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,14 +16,14 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class SurveysController : ControllerBase
 {
-    private readonly ISurveyService _surveyService;
+    // private readonly ISurveyService _surveyService;
     private readonly ICsvToJsonService _csvToJsonService;
     private readonly IImportSurveyService _importSurveyService;
     
-    public SurveysController(ISurveyService surveyService, ICsvToJsonService csvToJsonService, 
+    public SurveysController( ICsvToJsonService csvToJsonService, 
         IImportSurveyService importSurveyService)
     {
-        _surveyService = surveyService;
+        // _surveyService = surveyService;
         _csvToJsonService = csvToJsonService;
         _importSurveyService = importSurveyService;
     }
@@ -38,8 +39,9 @@ public class SurveysController : ControllerBase
     [SwaggerResponse(200, "Returns a list of all surveys", typeof(IEnumerable<SurveyListDto>))]
     public async Task<IActionResult> GetSurveys()
     {
-        var surveys = await _surveyService.GetSurveysAsync();
-        return Ok(surveys);
+        // var surveys = await _surveyService.GetSurveysAsync();
+        // return Ok(surveys);
+        return Ok();
     }
     
     /// <summary>
@@ -50,11 +52,12 @@ public class SurveysController : ControllerBase
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpGet("{surveyId:guid}")]
-    [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
+    // [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
     public async Task<IActionResult> GetSurvey(Guid surveyId)
     {
-        var survey = await _surveyService.GetSurveyAsync(surveyId);
-        return Ok(survey);
+        // var survey = await _surveyService.GetSurveyAsync(surveyId);
+        // return Ok(survey);
+        return Ok();
     }
     
     /// <summary>
@@ -71,7 +74,7 @@ public class SurveysController : ControllerBase
     {
         try
         {
-            await _surveyService.CreateSurveyAsync(newSurveyDto);
+            // await _surveyService.CreateSurveyAsync(newSurveyDto);
             return Ok();
         }
         catch (Exception e)

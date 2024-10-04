@@ -25,7 +25,7 @@ public class SurveyElementQuestionsDto
 public class PayloadQuestionDto
 {
     public string QuestionText { get; set; } = string.Empty;
-    public string DataExportingTag { get; set; } = string.Empty;
+    public string DataExportTag { get; set; } = string.Empty;
     public string QuestionDescription { get; set; } = string.Empty;
     public Dictionary<string, ChoicesDto> Choices { get; set; } = new();
 }
