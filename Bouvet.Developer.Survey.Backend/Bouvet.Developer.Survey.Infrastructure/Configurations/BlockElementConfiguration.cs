@@ -21,7 +21,7 @@ public class BlockElementConfiguration : IEntityTypeConfiguration<BlockElement>
         
         builder.HasOne(e => e.SurveyBlock)
             .WithMany(b => b.BlockElements)
-            .HasForeignKey(e => e.BlockId)
+            .HasForeignKey(e => e.SurveyElementGuid)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -91,19 +91,19 @@ builder.Services.AddSwaggerGen()
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
-// var services = scope.ServiceProvider;
-// try
-// {
-//     Console.WriteLine("Migrating database...");
-//     var context = services.GetRequiredService<DeveloperSurveyContext>();
-//     context.Database.Migrate();
-//     Console.WriteLine("Database migrated.");
-// }
-// catch (Exception ex)
-// {
-//     var logger = services.GetRequiredService<ILogger<Program>>();
-//     logger.LogError(ex, "An error occurred creating the DB.");
-// }
+var services = scope.ServiceProvider;
+try
+{
+    Console.WriteLine("Migrating database...");
+    var context = services.GetRequiredService<DeveloperSurveyContext>();
+    context.Database.Migrate();
+    Console.WriteLine("Database migrated.");
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred creating the DB.");
+}
 
 if (app.Environment.IsDevelopment())
 {

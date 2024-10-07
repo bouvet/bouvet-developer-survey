@@ -1,4 +1,3 @@
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;

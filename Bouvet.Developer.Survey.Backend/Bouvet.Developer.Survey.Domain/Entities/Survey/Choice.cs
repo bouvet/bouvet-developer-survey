@@ -5,7 +5,7 @@ namespace Bouvet.Developer.Survey.Domain.Entities.Survey;
 public class Choice : IEntitiesDateTimeOffsett
 {
     public Guid Id { get; set; }
-    public string QuestionId { get; set; } = null!;
+    public Guid QuestionId { get; set; }
     public virtual Question Question { get; set; } = null!;
     public string Text { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }

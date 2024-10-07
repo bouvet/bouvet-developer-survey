@@ -5,7 +5,7 @@ namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 public class SurveyBlockDto
 {
     public Guid Id { get; set; }
-    public string SurveyId { get; set; } = null!;
+    public Guid SurveyId { get; set; }
     public string? Type { get; set; }
     public string? Description { get; set; } = string.Empty;
     public string SurveyBlockId { get; set; } = null!;
@@ -18,7 +18,7 @@ public class SurveyBlockDto
         return new SurveyBlockDto
         {
             Id = surveyBlock.Id,
-            SurveyId = surveyBlock.SurveyId,
+            SurveyId = surveyBlock.SurveyGuid,
             Type = surveyBlock.Type,
             Description = surveyBlock.Description,
             SurveyBlockId = surveyBlock.SurveyBlockId,

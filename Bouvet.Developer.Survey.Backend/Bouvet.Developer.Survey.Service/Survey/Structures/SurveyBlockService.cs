@@ -1,32 +1,95 @@
+using Bouvet.Developer.Survey.Domain.Entities.Survey;
+using Bouvet.Developer.Survey.Domain.Exceptions;
+using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bouvet.Developer.Survey.Service.Survey.Structures;
 
 public class SurveyBlockService : ISurveyBlockService
 {
-    public Task<SurveyBlockDto> CreateSurveyBlock(NewSurveyBlockDto newSurveyBlockDto)
+    private readonly DeveloperSurveyContext _context;
+    
+    public SurveyBlockService(DeveloperSurveyContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+    
+    public async Task<SurveyBlockDto> CreateSurveyBlock(NewSurveyBlockDto newSurveyBlockDto)
+    {
+        var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.SurveyId == newSurveyBlockDto.SurveyId);
+        
+        if (survey == null) throw new NotFoundException("Survey not found");
+        
+        var surveyBlock = new SurveyBlock
+        {
+            Id = Guid.NewGuid(),
+            Survey = survey,
+            Type = newSurveyBlockDto.Type,
+            Description = newSurveyBlockDto.Description,
+            SurveyBlockId = newSurveyBlockDto.SurveyBlockId,
+            CreatedAt = DateTimeOffset.Now
+        };
+        
+        await _context.SurveyBlocks.AddAsync(surveyBlock);
+        await _context.SaveChangesAsync();
+        
+        var dto = SurveyBlockDto.CreateFromEntity(surveyBlock);
+        
+        return dto;
     }
 
-    public Task<IEnumerable<SurveyBlockDto>> GetSurveyBlocks(Guid surveyId)
+    public async Task<IEnumerable<SurveyBlockDto>> GetSurveyBlocks(Guid surveyId)
     {
-        throw new NotImplementedException();
+        var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
+        
+        if (survey == null) throw new NotFoundException("Survey not found");
+        
+        var surveyBlocks = await _context.SurveyBlocks.Where(sb => sb.Survey == survey).ToListAsync();
+        
+        var surveyBlockList = surveyBlocks.Select(SurveyBlockDto.CreateFromEntity).ToList();
+        
+        return surveyBlockList;
     }
 
-    public Task<SurveyBlockDto> GetSurveyBlock(Guid surveyBlockId)
+    public async Task<SurveyBlockDto> GetSurveyBlock(Guid surveyBlockId)
     {
-        throw new NotImplementedException();
+        var surveyBlock = await _context.SurveyBlocks.FirstOrDefaultAsync(sb => sb.Id == surveyBlockId);
+        
+        if (surveyBlock == null) throw new NotFoundException("Survey block not found");
+        
+        var dto = SurveyBlockDto.CreateFromEntity(surveyBlock);
+        
+        return dto;
     }
 
-    public Task<SurveyBlockDto> UpdateSurveyElement(Guid surveyElementId, NewSurveyBlockDto updateSurveyBlockDto)
+    public async Task<SurveyBlockDto> UpdateSurveyElement(Guid surveyElementId, NewSurveyBlockDto updateSurveyBlockDto)
     {
-        throw new NotImplementedException();
+       var surveyBlock = await _context.SurveyBlocks.FirstOrDefaultAsync(sb => sb.Id == surveyElementId);
+       
+       if (surveyBlock == null) throw new NotFoundException("Survey block not found");
+       
+        surveyBlock.Type = updateSurveyBlockDto.Type;
+        surveyBlock.Description = updateSurveyBlockDto.Description;
+        surveyBlock.UpdatedAt = DateTimeOffset.Now;
+         
+        _context.SurveyBlocks.Update(surveyBlock);
+        await _context.SaveChangesAsync();
+        
+        var dto = SurveyBlockDto.CreateFromEntity(surveyBlock);
+        
+        return dto;
     }
 
-    public Task DeleteSurveyBlock(Guid surveyBlockId)
+    public async Task DeleteSurveyBlock(Guid surveyBlockId)
     {
-        throw new NotImplementedException();
+        var surveyBlock = await _context.SurveyBlocks.FirstOrDefaultAsync(sb => sb.Id == surveyBlockId);
+        
+        if (surveyBlock == null) throw new NotFoundException("Survey block not found");
+        
+        surveyBlock.DeletedAt = DateTimeOffset.Now;
+        _context.SurveyBlocks.Update(surveyBlock);
+        await _context.SaveChangesAsync();
     }
 }

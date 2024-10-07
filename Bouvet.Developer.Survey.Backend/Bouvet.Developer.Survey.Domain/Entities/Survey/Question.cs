@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Bouvet.Developer.Survey.Domain.Interfaces;
 
 namespace Bouvet.Developer.Survey.Domain.Entities.Survey;
@@ -5,9 +6,13 @@ namespace Bouvet.Developer.Survey.Domain.Entities.Survey;
 public class Question : IEntitiesDateTimeOffsett
 {
     public Guid Id { get; set; }
-    public string BlockElementId { get; set; } = null!;
+    public Guid BlockElementId { get; set; }
     public virtual BlockElement BlockElement { get; set; } = null!;
+    
+    [MaxLength(250)]
     public string SurveyId { get; set; } = null!;
+    
+    [MaxLength(250)]
     public string DateExportTag { get; set; } = null!;
     public string QuestionText { get; set; } = null!;
     public string QuestionDescription { get; set; } = null!;

@@ -16,12 +16,12 @@ public class SurveyBlockConfiguration : IEntityTypeConfiguration<SurveyBlock>
 
         builder.HasMany(b => b.BlockElements)
             .WithOne(e => e.SurveyBlock)
-            .HasForeignKey(e => e.BlockId)
+            .HasForeignKey(e => e.SurveyElementGuid)
             .OnDelete(DeleteBehavior.NoAction);
         
         builder.HasOne(b => b.Survey)
             .WithMany(s => s.SurveyBlocks)
-            .HasForeignKey(b => b.SurveyId)
+            .HasForeignKey(b => b.SurveyGuid)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

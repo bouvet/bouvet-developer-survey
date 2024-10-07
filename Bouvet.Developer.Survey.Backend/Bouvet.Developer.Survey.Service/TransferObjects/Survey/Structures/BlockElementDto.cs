@@ -2,8 +2,9 @@ using Bouvet.Developer.Survey.Domain.Entities.Survey;
 
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
-public class BlockDto
+public class BlockElementDto
 {
+    public Guid Id { get; set; }
     public Guid BlockId { get; set; }
     public string Type { get; set; } = null!;
     public string QuestionId { get; set; } = null!;
@@ -11,11 +12,12 @@ public class BlockDto
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }
     
-    public static BlockDto CreateFromEntity(BlockElement block)
+    public static BlockElementDto CreateFromEntity(BlockElement block)
     {
-        return new BlockDto
+        return new BlockElementDto
         {
-            BlockId = block.BlockId,
+            Id = block.Id,
+            BlockId = block.SurveyElementGuid,
             Type = block.Type,
             QuestionId = block.QuestionId,
             CreatedAt = block.CreatedAt,

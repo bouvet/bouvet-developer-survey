@@ -4,7 +4,7 @@ namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 public class QuestionDto
 {
-    public string BlockElementId { get; set; } = null!;
+    public Guid BlockElementId { get; set; }
     public string SurveyId { get; set; } = null!;
     public string DateExportTag { get; set; } = null!;
     public string QuestionText { get; set; } = null!;

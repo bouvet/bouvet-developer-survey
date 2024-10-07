@@ -36,7 +36,7 @@ public class SurveysController : ControllerBase
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpGet]
-    [SwaggerResponse(200, "Returns a list of all surveys", typeof(IEnumerable<SurveyListDto>))]
+    [SwaggerResponse(200, "Returns a list of all surveys", typeof(IEnumerable<SurveyDto>))]
     public async Task<IActionResult> GetSurveys()
     {
         // var surveys = await _surveyService.GetSurveysAsync();
@@ -69,7 +69,7 @@ public class SurveysController : ControllerBase
     /// <response code="403">User not authorized to write</response>
     [HttpPost]
     [Authorize(Roles = RoleConstants.WriteRole)]
-    [SwaggerResponse(201, "Survey created", typeof(SurveyListDto))]
+    [SwaggerResponse(201, "Survey created", typeof(SurveyDto))]
     public async Task<IActionResult> CreateSurvey([FromBody] NewSurveyDto newSurveyDto)
     {
         try
