@@ -79,6 +79,7 @@ export default function DotPlotChart(data: chartProps) {
 
     return (
         <Plot
+            className="w-full"
             data={plot}
             layout={layout}
             config={config}

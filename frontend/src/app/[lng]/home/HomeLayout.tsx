@@ -17,8 +17,12 @@ export default function Home() {
   return (
     <HomeContextProvider>
       <Header />
-      <h1 className="text-2xl underline">Bouvet Developer Survey</h1>
-      <DotPlotChart {...chartData} />
+      <section className="mx-auto flex flex-col max-w-7xl lg:px-8">
+        <h1 className="text-3xl w-full text-center">Teknologier</h1>
+        <div className="w-full">
+          <DotPlotChart {...chartData} />
+        </div>
+      </section>
     </HomeContextProvider>
   );
 }
