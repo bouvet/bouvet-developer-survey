@@ -3,7 +3,6 @@ using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
-using Bouvet.Developer.Survey.Tests.Builders.Entities;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -12,7 +11,6 @@ namespace Bouvet.Developer.Survey.Tests.Services.Survey;
 public class BlockElementServiceTests
 {
     private readonly IBlockElementService _blockElementService;
-    private readonly SurveyBuilder _surveyBuilder = new();
     private readonly ISurveyBlockService _surveyBlockService;
     private readonly ISurveyService _surveyService;
     private readonly DeveloperSurveyContext _context;
@@ -57,7 +55,7 @@ public class BlockElementServiceTests
         await _context.SaveChangesAsync();
     }
     
-    private async Task<SurveyBlockDto> CreateTestSurveyBlock()
+    private async Task<SurveyElementDto> CreateTestSurveyBlock()
     {
         await CreateTestSurvey();
         
@@ -72,16 +70,20 @@ public class BlockElementServiceTests
         return await _surveyBlockService.CreateSurveyBlock(newSurveyBlockDto);
     }
     
-    private async Task<BlockElementDto> CreateTestBlockElementAsync(Guid blockId)
+    private async Task<List<BlockElementDto>> CreateTestBlockElementAsync(Guid blockId)
     {
+        var listElementDto = new List<NewBlockElementDto>();
+        
         var newBlockDto = new NewBlockElementDto
         {
             QuestionId = ElementQuestionId,
             Type = ElementType,
             BlockId = blockId
         };
+        
+        listElementDto.Add(newBlockDto);
 
-        return await _blockElementService.CreateBlockElement(newBlockDto);
+        return await _blockElementService.CreateBlockElement(listElementDto);
     }
 
     [Fact]
@@ -94,11 +96,11 @@ public class BlockElementServiceTests
         
         // Assert
         Assert.NotNull(block);
-        Assert.Equal(ElementType, block.Type);
-        Assert.Equal(ElementQuestionId, block.QuestionId);
-        Assert.Equal(testBlock.Id, block.BlockId);
+        Assert.Equal(ElementType, block.First().Type);
+        Assert.Equal(ElementQuestionId, block.First().QuestionId);
+        Assert.Equal(testBlock.Id, block.First().BlockId);
         
-        var blockElementById = await _blockElementService.GetBlockElementById(block.Id);
+        var blockElementById = await _blockElementService.GetBlockElementById(block.First().Id);
         
         Assert.NotNull(blockElementById);
         Assert.Equal(ElementType, blockElementById.Type);
@@ -110,18 +112,20 @@ public class BlockElementServiceTests
         await DeleteAllSurveyBlocks();
         
         // Arrange
+        var listElementDto = new List<NewBlockElementDto>();
         var newBlockDto = new NewBlockElementDto
         {
             QuestionId = ElementQuestionId,
             Type = ElementType,
             BlockId = Guid.NewGuid()
         };
-
-        // Act
-        async Task CreateBlock() => await _blockElementService.CreateBlockElement(newBlockDto);
         
-        // Assert
-        await Assert.ThrowsAsync<NotFoundException>(CreateBlock);
+        listElementDto.Add(newBlockDto);
+        
+        var createBlock = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.CreateBlockElement(listElementDto));
+        
+        Assert.Equal("Blocks not found: " + newBlockDto.BlockId, createBlock.Message);
+        
         
         var blockElementGet = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.GetBlockElementById(Guid.NewGuid()));
         
@@ -180,7 +184,7 @@ public class BlockElementServiceTests
         };
         
         // Act
-        var updatedBlockElement = await _blockElementService.UpdateBlockElement(blockElement.Id, updatedBlockElementDto);
+        var updatedBlockElement = await _blockElementService.UpdateBlockElement(blockElement.First().Id, updatedBlockElementDto);
         
         // Assert
         Assert.NotNull(updatedBlockElement);
@@ -196,10 +200,10 @@ public class BlockElementServiceTests
         var blockElement = await CreateTestBlockElementAsync(testBlock.Id);
         
         // Act
-        await _blockElementService.DeleteBlockElement(blockElement.Id);
+        await _blockElementService.DeleteBlockElement(blockElement.First().Id);
         
         // Assert
-        var blockElementGet = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.GetBlockElementById(blockElement.Id));
+        var blockElementGet = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.GetBlockElementById(blockElement.First().Id));
         
         Assert.Equal("Block element not found", blockElementGet.Message);
     }

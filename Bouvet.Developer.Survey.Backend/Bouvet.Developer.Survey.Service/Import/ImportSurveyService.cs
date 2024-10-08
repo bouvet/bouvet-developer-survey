@@ -23,10 +23,10 @@ public class ImportSurveyService : IImportSurveyService
         _surveyService = surveyService;
         _surveyBlockService = surveyBlockService;
         _blockElementService = blockElementService;
-        _context = context;
+        _context = context; 
     }
     
-    public async Task<SurveyBlocksDto> FindSurveyBlocks(Stream stream)
+    public async Task<SurveyBlocksDto> UploadSurvey(Stream stream)
     {
         using var reader = new StreamReader(stream);
         var jsonString = await reader.ReadToEndAsync();
@@ -35,11 +35,21 @@ public class ImportSurveyService : IImportSurveyService
 
         if (surveyDto == null) throw new BadRequestException("Invalid JSON");
 
+        
+        var mapSurvey = await FindSurveyBlocks(surveyDto);
+        
+        return mapSurvey;
+    }
+
+    public async Task<SurveyBlocksDto> FindSurveyBlocks(SurveyBlocksDto surveyDto)
+    {
         // Filter out elements where Payload is null or empty
         surveyDto.SurveyElements = (surveyDto.SurveyElements ?? throw new BadRequestException("Invalid JSON"))
             .Where(element => element.Payload != null && element.Payload.Count > 0)
             .ToArray();
 
+        await MapJsonSurveyBlocks(surveyDto);
+        
         return surveyDto;
     }
 
@@ -60,12 +70,12 @@ public class ImportSurveyService : IImportSurveyService
         return surveyDto;
     }
     
-    private async Task MapJsonObjectToSurveyBlock(SurveyBlocksDto surveyBlockDto)
+    private async Task MapJsonSurveyBlocks(SurveyBlocksDto surveyBlockDto)
     {
         var checkSurveyExists = await 
             _context.Surveys.FirstOrDefaultAsync(s => s.SurveyId == surveyBlockDto.SurveyEntry.SurveyId);
         
-        if(checkSurveyExists != null) throw new NotFoundException("Survey found");
+        if(checkSurveyExists != null) throw new NotFoundException("Survey already exists");
         
         var survey = await _surveyService.CreateSurveyAsync(new NewSurveyDto
         {
@@ -74,26 +84,31 @@ public class ImportSurveyService : IImportSurveyService
             Language = surveyBlockDto.SurveyEntry.SurveyLanguage
         });
         
-        foreach (var surveyElement in surveyBlockDto.SurveyElements)
-        {
-            // var surveyBlock = await _surveyBlockService.CreateSurveyBlock(new NewSurveyBlockDto
-            // {
-            //     SurveyId = survey.SurveyId,
-            //     Type = surveyElement.Payload.,
-            //     Description = surveyElement.Description,
-            //     SurveyBlockId = surveyElement.SurveyBlockId
-            // });
-            //
-            foreach (var element in surveyElement.Payload)
+        // Bulk insert survey blocks and block elements
+        var blockElements = new List<NewBlockElementDto>();
+
+        if (surveyBlockDto.SurveyElements != null)
+            foreach (var surveyElement in surveyBlockDto.SurveyElements)
             {
-                await _blockElementService.CreateBlockElement(new NewBlockElementDto
+                foreach (var element in surveyElement.Payload.Values)
                 {
-                    SurveyBlockId = surveyBlock.Id,
-                    Type = element.Type,
-                    Description = element.Description,
-                    Choices = element.Choices
-                });
+                    var surveyBlock = await _surveyBlockService.CreateSurveyBlock(new NewSurveyBlockDto
+                    {
+                        SurveyId = survey.SurveyId,
+                        Type = element.Type,
+                        Description = element.Description,
+                        SurveyBlockId = element.Id
+                    });
+                    
+                    blockElements.AddRange(element.BlockElements.Select(blockElement => new NewBlockElementDto
+                    {
+                        BlockId = surveyBlock.Id,
+                        Type = blockElement.Type,
+                        QuestionId = blockElement.QuestionId
+                    }));
+                }
             }
-        }
+
+        await _blockElementService.CreateBlockElement(blockElements); // Bulk insert
     }
 }

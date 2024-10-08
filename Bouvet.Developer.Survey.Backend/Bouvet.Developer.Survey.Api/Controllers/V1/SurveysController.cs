@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.AspNetCore.Authorization;
@@ -16,14 +17,14 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class SurveysController : ControllerBase
 {
-    // private readonly ISurveyService _surveyService;
+    private readonly ISurveyService _surveyService;
     private readonly ICsvToJsonService _csvToJsonService;
     private readonly IImportSurveyService _importSurveyService;
     
-    public SurveysController( ICsvToJsonService csvToJsonService, 
+    public SurveysController(ISurveyService surveyService, ICsvToJsonService csvToJsonService, 
         IImportSurveyService importSurveyService)
     {
-        // _surveyService = surveyService;
+        _surveyService = surveyService;
         _csvToJsonService = csvToJsonService;
         _importSurveyService = importSurveyService;
     }
@@ -39,9 +40,8 @@ public class SurveysController : ControllerBase
     [SwaggerResponse(200, "Returns a list of all surveys", typeof(IEnumerable<SurveyDto>))]
     public async Task<IActionResult> GetSurveys()
     {
-        // var surveys = await _surveyService.GetSurveysAsync();
-        // return Ok(surveys);
-        return Ok();
+        var surveys = await _surveyService.GetSurveysAsync();
+        return Ok(surveys);
     }
     
     /// <summary>
@@ -55,9 +55,8 @@ public class SurveysController : ControllerBase
     // [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
     public async Task<IActionResult> GetSurvey(Guid surveyId)
     {
-        // var survey = await _surveyService.GetSurveyAsync(surveyId);
-        // return Ok(survey);
-        return Ok();
+        var survey = await _surveyService.GetSurveyAsync(surveyId);
+        return Ok(survey);
     }
     
     /// <summary>
@@ -74,7 +73,7 @@ public class SurveysController : ControllerBase
     {
         try
         {
-            // await _surveyService.CreateSurveyAsync(newSurveyDto);
+            await _surveyService.CreateSurveyAsync(newSurveyDto);
             return Ok();
         }
         catch (Exception e)
@@ -96,7 +95,7 @@ public class SurveysController : ControllerBase
         {
             await file.CopyToAsync(stream);
             stream.Position = 0;
-            var survey = await _importSurveyService.FindSurveyBlocks(stream);
+            var survey = await _importSurveyService.UploadSurvey(stream);
             return Ok(survey);
         }
     }

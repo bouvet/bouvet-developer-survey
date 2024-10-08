@@ -7,9 +7,9 @@ public interface IBlockElementService
     /// <summary>
     /// Create a new block
     /// </summary>
-    /// <param name="newBlockElementDto">The new block DTO</param>
-    /// <returns>The created block DTO</returns>
-    public Task<BlockElementDto> CreateBlockElement(NewBlockElementDto newBlockElementDto);
+    /// <param name="newBlockElementDtos">List of block elements to create</param>
+    /// <returns>List of created block elements</returns>
+    public Task<List<BlockElementDto>> CreateBlockElement(List<NewBlockElementDto> newBlockElementDtos);
     
     /// <summary>
     /// Get block by GUID

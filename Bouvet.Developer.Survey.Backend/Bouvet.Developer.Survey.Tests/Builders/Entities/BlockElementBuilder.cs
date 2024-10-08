@@ -1,3 +1,4 @@
+using System;
 using Bouvet.Developer.Survey.Domain.Entities.Survey;
 
 namespace Bouvet.Developer.Survey.Tests.Builders.Entities;

@@ -4,6 +4,7 @@ namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 public class ChoiceDto
 {
+    public Guid Id { get; set; }
     public Guid QuestionId { get; set; }
     public string Text { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
@@ -15,6 +16,7 @@ public class ChoiceDto
     {
         return new ChoiceDto
         {
+            Id = choice.Id,
             QuestionId = choice.QuestionId,
             Text = choice.Text,
             CreatedAt = choice.CreatedAt,

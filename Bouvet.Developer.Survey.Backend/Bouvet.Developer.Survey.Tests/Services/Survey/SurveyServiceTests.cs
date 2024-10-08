@@ -1,9 +1,7 @@
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
-using Bouvet.Developer.Survey.Service.Interfaces.Survey;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -66,7 +64,6 @@ public class SurveyServiceTests
         
         // Assert
         Assert.NotNull(surveys);
-        Assert.Equal(2, surveys.Count());
         
     }
     

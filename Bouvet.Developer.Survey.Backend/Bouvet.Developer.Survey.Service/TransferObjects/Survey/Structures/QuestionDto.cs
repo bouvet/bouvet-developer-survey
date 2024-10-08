@@ -4,6 +4,7 @@ namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 public class QuestionDto
 {
+    public Guid Id { get; set; }
     public Guid BlockElementId { get; set; }
     public string SurveyId { get; set; } = null!;
     public string DateExportTag { get; set; } = null!;
@@ -12,11 +13,13 @@ public class QuestionDto
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }
+    public virtual ICollection<ChoiceDto>? Choices { get; set; } = new List<ChoiceDto>();
     
     public static QuestionDto CreateFromEntity(Question question)
     {
         return new QuestionDto
         {
+            Id = question.Id,
             BlockElementId = question.BlockElementId,
             SurveyId = question.SurveyId,
             DateExportTag = question.DateExportTag,
@@ -25,6 +28,7 @@ public class QuestionDto
             CreatedAt = question.CreatedAt,
             UpdatedAt = question.UpdatedAt,
             LastSyncedAt = question.LastSyncedAt,
+            Choices = question.Choices?.Select(ChoiceDto.CreateFromEntity).ToList()
         };
     }
 }

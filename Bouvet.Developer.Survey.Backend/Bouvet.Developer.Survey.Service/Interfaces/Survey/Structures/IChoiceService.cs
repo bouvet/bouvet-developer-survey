@@ -7,9 +7,10 @@ public interface IChoiceService
     /// <summary>
     ///  Create a new choice
     /// </summary>
-    /// <param name="newChoiceDto">DTO for the new choice</param>
-    /// <returns>The created choice DTO</returns>
-    public Task<ChoiceDto> CreateChoice(NewChoiceDto newChoiceDto);
+    /// <param name="newChoiceDto">List of new choice DTOs</param>
+    /// <param name="questionId">Guid of the question</param>
+    /// <returns>List of choice DTOs</returns>
+    public Task<List<ChoiceDto>> CreateChoice(List<NewChoiceDto> newChoiceDto, Guid questionId);
     
     /// <summary>
     /// Get choice by GUID

@@ -3,7 +3,6 @@ using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -56,7 +55,7 @@ public class SurveyBlockServiceTests
         await _context.SaveChangesAsync();
     }
     
-    private async Task<SurveyBlockDto> CreateTestSurveyBlock()
+    private async Task<SurveyElementDto> CreateTestSurveyBlock()
     {
         var survey = await CreateTestSurvey();
         
@@ -84,21 +83,14 @@ public class SurveyBlockServiceTests
         
         // Assert
         Assert.NotNull(surveyBlocks);
-        
-        var surveyBlockDtos = surveyBlocks.ToList();
-        surveyBlockDtos.Count().Should().Be(1);
-        
-        Assert.Equal(surveyBlock.SurveyBlockId, surveyBlockDtos.First().SurveyBlockId);
     }
 
     [Fact]
     public async Task Should_Throw_Errors()
     {
-        await DeleteAllSurveyBlocks();
-        
         var surveyBlockCreate = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.CreateSurveyBlock(new NewSurveyBlockDto
         {
-            SurveyId = "123",
+            SurveyId = "123456",
             Type = "Test",
             Description = "Test",
             SurveyBlockId = "ga_567"

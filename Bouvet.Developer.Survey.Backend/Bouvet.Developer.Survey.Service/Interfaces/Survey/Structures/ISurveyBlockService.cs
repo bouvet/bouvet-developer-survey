@@ -9,21 +9,21 @@ public interface ISurveyBlockService
     /// </summary>
     /// <param name="newSurveyBlockDto">The new survey block DTO</param>
     /// <returns>The created survey block DTO</returns>
-    public Task<SurveyBlockDto> CreateSurveyBlock(NewSurveyBlockDto newSurveyBlockDto);
+    public Task<SurveyElementDto> CreateSurveyBlock(NewSurveyBlockDto newSurveyBlockDto);
 
     /// <summary>
     ///  Get survey block by GUID
     /// </summary>
     /// <param name="surveyId">The survey GUID</param>
     /// <returns>Survey block DTO</returns>
-    public Task<IEnumerable<SurveyBlockDto>> GetSurveyBlocks(Guid surveyId);
+    public Task<IEnumerable<SurveyElementDto>> GetSurveyBlocks(Guid surveyId);
 
     /// <summary>
     /// Get survey block by GUID
     /// </summary>
     /// <param name="surveyBlockId">The survey block GUID</param>
     /// <returns>Survey block DTO</returns>
-    public Task<SurveyBlockDto> GetSurveyBlock(Guid surveyBlockId);
+    public Task<SurveyElementDto> GetSurveyBlock(Guid surveyBlockId);
 
     /// <summary>
     /// Update survey block
@@ -31,7 +31,7 @@ public interface ISurveyBlockService
     /// <param name="surveyElementId">The survey block GUID</param>
     /// <param name="updateSurveyBlockDto">The survey block DTO</param>
     /// <returns>Survey block DTO</returns>
-    public Task<SurveyBlockDto> UpdateSurveyElement(Guid surveyElementId, NewSurveyBlockDto updateSurveyBlockDto);
+    public Task<SurveyElementDto> UpdateSurveyElement(Guid surveyElementId, NewSurveyBlockDto updateSurveyBlockDto);
 
     /// <summary>
     /// Set survey block to deleted

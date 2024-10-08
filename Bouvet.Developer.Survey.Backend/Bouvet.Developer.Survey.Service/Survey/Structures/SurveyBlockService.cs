@@ -16,7 +16,7 @@ public class SurveyBlockService : ISurveyBlockService
         _context = context;
     }
     
-    public async Task<SurveyBlockDto> CreateSurveyBlock(NewSurveyBlockDto newSurveyBlockDto)
+    public async Task<SurveyElementDto> CreateSurveyBlock(NewSurveyBlockDto newSurveyBlockDto)
     {
         var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.SurveyId == newSurveyBlockDto.SurveyId);
         
@@ -35,12 +35,12 @@ public class SurveyBlockService : ISurveyBlockService
         await _context.SurveyBlocks.AddAsync(surveyBlock);
         await _context.SaveChangesAsync();
         
-        var dto = SurveyBlockDto.CreateFromEntity(surveyBlock);
+        var dto = SurveyElementDto.CreateFromEntity(surveyBlock);
         
         return dto;
     }
 
-    public async Task<IEnumerable<SurveyBlockDto>> GetSurveyBlocks(Guid surveyId)
+    public async Task<IEnumerable<SurveyElementDto>> GetSurveyBlocks(Guid surveyId)
     {
         var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
         
@@ -48,23 +48,23 @@ public class SurveyBlockService : ISurveyBlockService
         
         var surveyBlocks = await _context.SurveyBlocks.Where(sb => sb.Survey == survey).ToListAsync();
         
-        var surveyBlockList = surveyBlocks.Select(SurveyBlockDto.CreateFromEntity).ToList();
+        var surveyBlockList = surveyBlocks.Select(SurveyElementDto.CreateFromEntity).ToList();
         
         return surveyBlockList;
     }
 
-    public async Task<SurveyBlockDto> GetSurveyBlock(Guid surveyBlockId)
+    public async Task<SurveyElementDto> GetSurveyBlock(Guid surveyBlockId)
     {
         var surveyBlock = await _context.SurveyBlocks.FirstOrDefaultAsync(sb => sb.Id == surveyBlockId);
         
         if (surveyBlock == null) throw new NotFoundException("Survey block not found");
         
-        var dto = SurveyBlockDto.CreateFromEntity(surveyBlock);
+        var dto = SurveyElementDto.CreateFromEntity(surveyBlock);
         
         return dto;
     }
 
-    public async Task<SurveyBlockDto> UpdateSurveyElement(Guid surveyElementId, NewSurveyBlockDto updateSurveyBlockDto)
+    public async Task<SurveyElementDto> UpdateSurveyElement(Guid surveyElementId, NewSurveyBlockDto updateSurveyBlockDto)
     {
        var surveyBlock = await _context.SurveyBlocks.FirstOrDefaultAsync(sb => sb.Id == surveyElementId);
        
@@ -77,7 +77,7 @@ public class SurveyBlockService : ISurveyBlockService
         _context.SurveyBlocks.Update(surveyBlock);
         await _context.SaveChangesAsync();
         
-        var dto = SurveyBlockDto.CreateFromEntity(surveyBlock);
+        var dto = SurveyElementDto.CreateFromEntity(surveyBlock);
         
         return dto;
     }

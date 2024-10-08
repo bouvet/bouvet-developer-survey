@@ -15,27 +15,37 @@ public class BlockElementService : IBlockElementService
     {
         _context = context;
     }
-    public async Task<BlockElementDto> CreateBlockElement(NewBlockElementDto newBlockElementDto)
+    public async Task<List<BlockElementDto>> CreateBlockElement(List<NewBlockElementDto> newBlockElementDtos)
     {
-        var block = await _context.SurveyBlocks.FirstOrDefaultAsync(b => b.Id == newBlockElementDto.BlockId);
+        var blockIds = newBlockElementDtos.Select(dto => dto.BlockId).Distinct().ToList();
         
-        if (block == null) throw new NotFoundException("Block not found");
+        var blocks = await _context.SurveyBlocks
+            .Where(b => blockIds.Contains(b.Id))
+            .ToListAsync();
         
-        var blockElement = new BlockElement
+        if(blocks.Count != blockIds.Count)
+        {
+            var missingBlockIds = blockIds.Except(blocks.Select(b => b.Id)).ToList();
+            throw new NotFoundException($"Blocks not found: {string.Join(", ", missingBlockIds)}");
+        }
+        
+        //Create BlockElements
+        var blockElements = newBlockElementDtos.Select(dto => new BlockElement
         {
             Id = Guid.NewGuid(),
-            SurveyElementGuid = newBlockElementDto.BlockId,
-            Type = newBlockElementDto.Type,
-            QuestionId = newBlockElementDto.QuestionId,
+            SurveyElementGuid = dto.BlockId,
+            Type = dto.Type,
+            QuestionId = dto.QuestionId,
             CreatedAt = DateTimeOffset.Now
-        };
+        }).ToList();
         
-        await _context.BlockElements.AddAsync(blockElement);
+        await _context.BlockElements.AddRangeAsync(blockElements);
         await _context.SaveChangesAsync();
         
-        var dto = BlockElementDto.CreateFromEntity(blockElement);
+        var dtos = blockElements.Select(BlockElementDto.CreateFromEntity).ToList();
         
-        return dto;
+        return dtos;
+        
     }
 
     public async Task<BlockElementDto> GetBlockElementById(Guid blockElementId)
