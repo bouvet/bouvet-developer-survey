@@ -75,7 +75,7 @@ export default function DotPlotChart(data: chartProps) {
       plot_bgcolor: 'rgb(254, 247, 234)',
     };
     
-    const config = {responsive: true}
+    const config = {responsive: true, displayModeBar: false};
     const plot = [trace1, trace2];
 
     return (
