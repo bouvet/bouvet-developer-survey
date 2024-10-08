@@ -37,7 +37,7 @@ export default function DotPlotChart(data: chartProps) {
       y: data.y,
       mode: 'markers+text',
       name: 'Beundret',
-      text: data.y.map(value => value + ' %'),
+      text: data.x2.map(value => value + ' %'),
       textposition: 'right',
       marker: {
         color: 'rgba(204, 204, 204, 0.95)',
