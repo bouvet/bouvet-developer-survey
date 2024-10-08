@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 interface chartProps {
+    title: string;
     x1: number[];
     x2: number[];
     y: string[];
@@ -50,7 +51,7 @@ export default function DotPlotChart(data: chartProps) {
     };
     
     const layout = {
-      title: 'Beundret og ønsket',
+      title: data.title,
       xaxis: {
         visible:false,
         range: [0, 100]
