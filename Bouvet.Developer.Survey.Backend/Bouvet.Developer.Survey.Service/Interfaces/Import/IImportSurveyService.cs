@@ -7,5 +7,5 @@ public interface IImportSurveyService
 {
     Task<SurveyBlocksDto> UploadSurvey(Stream stream);
     Task<SurveyBlocksDto> FindSurveyBlocks(SurveyBlocksDto surveyDto);
-    Task<SurveyQuestionsDto> FindSurveyQuestions(Stream stream);
+    Task FindSurveyQuestions(SurveyQuestionsDto surveyQuestionsDto);
 }

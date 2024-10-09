@@ -1,9 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Bouvet.Developer.Survey.Service.TransferObjects.Import;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 
-namespace Bouvet.Developer.Survey.Service.Interfaces.Import;
+namespace Bouvet.Developer.Survey.Service.Import;
 public class PayloadConverter : JsonConverter<Dictionary<string, DictionaryPayload>>
 {
     public override Dictionary<string, DictionaryPayload>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions? options)

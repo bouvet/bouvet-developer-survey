@@ -82,39 +82,31 @@ public class SurveysController : ControllerBase
         }
     }
     
-    // POST: api/file/upload
-    [HttpPost("upload")]
-    public async Task<IActionResult> UploadFile(IFormFile file)
+    /// <summary>
+    /// Upload a survey
+    /// </summary>
+    /// <param name="file">The file to upload</param>
+    [HttpPost("UploadSurvey")]
+    [SwaggerResponse(201, "Survey created")]
+    public async Task<IActionResult> UploadFile(IFormFile? file)
     {
         if (file == null || file.Length == 0)
         {
             return BadRequest("No file uploaded or file is empty.");
         }
 
-        using (var stream = new MemoryStream())
+        try
         {
-            await file.CopyToAsync(stream);
-            stream.Position = 0;
-            var survey = await _importSurveyService.UploadSurvey(stream);
-            return Ok(survey);
-        }
-    }
-    
-    // POST: api/file/upload
-    [HttpPost("uploadQuestions")]
-    public async Task<IActionResult> UploadQuestions(IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest("No file uploaded or file is empty.");
-        }
+            using var stream = new MemoryStream();
 
-        using (var stream = new MemoryStream())
-        {
             await file.CopyToAsync(stream);
             stream.Position = 0;
-            var survey = await _importSurveyService.FindSurveyQuestions(stream);
-            return Ok(survey);
+            await _importSurveyService.UploadSurvey(stream);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
     

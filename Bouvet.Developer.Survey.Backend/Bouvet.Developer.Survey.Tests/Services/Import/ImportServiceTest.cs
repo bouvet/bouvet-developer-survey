@@ -13,10 +13,7 @@ public class ImportServiceTest
 {
     private readonly IImportSurveyService _importSurvey;
     private readonly ISurveyService _surveyService;
-    private readonly ISurveyBlockService _surveyBlockService;
-    private readonly IBlockElementService _blockElementService;
-    private readonly DeveloperSurveyContext _context;
-    
+
     public ImportServiceTest()
     {
         // Setting up an in-memory database for the context
@@ -24,13 +21,17 @@ public class ImportServiceTest
             .UseInMemoryDatabase(databaseName: "ImportDatabase")
             .Options;
 
-        _context = new DeveloperSurveyContext(options);
+        var context = new DeveloperSurveyContext(options);
 
         // Injecting the in-memory context into the service
-        _surveyService = new SurveyService(_context);
-        _surveyBlockService = new SurveyBlockService(_context);
-        _blockElementService = new BlockElementService(_context);
-        _importSurvey = new ImportSurveyService(_surveyService, _surveyBlockService, _blockElementService,_context);
+        _surveyService = new SurveyService(context);
+        IChoiceService choiceService = new ChoiceService(context);
+        IQuestionService questionService = new QuestionService(context, choiceService);
+        ISurveyBlockService surveyBlockService = new SurveyBlockService(context);
+        IBlockElementService blockElementService = new BlockElementService(context);
+        IImportSyncService importSyncService = new ImportSyncService(surveyBlockService, blockElementService,
+            questionService, _surveyService);
+        _importSurvey = new ImportSurveyService(_surveyService, importSyncService, context);
     }
 
     [Fact]
@@ -53,6 +54,10 @@ public class ImportServiceTest
         
         // Assert
         Assert.NotNull(surveys);
+        
+        
+        var surveyQuestionsDto = await TestSurveyQuestions();
+        await _importSurvey.FindSurveyQuestions(surveyQuestionsDto);
     }
 
 
@@ -120,5 +125,37 @@ public class ImportServiceTest
          };
        
        return await Task.FromResult(test);
+    }
+
+    private async Task<SurveyQuestionsDto> TestSurveyQuestions()
+    {
+        var testSurveyElements = new SurveyElementQuestionsDto
+        {
+            SurveyId = "123",
+            Element = "QID1",
+            PrimaryAttribute = "QID1",
+            SecondaryAttribute = "QID1",
+            TertiaryAttribute = "QID1",
+            Payload = new PayloadQuestionDto
+            {
+                QuestionText = "What is your name?",
+                DataExportTag = "Name",
+                QuestionDescription = "Name",
+                Choices = new Dictionary<string, ChoicesDto>
+                {
+                    {"1", new ChoicesDto
+                    {
+                        Display = "Name"
+                    }}
+                }
+            }
+        };
+        
+        var testParent = new SurveyQuestionsDto
+        {
+            SurveyElements = [testSurveyElements]
+        };
+        
+        return await Task.FromResult(testParent);
     }
 }
