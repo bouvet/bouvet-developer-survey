@@ -17,7 +17,6 @@ const Survey = () => {
     
     return (
         <section className="mx-auto flex flex-col max-w-7xl lg:px-8">
-            <h1 className="text-3xl w-full text-center mb-8">{t('langs-and-frameworks')}</h1>
             <div className="w-full">
                 {/*
                 <DotPlotChart {...chartData} />

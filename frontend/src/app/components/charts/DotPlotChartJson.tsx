@@ -68,6 +68,7 @@ const DotPlotChartJson = () => {
       paper_bgcolor: graphBackgroundColor,
       plot_bgcolor: graphBackgroundColor,
     };
+    
     const config = {responsive: true, displayModeBar: false};
 
     return (
