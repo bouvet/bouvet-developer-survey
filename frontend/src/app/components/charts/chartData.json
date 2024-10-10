@@ -1,55 +1,55 @@
 {
-    "name": "Programmeringsspråk: Beundret og ønsket",
-    "data": [
-        {
-            "label": "C#",
-            "xMin": 46,
-            "xMax": 68
-        },
-        {
-            "label": "Typescript",
-            "xMin": 40,
-            "xMax": 65
-        },
-        {
-            "label": "Python",
-            "xMin": 35,
-            "xMax": 68
-        },
-        {
-            "label": "Javascript",
-            "xMin": 33,
-            "xMax": 44
-        },
-        {
-            "label": "SQL",
-            "xMin": 33,
-            "xMax": 53
-        },
-        {
-            "label": "HTML/CSS",
-            "xMin": 29,
-            "xMax": 53
-        },
-        {
-            "label": "Rust",
-            "xMin": 23,
-            "xMax": 86
-        },
-        {
-            "label": "Bash/Shell",
-            "xMin": 19,
-            "xMax": 52
-        },
-        {
-            "label": "PowerShell",
-            "xMin": 17,
-            "xMax": 39
-        },
-        {
-            "label": "Go",
-            "xMin": 15,
-            "xMax": 62
-        }
-    ]
-  }
+  "name": "Programmeringsspråk: Beundret og ønsket",
+  "data": [
+    {
+      "label": "C#",
+      "xMin": 46,
+      "xMax": 68
+    },
+    {
+      "label": "Typescript",
+      "xMin": 40,
+      "xMax": 65
+    },
+    {
+      "label": "Python",
+      "xMin": 35,
+      "xMax": 68
+    },
+    {
+      "label": "Javascript",
+      "xMin": 33,
+      "xMax": 44
+    },
+    {
+      "label": "SQL",
+      "xMin": 33,
+      "xMax": 53
+    },
+    {
+      "label": "HTML/CSS",
+      "xMin": 29,
+      "xMax": 53
+    },
+    {
+      "label": "Rust",
+      "xMin": 23,
+      "xMax": 86
+    },
+    {
+      "label": "Bash/Shell",
+      "xMin": 19,
+      "xMax": 52
+    },
+    {
+      "label": "PowerShell",
+      "xMin": 17,
+      "xMax": 39
+    },
+    {
+      "label": "Go",
+      "xMin": 15,
+      "xMax": 62
+    }
+  ]
+}
