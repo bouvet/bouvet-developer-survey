@@ -25,10 +25,10 @@ public class DictionaryPayload
     
     [JsonPropertyName("ID")]
     public string Id { get; set; } = string.Empty;
-    public List<BlockElementDto> BlockElements { get; set; } = [];
+    public List<SurveyBlockElementDto> BlockElements { get; set; } = [];
 }
 
-public class BlockElementDto
+public class SurveyBlockElementDto
 {
     public string Type { get; set; } = string.Empty;
     

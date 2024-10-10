@@ -8,6 +8,8 @@ public class SurveyDto
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }
+    
+    public virtual ICollection<SurveyElementDto>? SurveyBlocks { get; set; }
   
     
     public static SurveyDto CreateFromEntity(Domain.Entities.Survey.Survey survey)
@@ -20,6 +22,7 @@ public class SurveyDto
             CreatedAt = survey.CreatedAt,
             UpdatedAt = survey.UpdatedAt,
             LastSyncedAt = survey.LastSyncedAt,
+            SurveyBlocks = survey.SurveyBlocks?.Select(SurveyElementDto.CreateFromEntity).ToList()
         };
     }
 }

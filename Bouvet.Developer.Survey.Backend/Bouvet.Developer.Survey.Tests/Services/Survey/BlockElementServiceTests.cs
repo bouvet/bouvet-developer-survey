@@ -83,7 +83,7 @@ public class BlockElementServiceTests
         
         listElementDto.Add(newBlockDto);
 
-        return await _blockElementService.CreateBlockElement(listElementDto);
+        return await _blockElementService.CreateBlockElements(listElementDto);
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public class BlockElementServiceTests
         
         listElementDto.Add(newBlockDto);
         
-        var createBlock = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.CreateBlockElement(listElementDto));
+        var createBlock = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.CreateBlockElements(listElementDto));
         
         Assert.Equal("Blocks not found: " + newBlockDto.BlockId, createBlock.Message);
         
@@ -178,7 +178,6 @@ public class BlockElementServiceTests
         
         var updatedBlockElementDto = new NewBlockElementDto
         {
-            QuestionId = "QID3",
             Type = "TEXT",
             BlockId = testBlock.Id
         };
@@ -188,7 +187,7 @@ public class BlockElementServiceTests
         
         // Assert
         Assert.NotNull(updatedBlockElement);
-        Assert.Equal(updatedBlockElementDto.QuestionId, updatedBlockElement.QuestionId);
+        Assert.Equal(updatedBlockElementDto.Type, updatedBlockElement.Type);
     }
 
     [Fact]

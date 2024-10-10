@@ -111,6 +111,34 @@ public class SurveysController : ControllerBase
     }
     
     /// <summary>
+    /// ShowSurvey
+    /// </summary>
+    /// <param name="file">The file to upload</param>
+    [HttpPost("ShowSurvey")]
+    [SwaggerResponse(201, "Survey created")]
+    public async Task<IActionResult> ShowSurvey(IFormFile? file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("No file uploaded or file is empty.");
+        }
+
+        try
+        {
+            using var stream = new MemoryStream();
+
+            await file.CopyToAsync(stream);
+            stream.Position = 0;
+            var result = await _importSurveyService.ShowJsonSurvey(stream);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
+    /// <summary>
     /// Import a survey from CSV
     /// </summary>
     [HttpPost("import")]

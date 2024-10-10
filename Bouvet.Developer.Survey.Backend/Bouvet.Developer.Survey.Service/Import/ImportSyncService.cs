@@ -42,7 +42,7 @@ public class ImportSyncService : IImportSyncService
             }));
         }
 
-        await _blockElementService.CreateBlockElement(blockElements);
+        await _blockElementService.CreateBlockElements(blockElements);
     }
 
     public async Task AddQuestions(SurveyQuestionsDto questionsDto, string surveyId)
@@ -58,12 +58,10 @@ public class ImportSyncService : IImportSyncService
                 QuestionDescription = surveyElement.Payload != null
                     ? surveyElement.Payload.QuestionDescription
                     : string.Empty,
-                Choices = surveyElement.Payload != null
-                    ? surveyElement.Payload.Choices.Select(choice => new NewChoiceDto
-                    {
-                        Text = choice.Value.Display
-                    }).ToList()
-                    : null
+                Choices = surveyElement.Payload?.Choices.Select(choice => new NewChoiceDto
+                {
+                    Text = choice.Value.Display
+                }).ToList()
             };
             
             await _questionService.CreateQuestionAsync(newQuestionsForm);
@@ -74,7 +72,7 @@ public class ImportSyncService : IImportSyncService
     {
         //Find the survey, check if there are any differences in the name, Language
         var surveyEntry = surveyBlockDto.SurveyEntry;
-        
+
         if (survey.Name != surveyEntry.SurveyName || survey.SurveyLanguage != surveyEntry.SurveyLanguage)
         {
             await _surveyService.UpdateSurveyAsync(survey.Id, new NewSurveyDto
@@ -84,10 +82,21 @@ public class ImportSyncService : IImportSyncService
             });
         }
         
-        //Find all surveyElements related to the survey and look for differencdes on type and description
+        if(surveyBlockDto.SurveyElements == null) return;
         
-        //Find all blockelements related to the updated surveyelement and updathe the type or questionId if there are any differences
+        foreach (var surveyElement in surveyBlockDto.SurveyElements)
+        {
+            var surveyElementsList = survey?.SurveyBlocks?.ToList();
+            
+            if(surveyElementsList == null) continue;
+            
+            //Check for differences in the surveyBlock
+            if (survey != null)
+            {
+                await _surveyBlockService.CheckSurveyBlockElements(survey.Id, surveyElement);
+                // await _blockElementService.CheckBlockElements(survey.Id, surveyElement);
+            }
+            
+        }
     }
-    
-    
 }

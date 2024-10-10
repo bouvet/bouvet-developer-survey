@@ -11,6 +11,7 @@ public class BlockElementDto
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }
+    // public virtual ICollection<QuestionDto>? Questions { get; set; }
     
     public static BlockElementDto CreateFromEntity(BlockElement block)
     {
@@ -23,6 +24,7 @@ public class BlockElementDto
             CreatedAt = block.CreatedAt,
             UpdatedAt = block.UpdatedAt,
             LastSyncedAt = block.LastSyncedAt,
+            // Questions = block.Questions?.Select(QuestionDto.CreateFromEntity).ToList()
         };
     }
 }

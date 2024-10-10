@@ -1,3 +1,4 @@
+using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
@@ -9,7 +10,7 @@ public interface IBlockElementService
     /// </summary>
     /// <param name="newBlockElementDtos">List of block elements to create</param>
     /// <returns>List of created block elements</returns>
-    public Task<List<BlockElementDto>> CreateBlockElement(List<NewBlockElementDto> newBlockElementDtos);
+    public Task<List<BlockElementDto>> CreateBlockElements(List<NewBlockElementDto> newBlockElementDtos);
     
     /// <summary>
     /// Get block by GUID
@@ -39,4 +40,12 @@ public interface IBlockElementService
     /// <param name="blockId">The block GUID</param>
     /// <returns>Task</returns>
     public Task DeleteBlockElement(Guid blockId);
+
+    /// <summary>
+    /// Check if block elements are valid
+    /// </summary>
+    /// <param name="surveyGuid">GUID of the survey</param>
+    /// <param name="block">Survey block DTO</param>
+    /// <returns>Task</returns>
+    public Task CheckBlockElements(Guid surveyGuid, SurveyElementBlockDto block);
 }

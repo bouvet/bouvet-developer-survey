@@ -57,7 +57,7 @@ public class QuestionServiceTest
         });
 
         // Create test block elements
-        await _blockElementService.CreateBlockElement([
+        await _blockElementService.CreateBlockElements([
             new NewBlockElementDto
             {
                 QuestionId = ElementQuestionId,

@@ -3,7 +3,6 @@ using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
-using Bouvet.Developer.Survey.Service.TransferObjects.Import;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +40,19 @@ public class ImportSurveyService : IImportSurveyService
             await FindSurveyQuestions(questionsDto);
         
         return mapSurvey;
+    }
+    
+    public async Task<SurveyBlocksDto> ShowJsonSurvey(Stream stream)
+    {
+        using var reader = new StreamReader(stream);
+        var jsonString = await reader.ReadToEndAsync();
+
+        var surveyDto = JsonSerializer.Deserialize<SurveyBlocksDto>(jsonString);
+
+        if (surveyDto == null) throw new BadRequestException("Invalid JSON");
+        
+        
+        return surveyDto;
     }
 
     public async Task<SurveyBlocksDto> FindSurveyBlocks(SurveyBlocksDto surveyDto)

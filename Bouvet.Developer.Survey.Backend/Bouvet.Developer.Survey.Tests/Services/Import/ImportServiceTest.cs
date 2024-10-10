@@ -18,7 +18,7 @@ public class ImportServiceTest
     {
         // Setting up an in-memory database for the context
         var options = new DbContextOptionsBuilder<DeveloperSurveyContext>()
-            .UseInMemoryDatabase(databaseName: "ImportDatabase")
+            .UseInMemoryDatabase(databaseName: "ImportDatabase2")
             .Options;
 
         var context = new DeveloperSurveyContext(options);
@@ -55,19 +55,42 @@ public class ImportServiceTest
         // Assert
         Assert.NotNull(surveys);
         
-        
         var surveyQuestionsDto = await TestSurveyQuestions();
         await _importSurvey.FindSurveyQuestions(surveyQuestionsDto);
+        
+        //Test for survey exist
+        var changeDto = await TestDataChangeName();
+        var test = await _importSurvey.FindSurveyBlocks(changeDto);
+        
+        Assert.NotNull(test);
+        Assert.Equal(changeDto.SurveyEntry.SurveyId, test.SurveyEntry.SurveyId);
+        Assert.Equal(changeDto.SurveyEntry.SurveyName, test.SurveyEntry.SurveyName);
+        Assert.Equal(changeDto.SurveyEntry.SurveyLanguage, test.SurveyEntry.SurveyLanguage);
     }
 
-
+    private async Task<SurveyBlocksDto> TestDataChangeName()
+    {
+        var newSurveyBlocksDto = new SurveyBlocksDto
+        {
+            SurveyEntry = new SurveyEntryDto
+            {
+                SurveyId = "123qa",
+                SurveyName = "Bouvet survey",
+                SurveyLanguage = "NO"
+            },
+            SurveyElements = [await TestSurveyBlocksChange()]
+        };
+            
+        return newSurveyBlocksDto;
+    }
+    
     private async Task<SurveyBlocksDto> TestData()
     {
         var newSurveyBlocksDto = new SurveyBlocksDto
         {
             SurveyEntry = new SurveyEntryDto
             {
-                SurveyId = "123",
+                SurveyId = "123qa",
                 SurveyName = "Test survey",
                 SurveyLanguage = "English"
             },
@@ -88,14 +111,14 @@ public class ImportServiceTest
                        Type= "TEXT",
                        Description = "What is your name?",
                        Id = "QID1",
-                       BlockElements = new List<BlockElementDto>
+                       BlockElements = new List<SurveyBlockElementDto>
                        { 
-                           new BlockElementDto
+                           new SurveyBlockElementDto
                             {
                                  Type = "TEXT",
                                  QuestionId = "QID1"
                             },
-                            new BlockElementDto
+                            new SurveyBlockElementDto
                             {
                                 Type = "TEXT",
                                 QuestionId = "QID2"
@@ -107,14 +130,14 @@ public class ImportServiceTest
                         Type= "TEXT 2",
                         Description = "How old are you?",
                         Id = "QID2",
-                        BlockElements = new List<BlockElementDto>
+                        BlockElements = new List<SurveyBlockElementDto>
                         { 
-                            new BlockElementDto
+                            new SurveyBlockElementDto
                             {
                                 Type = "TEXT",
                                 QuestionId = "QID2"
                             },
-                            new BlockElementDto
+                            new SurveyBlockElementDto
                             {
                                 Type = "TEXT",
                                 QuestionId = "QID2"
@@ -126,12 +149,63 @@ public class ImportServiceTest
        
        return await Task.FromResult(test);
     }
+    
+    private async Task<SurveyElementBlockDto> TestSurveyBlocksChange()
+    {
+        var test = new SurveyElementBlockDto
+        {
+            SurveyId = "123qa",
+            Payload = new Dictionary<string, DictionaryPayload>
+            {
+                {"QID1", new DictionaryPayload
+                {
+                    Type= "Vad",
+                    Description = "What is 1+1?",
+                    Id = "QID1",
+                    BlockElements = new List<SurveyBlockElementDto>
+                    { 
+                        new SurveyBlockElementDto
+                        {
+                            Type = "Text output",
+                            QuestionId = "QID1"
+                        },
+                        new SurveyBlockElementDto
+                        {
+                            Type = "TEXT",
+                            QuestionId = "QID2"
+                        }
+                    }
+                }},
+                {"QID3", new DictionaryPayload
+                {
+                    Type= "TEXT 2",
+                    Description = "How old are you?",
+                    Id = "QID3",
+                    BlockElements = new List<SurveyBlockElementDto>
+                    { 
+                        new SurveyBlockElementDto
+                        {
+                            Type = "TEXT 2",
+                            QuestionId = "QID3"
+                        },
+                        new SurveyBlockElementDto
+                        {
+                            Type = "TEXT 4",
+                            QuestionId = "QID3"
+                        }
+                    }
+                }}
+            }
+        };
+       
+        return await Task.FromResult(test);
+    }
 
     private async Task<SurveyQuestionsDto> TestSurveyQuestions()
     {
         var testSurveyElements = new SurveyElementQuestionsDto
         {
-            SurveyId = "123",
+            SurveyId = "123qa",
             Element = "QID1",
             PrimaryAttribute = "QID1",
             SecondaryAttribute = "QID1",

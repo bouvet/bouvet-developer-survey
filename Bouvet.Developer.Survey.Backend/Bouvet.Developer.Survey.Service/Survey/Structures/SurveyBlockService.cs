@@ -2,6 +2,7 @@ using Bouvet.Developer.Survey.Domain.Entities.Survey;
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,13 +71,17 @@ public class SurveyBlockService : ISurveyBlockService
        
        if (surveyBlock == null) throw new NotFoundException("Survey block not found");
        
-        surveyBlock.Type = updateSurveyBlockDto.Type;
-        surveyBlock.Description = updateSurveyBlockDto.Description;
-        surveyBlock.UpdatedAt = DateTimeOffset.Now;
-         
-        _context.SurveyBlocks.Update(surveyBlock);
-        await _context.SaveChangesAsync();
-        
+        if (surveyBlock.Type != updateSurveyBlockDto.Type ||
+            surveyBlock.Description != updateSurveyBlockDto.Description)
+        {
+            surveyBlock.Type = updateSurveyBlockDto.Type;
+            surveyBlock.Description = updateSurveyBlockDto.Description;
+            surveyBlock.UpdatedAt = DateTimeOffset.Now;
+            
+            _context.SurveyBlocks.Update(surveyBlock);
+            await _context.SaveChangesAsync();
+        }
+
         var dto = SurveyElementDto.CreateFromEntity(surveyBlock);
         
         return dto;
@@ -91,5 +96,56 @@ public class SurveyBlockService : ISurveyBlockService
         surveyBlock.DeletedAt = DateTimeOffset.Now;
         _context.SurveyBlocks.Update(surveyBlock);
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task CheckSurveyBlockElements(Guid surveyGuid, SurveyElementBlockDto block)
+    {
+        var surveyBlocks = await _context.SurveyBlocks.Where(sb => sb.SurveyGuid == surveyGuid)
+            .ToListAsync();
+        
+        //If there are new surveyElements, add them to the survey
+        foreach (var blockElement in block.Payload.Values)
+        {
+            var findBlockElement = surveyBlocks.FirstOrDefault(sb => sb.SurveyBlockId == blockElement.Id);
+            
+            if (findBlockElement == null)
+            {
+                await CreateSurveyBlock(new NewSurveyBlockDto
+                {
+                    SurveyId = block.SurveyId,
+                    SurveyBlockId = blockElement.Id,
+                    Type = blockElement.Type,
+                    Description = blockElement.Description
+                });
+            }
+        }
+        
+        //If there are surveyElements that are not in the payload, delete them
+        foreach (var surveyBlock in surveyBlocks)
+        {
+            var findBlock = block.Payload.Values.FirstOrDefault(b => b.Id == surveyBlock.SurveyBlockId);
+            
+            if (findBlock == null)
+            {
+                await DeleteSurveyBlock(surveyBlock.Id);
+            }
+        }
+        
+        //If there are surveyElements that are in the payload, update them
+        foreach (var blockElement in block.Payload.Values)
+        {
+            var findBlockElement = surveyBlocks.FirstOrDefault(sb => sb.SurveyBlockId == blockElement.Id);
+            
+            if (findBlockElement == null) continue;
+            
+            if (findBlockElement.Type != blockElement.Type || findBlockElement.Description != blockElement.Description)
+            {
+                await UpdateSurveyElement(findBlockElement.Id, new NewSurveyBlockDto
+                {
+                    Type = blockElement.Type,
+                    Description = blockElement.Description
+                });
+            }
+        }
     }
 }
