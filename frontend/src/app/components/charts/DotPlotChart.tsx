@@ -49,6 +49,7 @@ export default function DotPlotChart(data: chartProps) {
         size: 12
       }
     };
+
     
     const layout = {
       title: data.title,
