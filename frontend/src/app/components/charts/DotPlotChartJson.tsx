@@ -3,7 +3,10 @@ import dynamic from 'next/dynamic';
 import chartData from './chartData.json';
 
 // lazy load 'react-plotly.js'
-const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
+const Plot = dynamic(() => import('react-plotly.js'), { 
+  ssr: false,
+  loading: () => <p>Laster...</p>
+});
 
 // Graph colors
 const dotMinColor =     '#F9A86F';
