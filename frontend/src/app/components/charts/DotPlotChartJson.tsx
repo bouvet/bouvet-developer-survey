@@ -15,6 +15,7 @@ const thickLineWidth =   3;
 const markerSize =       15;
 const graphBackgroundColor = '#faf1e3';
 const fontColor =        '#555';
+const fontSize =         11;
 
 const DotPlotChartJson = () => {
 
@@ -30,7 +31,8 @@ const DotPlotChartJson = () => {
         marker: {
           color: [dotMinColor, dotMaxColor],
           symbol: 'circle',
-          size: markerSize
+          size: markerSize,
+
         },
         line: { 
           color: thickLineColor,
@@ -62,7 +64,9 @@ const DotPlotChartJson = () => {
       },
 
       font: {
-        color: fontColor
+        color: fontColor,
+        size: fontSize
+
       },
       autosize: true,
       paper_bgcolor: graphBackgroundColor,
