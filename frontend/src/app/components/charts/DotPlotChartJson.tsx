@@ -43,7 +43,7 @@ const DotPlotChartJson = () => {
       title: chartData.name,
       xaxis: {
           showgrid: false,
-
+          visible: false,
       },
       yaxis: {
         showline: false,
@@ -68,7 +68,7 @@ const DotPlotChartJson = () => {
       paper_bgcolor: graphBackgroundColor,
       plot_bgcolor: graphBackgroundColor,
     };
-    
+
     const config = {responsive: true, displayModeBar: false};
 
     return (
