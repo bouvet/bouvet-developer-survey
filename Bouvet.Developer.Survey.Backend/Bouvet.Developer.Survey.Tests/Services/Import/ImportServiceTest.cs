@@ -29,9 +29,8 @@ public class ImportServiceTest
         IQuestionService questionService = new QuestionService(context, choiceService);
         ISurveyBlockService surveyBlockService = new SurveyBlockService(context);
         IBlockElementService blockElementService = new BlockElementService(context);
-        IImportSyncService importSyncService = new ImportSyncService(surveyBlockService, blockElementService,
-            questionService, _surveyService);
-        _importSurvey = new ImportSurveyService(_surveyService, importSyncService, context);
+        _importSurvey = new ImportSurveyService(_surveyService, context, questionService, surveyBlockService, 
+            blockElementService);
     }
 
     [Fact]
@@ -66,6 +65,11 @@ public class ImportServiceTest
         Assert.Equal(changeDto.SurveyEntry.SurveyId, test.SurveyEntry.SurveyId);
         Assert.Equal(changeDto.SurveyEntry.SurveyName, test.SurveyEntry.SurveyName);
         Assert.Equal(changeDto.SurveyEntry.SurveyLanguage, test.SurveyEntry.SurveyLanguage);
+        
+        //Test for survey questions change
+        var surveyQuestionsDtoChange = await TestSurveyQuestionsChange();
+        await _importSurvey.FindSurveyQuestions(surveyQuestionsDtoChange);
+        
     }
 
     private async Task<SurveyBlocksDto> TestDataChangeName()
@@ -225,11 +229,66 @@ public class ImportServiceTest
             }
         };
         
+        var testSurveyElements2 = new SurveyElementQuestionsDto
+        {
+            SurveyId = "123qa",
+            Element = "QID2",
+            PrimaryAttribute = "QID2",
+            SecondaryAttribute = "QID2",
+            TertiaryAttribute = "QID2",
+            Payload = new PayloadQuestionDto
+            {
+                QuestionText = "What is your name?",
+                DataExportTag = "Name",
+                QuestionDescription = "Name",
+                Choices = new Dictionary<string, ChoicesDto>
+                {
+                    {"1", new ChoicesDto
+                    {
+                        Display = "Name"
+                    }}
+                }
+            }
+        };
+        
         var testParent = new SurveyQuestionsDto
         {
-            SurveyElements = [testSurveyElements]
+            SurveyElements = [testSurveyElements, testSurveyElements2]
         };
         
         return await Task.FromResult(testParent);
     }
+    
+    private async Task<SurveyQuestionsDto> TestSurveyQuestionsChange()
+    {
+        var testSurveyElements2 = new SurveyElementQuestionsDto
+        {
+            SurveyId = "123qa",
+            Element = "QID2",
+            PrimaryAttribute = "QID2",
+            SecondaryAttribute = "QID2",
+            TertiaryAttribute = "QID2",
+            Payload = new PayloadQuestionDto
+            {
+                QuestionText = "What is your name?",
+                DataExportTag = "Name",
+                QuestionDescription = "Name",
+                Choices = new Dictionary<string, ChoicesDto>
+                {
+                    {"1", new ChoicesDto
+                    {
+                        Display = "Name"
+                    }}
+                }
+            }
+        };
+        
+        var testParent = new SurveyQuestionsDto
+        {
+            SurveyElements = [testSurveyElements2]
+        };
+        
+        return await Task.FromResult(testParent);
+    }
+    
 }

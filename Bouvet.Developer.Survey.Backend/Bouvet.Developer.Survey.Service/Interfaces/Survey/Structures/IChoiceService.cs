@@ -1,3 +1,4 @@
+using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
@@ -11,6 +12,14 @@ public interface IChoiceService
     /// <param name="questionId">Guid of the question</param>
     /// <returns>List of choice DTOs</returns>
     public Task<List<ChoiceDto>> CreateChoice(List<NewChoiceDto> newChoiceDto, Guid questionId);
+
+    /// <summary>
+    /// Check for differences in choices
+    /// </summary>
+    /// <param name="questionId">The question GUID</param>
+    /// <param name="questionsDto">The question DTO</param>
+    /// <returns>Task</returns>
+    public Task CheckForDifferences(Guid questionId, PayloadQuestionDto questionsDto);
     
     /// <summary>
     /// Get choice by GUID

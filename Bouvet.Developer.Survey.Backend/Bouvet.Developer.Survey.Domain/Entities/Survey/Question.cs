@@ -11,6 +11,7 @@ public class Question : IEntitiesDateTimeOffsett
     
     [MaxLength(250)]
     public string SurveyId { get; set; } = null!;
+    public string QuestionId { get; set; } = null!;
     
     [MaxLength(250)]
     public string DateExportTag { get; set; } = null!;
@@ -18,7 +19,6 @@ public class Question : IEntitiesDateTimeOffsett
     public string QuestionDescription { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public DateTimeOffset? LastSyncedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
     
     public virtual ICollection<Choice>? Choices { get; set; }

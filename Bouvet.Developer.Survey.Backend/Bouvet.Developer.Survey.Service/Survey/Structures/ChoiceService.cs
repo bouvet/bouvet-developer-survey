@@ -2,6 +2,7 @@ using Bouvet.Developer.Survey.Domain.Entities.Survey;
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,64 @@ public class ChoiceService : IChoiceService
         _context = context;
     }
     
+    public async Task CheckForDifferences(Guid questionId, PayloadQuestionDto questionsDto)
+    {
+        var existingQuestion = await _context.Questions
+            .Where(q => q.Id == questionId)
+            .Include(q => q.Choices)
+            .FirstOrDefaultAsync();
+        
+        var newChoices = questionsDto.Choices.Values.Select(c => new Choice
+        {
+            Id = Guid.NewGuid(),
+            QuestionId = questionId,
+            Text = c.Display,
+            CreatedAt = DateTimeOffset.Now
+        }).ToList();
+        
+        if (existingQuestion?.Choices == null) return;
+        
+        await AddNewChoices(existingQuestion.Choices, newChoices);
+        await RemoveOldChoices(existingQuestion.Choices, newChoices);
+        await UpdateExistingChoices(existingQuestion.Choices, newChoices);
+
+        await _context.SaveChangesAsync();
+    }
+    
+    private async Task AddNewChoices(ICollection<Choice> existingChoices, List<Choice> newChoices)
+    {
+        foreach (var choice in newChoices)
+        {
+            if (existingChoices == null || !existingChoices.Any(c => c.Text == choice.Text))
+            {
+                await _context.Choices.AddAsync(choice);
+            }
+        }
+    }
+
+    private async Task RemoveOldChoices(ICollection<Choice> existingChoices, List<Choice> newChoices)
+    {
+        foreach (var choice in existingChoices)
+        {
+            if (newChoices.All(c => c.Text != choice.Text))
+            {
+                await DeleteChoice(choice.Id);
+            }
+        }
+    }
+
+    private async Task UpdateExistingChoices(ICollection<Choice> existingChoices, List<Choice> newChoices)
+    {
+        foreach (var choice in existingChoices)
+        {
+            var newChoice = newChoices.FirstOrDefault(c => c.Text == choice.Text);
+            if (newChoice != null && choice.Text != newChoice.Text)
+            {
+                await UpdateChoice(choice.Id, new NewChoiceDto { Text = newChoice.Text });
+            }
+        }
+    }
+
     public async Task<List<ChoiceDto>> CreateChoice(List<NewChoiceDto> newChoiceDto, Guid questionId)
     {
         var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);

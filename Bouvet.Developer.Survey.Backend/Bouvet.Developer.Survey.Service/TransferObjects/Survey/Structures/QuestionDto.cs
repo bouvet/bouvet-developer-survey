@@ -12,7 +12,6 @@ public class QuestionDto
     public string QuestionDescription { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public DateTimeOffset? LastSyncedAt { get; set; }
     public virtual ICollection<ChoiceDto>? Choices { get; set; } = new List<ChoiceDto>();
     
     public static QuestionDto CreateFromEntity(Question question)
@@ -27,7 +26,6 @@ public class QuestionDto
             QuestionDescription = question.QuestionDescription,
             CreatedAt = question.CreatedAt,
             UpdatedAt = question.UpdatedAt,
-            LastSyncedAt = question.LastSyncedAt,
             Choices = question.Choices?.Select(ChoiceDto.CreateFromEntity).ToList()
         };
     }

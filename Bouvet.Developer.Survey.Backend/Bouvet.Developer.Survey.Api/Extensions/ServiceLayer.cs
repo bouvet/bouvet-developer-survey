@@ -19,6 +19,5 @@ public static class ServiceLayer
         services.AddTransient<IQuestionService, QuestionService>();
         services.AddTransient<IChoiceService, ChoiceService>();
         services.AddTransient<IBlockElementService, BlockElementService>();
-        services.AddTransient<IImportSyncService, ImportSyncService>();
     }
 }

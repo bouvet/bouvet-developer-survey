@@ -12,15 +12,19 @@ namespace Bouvet.Developer.Survey.Service.Import;
 public class ImportSurveyService : IImportSurveyService
 {
     private readonly ISurveyService _surveyService;
-    private readonly IImportSyncService _importSyncService;
+    private readonly IQuestionService _questionService;
     private readonly DeveloperSurveyContext _context;
+    private readonly ISurveyBlockService _surveyBlockService;
+    private readonly IBlockElementService _blockElementService;
     
-    public ImportSurveyService(ISurveyService surveyService, IImportSyncService importSyncService,
-         DeveloperSurveyContext context)
+    public ImportSurveyService(ISurveyService surveyService, DeveloperSurveyContext context, IQuestionService questionService, ISurveyBlockService surveyBlockService,
+            IBlockElementService blockElementService)
     {
         _surveyService = surveyService;
         _context = context; 
-        _importSyncService = importSyncService;
+        _questionService = questionService;
+        _surveyBlockService = surveyBlockService;
+        _blockElementService = blockElementService;
     }
     
     public async Task<SurveyBlocksDto> UploadSurvey(Stream stream)
@@ -83,7 +87,7 @@ public class ImportSurveyService : IImportSurveyService
 
         if (checkSurveyExists != null)
         {
-            await _importSyncService.CheckForDifference(surveyBlockDto, checkSurveyExists);
+            await CheckForDifferenceSurvey(surveyBlockDto, checkSurveyExists);
         }
         else
         {
@@ -99,7 +103,7 @@ public class ImportSurveyService : IImportSurveyService
             {
                 foreach (var surveyElement in surveyBlockDto.SurveyElements)
                 {
-                    await _importSyncService.AddSurveyElements(surveyElement, survey.SurveyId);
+                    await AddSurveyElements(surveyElement, survey.SurveyId);
                 }
             }
         }
@@ -116,8 +120,64 @@ public class ImportSurveyService : IImportSurveyService
 
         if(questionsDto.SurveyElements == null) throw new BadRequestException("Invalid JSON");
         
-        await _importSyncService.AddQuestions(questionsDto, survey.SurveyId);
+        await _questionService.CheckForDifference(questionsDto, survey);
+    }
 
+    private async Task AddSurveyElements(SurveyElementBlockDto surveyBlockDto, string surveyId)
+    {
+        var blockElements = new List<NewBlockElementDto>();
         
+        foreach (var element in surveyBlockDto.Payload.Values)
+        {
+            var surveyBlock = await _surveyBlockService.CreateSurveyBlock(new NewSurveyBlockDto
+            {
+                SurveyId = surveyId,
+                Type = element.Type,
+                Description = element.Description,
+                SurveyBlockId = element.Id
+            });
+                    
+            blockElements.AddRange(element.BlockElements.Select(blockElement => new NewBlockElementDto
+            {
+                BlockId = surveyBlock.Id,
+                Type = blockElement.Type,
+                QuestionId = blockElement.QuestionId
+            }));
+        }
+
+        await _blockElementService.CreateBlockElements(blockElements);
+    }
+
+
+    private async Task CheckForDifferenceSurvey(SurveyBlocksDto surveyBlockDto, Domain.Entities.Survey.Survey survey)
+    {
+        //Find the survey, check if there are any differences in the name, Language
+        var surveyEntry = surveyBlockDto.SurveyEntry;
+
+        if (survey.Name != surveyEntry.SurveyName || survey.SurveyLanguage != surveyEntry.SurveyLanguage)
+        {
+            await _surveyService.UpdateSurveyAsync(survey.Id, new NewSurveyDto
+            {
+                Name = surveyEntry.SurveyName,
+                Language = surveyEntry.SurveyLanguage
+            });
+        }
+        
+        if(surveyBlockDto.SurveyElements == null) return;
+        
+        foreach (var surveyElement in surveyBlockDto.SurveyElements)
+        {
+            var surveyElementsList = survey?.SurveyBlocks?.ToList();
+            
+            if(surveyElementsList == null) continue;
+            
+            //Check for differences in the surveyBlock
+            if (survey != null)
+            {
+                await _surveyBlockService.CheckSurveyBlockElements(survey.Id, surveyElement);
+                // await _blockElementService.CheckBlockElements(survey.Id, surveyElement);
+            }
+            
+        }
     }
 }

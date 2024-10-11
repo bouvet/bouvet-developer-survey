@@ -9,7 +9,6 @@ public class ChoiceDto
     public string Text { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public DateTimeOffset? LastSyncedAt { get; set; }
     
     
     public static ChoiceDto CreateFromEntity(Choice choice)
@@ -20,8 +19,7 @@ public class ChoiceDto
             QuestionId = choice.QuestionId,
             Text = choice.Text,
             CreatedAt = choice.CreatedAt,
-            UpdatedAt = choice.UpdatedAt,
-            LastSyncedAt = choice.LastSyncedAt,
+            UpdatedAt = choice.UpdatedAt
         };
     }
 }

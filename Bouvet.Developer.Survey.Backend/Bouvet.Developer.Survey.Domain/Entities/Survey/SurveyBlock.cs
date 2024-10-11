@@ -17,7 +17,6 @@ public class SurveyBlock : IEntitiesDateTimeOffsett
     public string SurveyBlockId { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public DateTimeOffset? LastSyncedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
     public virtual ICollection<BlockElement>? BlockElements { get; set; }
 }

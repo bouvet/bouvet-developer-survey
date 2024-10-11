@@ -11,7 +11,6 @@ public class SurveyElementDto
     public string SurveyBlockId { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public DateTimeOffset? LastSyncedAt { get; set; }
     public virtual ICollection<BlockElementDto>? BlockElements { get; set; }
     
     public static SurveyElementDto CreateFromEntity(SurveyBlock surveyBlock)
@@ -25,7 +24,6 @@ public class SurveyElementDto
             SurveyBlockId = surveyBlock.SurveyBlockId,
             CreatedAt = surveyBlock.CreatedAt,
             UpdatedAt = surveyBlock.UpdatedAt,
-            LastSyncedAt = surveyBlock.LastSyncedAt,
             BlockElements = surveyBlock.BlockElements?.Select(BlockElementDto.CreateFromEntity).ToList()
         };
     }

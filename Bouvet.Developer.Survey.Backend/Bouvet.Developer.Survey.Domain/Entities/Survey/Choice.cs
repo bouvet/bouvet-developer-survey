@@ -10,6 +10,5 @@ public class Choice : IEntitiesDateTimeOffsett
     public string Text { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public DateTimeOffset? LastSyncedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 }

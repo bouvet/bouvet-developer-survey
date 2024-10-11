@@ -3,7 +3,7 @@ using Bouvet.Developer.Survey.Domain.Interfaces;
 
 namespace Bouvet.Developer.Survey.Domain.Entities.Survey;
 
-public class Survey : IEntitiesDateTimeOffsett
+public class Survey : IEntitiesDateTimeOffsett, ILastSyncedOffset
 {
     public Guid Id { get; set; }
     

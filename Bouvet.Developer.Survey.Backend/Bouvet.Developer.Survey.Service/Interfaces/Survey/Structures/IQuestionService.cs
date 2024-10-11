@@ -1,3 +1,4 @@
+using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
@@ -17,6 +18,14 @@ public interface IQuestionService
     /// <param name="questionId">The question id</param>
     /// <returns>Question dto</returns>
     public Task<QuestionDto> GetQuestionByIdAsync(Guid questionId);
+
+    /// <summary>
+    /// Check for differences in questions
+    /// </summary>
+    /// <param name="surveyQuestionsDto">The survey questions dto</param>
+    /// <param name="survey">The survey</param>
+    /// <returns>Task</returns>
+    Task CheckForDifference(SurveyQuestionsDto surveyQuestionsDto, Domain.Entities.Survey.Survey survey);
     
     /// <summary>
     /// Get all questions in a survey block
