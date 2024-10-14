@@ -88,6 +88,7 @@ public class ChoiceService : IChoiceService
             Id = Guid.NewGuid(),
             QuestionId = questionId,
             Text = dto.Text,
+            IndexId = dto.IndexId,
             CreatedAt = DateTimeOffset.Now
         }).ToList();
         

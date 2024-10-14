@@ -10,14 +10,21 @@ public interface IQuestionService
     /// </summary>
     /// <param name="newQuestionDto">New question dto</param>
     /// <returns>Question dto</returns>
-    public Task<QuestionDto> CreateQuestionAsync(NewQuestionDto newQuestionDto);
+    Task<QuestionDto> CreateQuestionAsync(NewQuestionDto newQuestionDto);
     
     /// <summary>
     /// Get question by id
     /// </summary>
     /// <param name="questionId">The question id</param>
     /// <returns>Question dto</returns>
-    public Task<QuestionDto> GetQuestionByIdAsync(Guid questionId);
+    Task<QuestionDto> GetQuestionByIdAsync(Guid questionId);
+
+    /// <summary>
+    /// Get a list of questions by survey id
+    /// </summary>
+    /// <param name="surveyId">String of survey id </param>
+    /// <returns></returns>
+    Task<IEnumerable<QuestionDto>> GetQuestionsBySurveyIdAsync(string surveyId);
 
     /// <summary>
     /// Check for differences in questions
@@ -32,7 +39,7 @@ public interface IQuestionService
     /// </summary>
     /// <param name="surveyBlockId">The survey block id</param>
     /// <returns>A list of available questions</returns>
-    public Task<IEnumerable<QuestionDto>> GetQuestionsBySurveyBlockIdAsync(Guid surveyBlockId);
+    Task<IEnumerable<QuestionDto>> GetQuestionsBySurveyBlockIdAsync(Guid surveyBlockId);
     
     /// <summary>
     /// Update question
@@ -40,12 +47,12 @@ public interface IQuestionService
     /// <param name="questionId">Guid of the question</param>
     /// <param name="updateQuestionDto">The updated question dto</param>
     /// <returns>Question dto</returns>
-    public Task<QuestionDto> UpdateQuestionAsync(Guid questionId, NewQuestionDto updateQuestionDto);
+    Task<QuestionDto> UpdateQuestionAsync(Guid questionId, NewQuestionDto updateQuestionDto);
     
     /// <summary>
     /// Set question to deleted
     /// </summary>
     /// <param name="questionId">The question id</param>
     /// <returns>Task</returns>
-    public Task DeleteQuestionAsync(Guid questionId);
+    Task DeleteQuestionAsync(Guid questionId);
 }

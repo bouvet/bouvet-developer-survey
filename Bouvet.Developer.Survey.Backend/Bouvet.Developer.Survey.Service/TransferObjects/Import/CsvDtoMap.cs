@@ -1,3 +1,4 @@
+using Bouvet.Developer.Survey.Service.Interfaces.Survey;
 using CsvHelper.Configuration;
 
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Import;
@@ -22,5 +23,7 @@ public sealed class CsvDtoMap : ClassMap<CsvDto>
         Map(m => m.Enhet).Name("Enhet");
         Map(m => m.Arbeidsrolle).Name("Arbeidsrolle");
         Map(m => m.Arbeidserfaring).Name("Arbeidserfaring");
+
+        // Map(m => m.DynamicFields).TypeConverter<DynamicFieldsConverter>();
     }
 }

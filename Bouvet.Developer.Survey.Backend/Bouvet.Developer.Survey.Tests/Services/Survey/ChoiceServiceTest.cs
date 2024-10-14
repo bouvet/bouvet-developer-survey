@@ -87,10 +87,12 @@ public class ChoiceServiceTest
         {
             new NewChoiceDto
             {
+                IndexId = "1",
                 Text = "Choice 1",
             },
             new NewChoiceDto
             {
+                IndexId = "2",
                 Text = "Choice 2",
             }
         };
@@ -105,10 +107,12 @@ public class ChoiceServiceTest
         {
             new NewChoiceDto
             {
+                IndexId = "1",
                 Text = "Choice 1",
             },
             new NewChoiceDto
             {
+                IndexId = "2",
                 Text = "Choice 2",
             }
         }, new Guid()));

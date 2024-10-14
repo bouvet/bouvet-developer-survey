@@ -8,5 +8,4 @@ public interface IImportSurveyService
     Task<SurveyBlocksDto> UploadSurvey(Stream stream);
     Task<SurveyBlocksDto> FindSurveyBlocks(SurveyBlocksDto surveyDto);
     Task FindSurveyQuestions(SurveyQuestionsDto surveyQuestionsDto);
-    Task<SurveyBlocksDto> ShowJsonSurvey(Stream stream);
 }

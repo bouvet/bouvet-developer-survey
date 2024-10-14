@@ -20,13 +20,15 @@ public class SurveysController : ControllerBase
     private readonly ISurveyService _surveyService;
     private readonly ICsvToJsonService _csvToJsonService;
     private readonly IImportSurveyService _importSurveyService;
+    private readonly IQuestionService _questionService;
     
     public SurveysController(ISurveyService surveyService, ICsvToJsonService csvToJsonService, 
-        IImportSurveyService importSurveyService)
+        IImportSurveyService importSurveyService, IQuestionService questionService)
     {
         _surveyService = surveyService;
         _csvToJsonService = csvToJsonService;
         _importSurveyService = importSurveyService;
+        _questionService = questionService;
     }
     
     /// <summary>
@@ -59,6 +61,14 @@ public class SurveysController : ControllerBase
         return Ok(survey);
     }
     
+    [HttpGet("GetQuestionsSurvey")]
+    public async Task<IActionResult> GetQuestionsSurvey(string surveyId)
+    {
+        // var survey = await _questionService.GetQuestionsBySurveyIdAsync(surveyId);
+        var survey = await _csvToJsonService.GetQuestions(surveyId);
+        return Ok(survey);
+    }
+    
     /// <summary>
     /// Import a survey from JSON
     /// </summary>
@@ -88,38 +98,10 @@ public class SurveysController : ControllerBase
     }
     
     /// <summary>
-    /// ShowSurvey
-    /// </summary>
-    /// <param name="file">The file to upload</param>
-    [HttpPost("ShowSurvey")]
-    [SwaggerResponse(201, "Survey created")]
-    public async Task<IActionResult> ShowSurvey(IFormFile? file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest("No file uploaded or file is empty.");
-        }
-
-        try
-        {
-            using var stream = new MemoryStream();
-
-            await file.CopyToAsync(stream);
-            stream.Position = 0;
-            var result = await _importSurveyService.ShowJsonSurvey(stream);
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    
-    /// <summary>
     /// Import a survey from CSV
     /// </summary>
     [HttpPost("import")]
-    public async Task<IActionResult> ImportCsv(IFormFile file)
+    public async Task<IActionResult> ImportCsv(IFormFile file, string surveyId)
     {
         if (file == null || file.Length == 0)
         {
@@ -130,7 +112,7 @@ public class SurveysController : ControllerBase
         {
             await file.CopyToAsync(stream);
             stream.Position = 0;
-            var json = _csvToJsonService.ConvertCsvToJson(stream);
+            var json = await _csvToJsonService.GetQuestionsFromStream(stream, surveyId);
             return Ok(json);
         }
     }

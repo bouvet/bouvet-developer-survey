@@ -45,19 +45,6 @@ public class ImportSurveyService : IImportSurveyService
         
         return mapSurvey;
     }
-    
-    public async Task<SurveyBlocksDto> ShowJsonSurvey(Stream stream)
-    {
-        using var reader = new StreamReader(stream);
-        var jsonString = await reader.ReadToEndAsync();
-
-        var surveyDto = JsonSerializer.Deserialize<SurveyBlocksDto>(jsonString);
-
-        if (surveyDto == null) throw new BadRequestException("Invalid JSON");
-        
-        
-        return surveyDto;
-    }
 
     public async Task<SurveyBlocksDto> FindSurveyBlocks(SurveyBlocksDto surveyDto)
     {

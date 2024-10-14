@@ -45,9 +45,10 @@ public class QuestionService : IQuestionService
                     QuestionDescription = surveyElement.Payload != null
                         ? surveyElement.Payload.QuestionDescription
                         : string.Empty,
-                    Choices = surveyElement.Payload?.Choices.Values.Select(c => new NewChoiceDto
+                    Choices = surveyElement.Payload?.Choices.Select(c => new NewChoiceDto
                     {
-                        Text = c.Display
+                        IndexId = c.Key,
+                        Text = c.Value.Display
                     }).ToList()
                 };
                 
@@ -65,9 +66,10 @@ public class QuestionService : IQuestionService
                     QuestionDescription = surveyElement.Payload != null
                         ? surveyElement.Payload.QuestionDescription
                         : string.Empty,
-                    Choices = surveyElement.Payload?.Choices.Values.Select(c => new NewChoiceDto
+                    Choices = surveyElement.Payload?.Choices.Select(c => new NewChoiceDto
                     {
-                        Text = c.Display
+                        IndexId = c.Key,
+                        Text = c.Value.Display
                     }).ToList()
                 };
                 
@@ -137,6 +139,19 @@ public class QuestionService : IQuestionService
     {
         var questions = await _context.Questions
             .Where(q => q.BlockElementId == surveyBlockId)
+            .ToListAsync();
+        
+        if(questions.Count == 0) throw new NotFoundException("No questions found");
+        
+        var dtoS = questions.Select(QuestionDto.CreateFromEntity).ToList();
+        
+        return dtoS;
+    }
+    
+    public async Task<IEnumerable<QuestionDto>> GetQuestionsBySurveyIdAsync(string surveyId)
+    {
+        var questions = await _context.Questions
+            .Where(q => q.SurveyId == surveyId)
             .ToListAsync();
         
         if(questions.Count == 0) throw new NotFoundException("No questions found");

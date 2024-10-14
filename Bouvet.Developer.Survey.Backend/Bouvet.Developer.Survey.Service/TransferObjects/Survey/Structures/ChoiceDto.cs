@@ -7,6 +7,7 @@ public class ChoiceDto
     public Guid Id { get; set; }
     public Guid QuestionId { get; set; }
     public string Text { get; set; } = null!;
+    public string IndexId { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     
@@ -18,6 +19,7 @@ public class ChoiceDto
             Id = choice.Id,
             QuestionId = choice.QuestionId,
             Text = choice.Text,
+            IndexId = choice.IndexId,
             CreatedAt = choice.CreatedAt,
             UpdatedAt = choice.UpdatedAt
         };

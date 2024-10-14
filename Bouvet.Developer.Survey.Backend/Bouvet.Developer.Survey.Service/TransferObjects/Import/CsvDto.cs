@@ -19,4 +19,5 @@ public class CsvDto
     public string? Enhet { get; set; }
     public string? Arbeidsrolle { get; set; }
     public string? Arbeidserfaring { get; set; }
+    public Dictionary<string, string?> DynamicFields { get; set; } = new();
 }

@@ -154,10 +154,12 @@ public class QuestionServiceTest
             {
                 new NewChoiceDto
                 {
+                    IndexId = "1",
                     Text = "Choice 1",
                 },
                 new NewChoiceDto
                 {
+                    IndexId = "2",
                     Text = "Choice 2",
                 }
             }
