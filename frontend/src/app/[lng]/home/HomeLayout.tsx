@@ -2,6 +2,7 @@
 
 import { Header } from "@/app/components/Header";
 import { HomeContextProvider } from "./context";
+import Survey from "@/app/components/survey/Survey";
 
 // Component
 export default function Home() {
@@ -9,7 +10,7 @@ export default function Home() {
   return (
     <HomeContextProvider>
       <Header />
-      <h1 className="text-2xl underline">Bouvet Developer Survey</h1>
+      <Survey />
     </HomeContextProvider>
   );
 }
