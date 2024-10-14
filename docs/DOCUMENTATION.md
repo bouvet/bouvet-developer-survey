@@ -159,7 +159,7 @@ Please see Bicep templates at /infra for infrastructure documentation.
 
 4. Azure SQL Database
     - Used for storage and querying of survey data.
-
+git 
 5. Resource group
     - A dedicated resource group is created for this project
 
