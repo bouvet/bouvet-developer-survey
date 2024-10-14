@@ -66,11 +66,11 @@ Suggestion of daily git work flow. Please comment :)
 `git pull origin main`
 
 3. Create short lived feature branch:
-`git checkout -b feature/my-feature`
+`git checkout -b feat/#issue-id/my-feature-name`
 
 5. Work on your feature and test it locally. Once ready, stage and commit your changes:
 `git add .`
-`git commit -m "Add my feature"`
+`git commit -m "My commit message"`
 
 ### Push your work to main and create PR
 
@@ -83,14 +83,14 @@ Suggestion of daily git work flow. Please comment :)
 `git pull origin main`
 
 `# Switch back to your feature branch`
-`git checkout feature/my-feature`
+`git checkout feat/#issue-id/my-feature-name`
 
 `# Rebase the feature branch with the latest main branch (this keeps history linear)`
 `git rebase main`
 
 
 6. Push feature branch to remote
-`git push -u origin feature/my-feature`
+`git push -u origin feat/#issue-id/my-feature-name`
 
 7. If there are any conflicts during the rebase, Git will pause, and you’ll need to resolve them manually. After resolving, continue the rebase:
 
@@ -102,7 +102,7 @@ Suggestion of daily git work flow. Please comment :)
 
 
 8. Push your feature branch to the remote repo and create a Pull Request:
-`git push origin feature/my-task-name`
+`git push origin feat/#issue-id/my-feature-name`
 
 9. Create pull request in Github:
 https://github.com/bouvet/bouvet-developer-survey/pulls
@@ -111,8 +111,8 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 
 `git checkout main`
 `git pull origin main`
-`git branch -d feature/my-feature`
-`git push origin --delete feature/my-feature`
+`git branch -d feat/#issue-id/my-feature-name`
+`git push origin --delete feat/#issue-id/my-feature-name`
 
 ## Containerization
 
