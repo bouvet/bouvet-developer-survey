@@ -1,0 +1,14 @@
+{
+  "serverError": "Server Error",
+  "noAccess": "Unauthorized",
+  "noData": "No data",
+  "noAvailableData": "No data available",
+  "noAvailableDataFetchText": "Not able to fetch any data from {{ source }}. Try refreshing the application.\nIf problem persists, please report the issue.",
+  "generalErrorTitle": "Something went wrong...",
+  "generalErrorDesc": "Unable to fetch the data for the {{value}}, try again later or if the error persist report the issue.",
+  "general400Error": "Can't handle the request right now.",
+  "general404Error": "The content requested could not be found",
+  "general500Error": "There is a problem with fetching the data, please reload the page.",
+  "general502Error": "There is a problem with fetching the data, please reload the page.",
+  "general504Error": "The data source is taking too long time to process our request. Please try refreshing the page."
+}

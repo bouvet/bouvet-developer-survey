@@ -120,7 +120,23 @@ https://github.com/bouvet/bouvet-developer-survey/pulls
 
 ## CI/CD
 
-- Describe pipeline
+### Initial thoughts ###
+
+- Source code, linting locally with ESLint, Prettier, pre-commit with Husky
+- Commit code
+- Linting and tests run by Actions on Push and PR
+- Compiling and build Docker images
+- Run integration tests?
+- Monitor, review and report test results
+- Image scanning (Azure security center?)
+- Ship images to Azure container registry.
+- Deploy containers to PR / test / prod environments, use IaC to manage
+
+### Components ###
+
+- Dockerfile
+- Github Actions Workflow .yml file
+- Documentation
 
 ## Azure hosting and services
 
@@ -160,7 +176,22 @@ Please see Bicep templates at /infra for infrastructure documentation.
 
 ## Release strategy
 
-- Describe our release strategy
+- Small, freqent releases
+- Feature flags
+
+### Environmensts
+
+#### Pull Request Environment: ####
+- Temporary deployments created on PRs.
+- Containers dynamically deployed to Azure Container Apps when a PR is opened and destroyed when the PR is closed.
+
+#### Testing Environment: ####
+- Stable environment used for integration testing and QA.
+- Always runs the latest main branch
+
+#### Production Environment: ####
+ - table environment running the live, production version of the application.
+ - Only updated via manual approvals, releases, or deployment pipelines from the production branch.
 
 ## Tools
 
