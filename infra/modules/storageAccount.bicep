@@ -1,5 +1,7 @@
+@description('The name of the storage account.')
 param storageName string
 
+@description('The SKU name of the storage account.')
 @allowed([
   'Standard_LRS'
   'Standard_GRS'
@@ -12,7 +14,8 @@ param storageName string
 ])
 param storageSKU string = 'Standard_LRS'
 
-param location string = 'norwayeast'
+@description('The location for the storage account.')
+param location string
 
 
 resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {

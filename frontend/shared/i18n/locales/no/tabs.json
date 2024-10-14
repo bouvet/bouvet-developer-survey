@@ -1,9 +1,9 @@
 {
-  "developerProfile": "Developer Profile",
-  "technology": "Technology",
+  "developerProfile": "Utviklerprofil",
+  "languagesAndFrameworks": "Språk og rammeverk",
+  "database": "Database",
   "ai": "AI",
-  "work": "Work",
-  "community": "Community",
-  "professionalDevelopers": "Professional Developers",
-  "methodology": "Methodology"
+  "security": "Sikkerhet",
+  "tools": "Verktøy",
+  "about": "Om undersøkelsen"
 }

@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+
+# if you use databases, these lines need to be uncommented
+RUN apk add --no-cache icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+# if you depend on timezones, these lines need to be uncommented
+# RUN apk add --no-cache tzdata
+# ENV TZ=Europe/Oslo
+
+WORKDIR /app
+COPY ["./Bouvet.Developer.Survey.Api/Bouvet.Developer.Survey.Api.csproj", "Bouvet.Developer.Survey.Api/"]
+COPY ["./Bouvet.Developer.Survey.Domain/Bouvet.Developer.Survey.Domain.csproj", "Bouvet.Developer.Survey.Domain/"]
+COPY ["./Bouvet.Developer.Survey.Infrastructure/Bouvet.Developer.Survey.Infrastructure.csproj", "Bouvet.Developer.Survey.Infrastructure/"]
+COPY ["./Bouvet.Developer.Survey.Service/Bouvet.Developer.Survey.Service.csproj", "Bouvet.Developer.Survey.Service/"]
+
+USER app
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "Bouvet.Developer.Survey.Api.dll"]
