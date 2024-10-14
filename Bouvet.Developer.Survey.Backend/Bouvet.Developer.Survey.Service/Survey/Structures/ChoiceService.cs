@@ -47,6 +47,7 @@ public class ChoiceService : IChoiceService
         {
             if (existingChoices == null || !existingChoices.Any(c => c.Text == choice.Text))
             {
+                Console.WriteLine("Adding new choice");
                 await _context.Choices.AddAsync(choice);
             }
         }
@@ -58,6 +59,7 @@ public class ChoiceService : IChoiceService
         {
             if (newChoices.All(c => c.Text != choice.Text))
             {
+                Console.WriteLine("Removing old choice");
                 await DeleteChoice(choice.Id);
             }
         }

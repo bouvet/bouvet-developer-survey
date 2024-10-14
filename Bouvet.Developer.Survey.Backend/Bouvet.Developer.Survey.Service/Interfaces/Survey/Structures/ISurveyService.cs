@@ -15,7 +15,7 @@ public interface ISurveyService
    ///  Get all surveys
    /// </summary>
    /// <returns>A list of available survey</returns>
-    public Task<IEnumerable<SurveyDto>> GetSurveysAsync();
+    public Task<IEnumerable<SurveysDto>> GetSurveysAsync();
    
    /// <summary>
    ///  Get survey by GUID

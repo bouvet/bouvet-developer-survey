@@ -36,11 +36,11 @@ public class SurveyService : ISurveyService
         return dto;
     }
 
-    public async Task<IEnumerable<SurveyDto>> GetSurveysAsync()
+    public async Task<IEnumerable<SurveysDto>> GetSurveysAsync()
     {
         var surveys = await _context.Surveys.ToListAsync();
 
-        var surveyList = surveys.Select(SurveyDto.CreateFromEntity).ToList();
+        var surveyList = surveys.Select(SurveysDto.CreateFromEntity).ToList();
         
         return surveyList;
     }

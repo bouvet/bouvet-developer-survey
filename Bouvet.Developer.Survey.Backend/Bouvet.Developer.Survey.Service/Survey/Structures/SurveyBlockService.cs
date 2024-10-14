@@ -5,6 +5,7 @@ using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Bouvet.Developer.Survey.Service.Survey.Structures;
 
@@ -110,6 +111,7 @@ public class SurveyBlockService : ISurveyBlockService
             
             if (findBlockElement == null)
             {
+                Console.WriteLine("Adding new survey block element");
                 await CreateSurveyBlock(new NewSurveyBlockDto
                 {
                     SurveyId = block.SurveyId,
@@ -127,6 +129,7 @@ public class SurveyBlockService : ISurveyBlockService
             
             if (findBlock == null)
             {
+                Console.WriteLine("Deleting survey block element");
                 await DeleteSurveyBlock(surveyBlock.Id);
             }
         }

@@ -37,7 +37,7 @@ public class SurveysController : ControllerBase
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpGet]
-    [SwaggerResponse(200, "Returns a list of all surveys", typeof(IEnumerable<SurveyDto>))]
+    [SwaggerResponse(200, "Returns a list of all surveys", typeof(IEnumerable<SurveysDto>))]
     public async Task<IActionResult> GetSurveys()
     {
         var surveys = await _surveyService.GetSurveysAsync();
@@ -52,7 +52,7 @@ public class SurveysController : ControllerBase
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpGet("{surveyId:guid}")]
-    // [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
+    [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
     public async Task<IActionResult> GetSurvey(Guid surveyId)
     {
         var survey = await _surveyService.GetSurveyAsync(surveyId);
@@ -60,35 +60,12 @@ public class SurveysController : ControllerBase
     }
     
     /// <summary>
-    /// Create a survey
-    /// </summary>
-    /// <returns>Survey created</returns>
-    /// <response code="200">Survey created</response>
-    /// <response code="401">If user is not authorized</response>
-    /// <response code="403">User not authorized to write</response>
-    [HttpPost]
-    [Authorize(Roles = RoleConstants.WriteRole)]
-    [SwaggerResponse(201, "Survey created", typeof(SurveyDto))]
-    public async Task<IActionResult> CreateSurvey([FromBody] NewSurveyDto newSurveyDto)
-    {
-        try
-        {
-            await _surveyService.CreateSurveyAsync(newSurveyDto);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    
-    /// <summary>
-    /// Upload a survey
+    /// Import a survey from JSON
     /// </summary>
     /// <param name="file">The file to upload</param>
-    [HttpPost("UploadSurvey")]
-    [SwaggerResponse(201, "Survey created")]
-    public async Task<IActionResult> UploadFile(IFormFile? file)
+    [HttpPost("ImportSurvey")]
+    [SwaggerResponse(200, "Survey created")]
+    public async Task<IActionResult> ImportSurvey(IFormFile? file)
     {
         if (file == null || file.Length == 0)
         {

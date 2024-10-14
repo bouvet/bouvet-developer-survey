@@ -1,6 +1,6 @@
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
-public class SurveyDto
+public class SurveysDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
@@ -8,11 +8,9 @@ public class SurveyDto
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }
-    public virtual ICollection<SurveyElementDto>? SurveyBlocks { get; set; }
-    
-    public static SurveyDto CreateFromEntity(Domain.Entities.Survey.Survey survey)
+    public static SurveysDto CreateFromEntity(Domain.Entities.Survey.Survey survey)
     {
-        return new SurveyDto
+        return new SurveysDto
         {
             Id = survey.Id,
             Name = survey.Name,
@@ -20,7 +18,6 @@ public class SurveyDto
             CreatedAt = survey.CreatedAt,
             UpdatedAt = survey.UpdatedAt,
             LastSyncedAt = survey.LastSyncedAt,
-            SurveyBlocks = survey.SurveyBlocks?.Select(SurveyElementDto.CreateFromEntity).ToList()
         };
     }
 }

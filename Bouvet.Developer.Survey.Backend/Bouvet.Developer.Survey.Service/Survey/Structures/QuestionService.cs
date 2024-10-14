@@ -34,6 +34,7 @@ public class QuestionService : IQuestionService
             //Add new questions to survey
             if (question == null)
             {
+                Console.WriteLine("Creating new question");
                 var newQuestion = new NewQuestionDto
                 {
                     BlockElementId = surveyElement.PrimaryAttribute,
@@ -78,6 +79,7 @@ public class QuestionService : IQuestionService
             {
                 if (surveyQuestionsDto.SurveyElements.All(q => q.PrimaryAttribute != questionToBeDeleted.QuestionId))
                 {
+                    Console.WriteLine("Deleting question with id: " + questionToBeDeleted.Id);
                     await DeleteQuestionAsync(questionToBeDeleted.Id);
                 }
             }

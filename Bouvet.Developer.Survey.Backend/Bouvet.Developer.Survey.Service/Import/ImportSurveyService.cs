@@ -87,6 +87,7 @@ public class ImportSurveyService : IImportSurveyService
 
         if (checkSurveyExists != null)
         {
+            Console.WriteLine("Survey already exists, checking for differences");   
             await CheckForDifferenceSurvey(surveyBlockDto, checkSurveyExists);
         }
         else
@@ -156,6 +157,7 @@ public class ImportSurveyService : IImportSurveyService
 
         if (survey.Name != surveyEntry.SurveyName || survey.SurveyLanguage != surveyEntry.SurveyLanguage)
         {
+            Console.WriteLine("Survey has been updated, updating survey");
             await _surveyService.UpdateSurveyAsync(survey.Id, new NewSurveyDto
             {
                 Name = surveyEntry.SurveyName,
@@ -177,7 +179,9 @@ public class ImportSurveyService : IImportSurveyService
                 await _surveyBlockService.CheckSurveyBlockElements(survey.Id, surveyElement);
                 // await _blockElementService.CheckBlockElements(survey.Id, surveyElement);
             }
-            
         }
+
+        if (survey != null) survey.LastSyncedAt = DateTimeOffset.Now;
+        await _context.SaveChangesAsync();
     }
 }
