@@ -104,7 +104,7 @@ jobs:
           echo "PASSWORD=$password" >> $GITHUB_ENV
 
       - name: Build and Push API Image to ACR
-        uses: azure/docker-login@v1
+        uses: azure/docker-login@v2
         with:
           login-server: ${{ env.LOGIN_SERVER }}
           username: ${{ env.LOGIN_NAME }}
@@ -163,7 +163,7 @@ jobs:
           echo "PASSWORD=$password" >> $GITHUB_ENV
 
       - name: Build and Push API Image to ACR
-        uses: azure/docker-login@v1
+        uses: azure/docker-login@v2
         with:
           login-server: ${{ env.LOGIN_SERVER }}
           username: ${{ env.LOGIN_NAME }}
