@@ -1,3 +1,4 @@
+using Bouvet.Developer.Survey.Domain.Entities.Results;
 using Bouvet.Developer.Survey.Domain.Entities.Survey;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,4 +11,6 @@ public interface IDeveloperSurveyContext
     public DbSet<Question> Questions { get; }
     public DbSet<Choice> Choices { get; }
     public DbSet<BlockElement> BlockElements { get; }
+    public DbSet<AnswerOption> AnswerOptions { get; }
+    public DbSet<Response> Responses { get; }
 }

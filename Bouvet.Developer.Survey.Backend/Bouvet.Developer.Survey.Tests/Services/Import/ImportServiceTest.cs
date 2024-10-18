@@ -26,7 +26,8 @@ public class ImportServiceTest
         // Injecting the in-memory context into the service
         _surveyService = new SurveyService(context);
         IChoiceService choiceService = new ChoiceService(context);
-        IQuestionService questionService = new QuestionService(context, choiceService);
+        IAnswerOptionService answerOptionService = new AnswerOptionService(context);
+        IQuestionService questionService = new QuestionService(context, choiceService, answerOptionService);
         ISurveyBlockService surveyBlockService = new SurveyBlockService(context);
         IBlockElementService blockElementService = new BlockElementService(context);
         _importSurvey = new ImportSurveyService(_surveyService, context, questionService, surveyBlockService, 
@@ -224,6 +225,13 @@ public class ImportServiceTest
                     {"1", new ChoicesDto
                     {
                         Display = "Name"
+                    }}
+                },
+                Answers = new Dictionary<string, ChoicesDto>
+                {
+                    {"1", new ChoicesDto
+                    {
+                        Display = "Wish"
                     }}
                 }
             }

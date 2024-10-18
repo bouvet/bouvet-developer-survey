@@ -128,6 +128,8 @@ public class ChoiceService : IChoiceService
         
         if (choice == null) throw new NotFoundException("Choice not found");
         
+        if(choice.Text == updateChoiceDto.Text) return ChoiceDto.CreateFromEntity(choice);
+        
         choice.Text = updateChoiceDto.Text;
         choice.UpdatedAt = DateTimeOffset.Now;
         

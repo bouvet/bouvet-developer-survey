@@ -7,6 +7,7 @@ public class NewQuestionDto
     public string DateExportTag { get; set; } = null!;
     public string QuestionId { get; set; } = null!;
     public string QuestionText { get; set; } = null!;
+    public bool IsMultipleChoice { get; set; }
     public string QuestionDescription { get; set; } = null!;
     
     public List<NewChoiceDto>? Choices { get; set; }

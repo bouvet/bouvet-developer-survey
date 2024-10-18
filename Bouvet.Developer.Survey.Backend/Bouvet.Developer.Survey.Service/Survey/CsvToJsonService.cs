@@ -34,21 +34,21 @@ public class CsvToJsonService : ICsvToJsonService
     {
         // Retrieve questions for the given survey ID
         var questions = await GetQuestions(surveyId);
-        
+    
         // Convert the CSV stream to JSON format
         var csvRecords = await ConvertCsvToJson(csvStream);
-        
+    
         // Deserialize the CSV records to a list of dictionaries
         var records = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(csvRecords);
-        
+    
         // Create a HashSet of DateExportTags from questions for quick lookup
         var exportTagSet = new HashSet<string>(questions.Select(q => q.DateExportTag));
 
-        // Filter the records to include only those fields present in the exportTagSet
+        // Filter the records to include only those fields present in the exportTagSet and contain numeric values
         var filteredFields = records
             .SelectMany(record => 
                 exportTagSet
-                    .Where(tag => record.ContainsKey(tag)) // Check if the record contains the field name
+                    .Where(tag => record.ContainsKey(tag) && IsNumeric(record[tag]?.ToString())) // Check if the value is a valid number
                     .Select(tag => new FieldDto // Create a new DTO with the field name and its value
                     {
                         FieldName = tag,
@@ -57,9 +57,23 @@ public class CsvToJsonService : ICsvToJsonService
             )
             .Distinct()
             .ToList();
+        
+        // Count how many "enhet" fields exist in filteredFields
+        var enhetCount = filteredFields.Count(f => f.FieldName == "Programmeringsspråk_46");
+
+        // Log the count to the console
+        Console.WriteLine($"Number of fields with FieldName 'Programmeringsspråk_46': {enhetCount}");
 
         return filteredFields;
     }
+
+    // Helper method to check if a string is numeric
+    private bool IsNumeric(string value)
+    {
+        return !string.IsNullOrEmpty(value) && decimal.TryParse(value, out _); // Return true if the string can be parsed as a number
+    }
+
+
     
     public async Task<string> ConvertCsvToJson(Stream csvStream)
     {
@@ -75,7 +89,7 @@ public class CsvToJsonService : ICsvToJsonService
         var records = new List<Dictionary<string, object>>();
         
         int recordCount = 0;
-        while (await csv.ReadAsync() && recordCount < 10) // Limit the number of records to 10
+        while (await csv.ReadAsync()) // Limit the number of records to 10
         {
             var record = new Dictionary<string, object>();
             foreach (var header in csv.HeaderRecord)

@@ -12,11 +12,13 @@ public class QuestionService : IQuestionService
 {
     private readonly DeveloperSurveyContext _context;
     private readonly IChoiceService _choiceService;
+    private readonly IAnswerOptionService _answerOptionService;
     
-    public QuestionService(DeveloperSurveyContext context, IChoiceService choiceService)
+    public QuestionService(DeveloperSurveyContext context, IChoiceService choiceService, IAnswerOptionService answerOptionService)
     {
         _context = context;
         _choiceService = choiceService;
+        _answerOptionService = answerOptionService;
     }
 
     public async Task CheckForDifference(SurveyQuestionsDto surveyQuestionsDto, Domain.Entities.Survey.Survey survey)
@@ -40,6 +42,7 @@ public class QuestionService : IQuestionService
                     BlockElementId = surveyElement.PrimaryAttribute,
                     QuestionId = surveyElement.PrimaryAttribute,
                     SurveyId = survey.SurveyId,
+                    IsMultipleChoice = surveyElement.Payload != null && surveyElement.Payload.Answers?.Count > 0,
                     DateExportTag = surveyElement.Payload != null ? surveyElement.Payload.DataExportTag : string.Empty,
                     QuestionText = surveyElement.Payload != null ? surveyElement.Payload.QuestionText : string.Empty,
                     QuestionDescription = surveyElement.Payload != null
@@ -61,6 +64,7 @@ public class QuestionService : IQuestionService
                 {
                     BlockElementId = surveyElement.PrimaryAttribute,
                     SurveyId = survey.SurveyId,
+                    IsMultipleChoice = surveyElement.Payload != null && surveyElement.Payload.Answers?.Count > 0,
                     DateExportTag = surveyElement.Payload != null ? surveyElement.Payload.DataExportTag : string.Empty,
                     QuestionText = surveyElement.Payload != null ? surveyElement.Payload.QuestionText : string.Empty,
                     QuestionDescription = surveyElement.Payload != null
@@ -90,6 +94,7 @@ public class QuestionService : IQuestionService
             if (question != null && surveyElement.Payload != null)
             {
                 await _choiceService.CheckForDifferences(question.Id, surveyElement.Payload);
+                await _answerOptionService.AddAnswerFromDto(survey.Id, surveyElement.Payload);
             }
         }
         
@@ -106,6 +111,7 @@ public class QuestionService : IQuestionService
             Id = Guid.NewGuid(),
             BlockElementId = blockElement.Id,
             SurveyId = newQuestionDto.SurveyId,
+            IsMultipleChoice = newQuestionDto.IsMultipleChoice,
             QuestionId = newQuestionDto.QuestionId,
             DateExportTag = newQuestionDto.DateExportTag,
             QuestionText = newQuestionDto.QuestionText,

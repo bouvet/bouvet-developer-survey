@@ -1,4 +1,4 @@
-namespace Bouvet.Developer.Survey.Domain.Entities;
+namespace Bouvet.Developer.Survey.Domain.Entities.Results;
 
 public class AiAnalyse
 {

@@ -17,6 +17,7 @@ public class Question : IEntitiesDateTimeOffsett
     public string DateExportTag { get; set; } = null!;
     public string QuestionText { get; set; } = null!;
     public string QuestionDescription { get; set; } = null!;
+    public bool IsMultipleChoice { get; set; } = false;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }

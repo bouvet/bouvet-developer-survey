@@ -28,6 +28,7 @@ public class PayloadQuestionDto
     public string DataExportTag { get; set; } = string.Empty;
     public string QuestionDescription { get; set; } = string.Empty;
     public Dictionary<string, ChoicesDto> Choices { get; set; } = new();
+    public Dictionary<string, ChoicesDto>? Answers { get; set; } = new();
 }
 
 public class ChoicesDto

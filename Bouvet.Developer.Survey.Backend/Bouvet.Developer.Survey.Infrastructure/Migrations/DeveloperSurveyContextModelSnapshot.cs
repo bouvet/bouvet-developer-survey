@@ -25,6 +25,69 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Results.Response", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AnswerOptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnswerOptionId");
+
+                    b.HasIndex("ChoiceId");
+
+                    b.ToTable("Responses", (string)null);
+                });
+
+            modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.AnswerOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("IndexId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SurveyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SurveyId");
+
+                    b.ToTable("AnswerOptions", (string)null);
+                });
+
             modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.BlockElement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -111,6 +174,9 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsMultipleChoice")
+                        .HasColumnType("bit");
 
                     b.Property<string>("QuestionDescription")
                         .IsRequired()
@@ -213,6 +279,35 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
                     b.ToTable("SurveyBlocks", (string)null);
                 });
 
+            modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Results.Response", b =>
+                {
+                    b.HasOne("Bouvet.Developer.Survey.Domain.Entities.Survey.AnswerOption", "AnswerOption")
+                        .WithMany("Responses")
+                        .HasForeignKey("AnswerOptionId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Bouvet.Developer.Survey.Domain.Entities.Survey.Choice", "Choice")
+                        .WithMany("Responses")
+                        .HasForeignKey("ChoiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AnswerOption");
+
+                    b.Navigation("Choice");
+                });
+
+            modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.AnswerOption", b =>
+                {
+                    b.HasOne("Bouvet.Developer.Survey.Domain.Entities.Survey.Survey", "Survey")
+                        .WithMany("AnswerOptions")
+                        .HasForeignKey("SurveyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Survey");
+                });
+
             modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.BlockElement", b =>
                 {
                     b.HasOne("Bouvet.Developer.Survey.Domain.Entities.Survey.SurveyBlock", "SurveyBlock")
@@ -257,9 +352,19 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
                     b.Navigation("Survey");
                 });
 
+            modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.AnswerOption", b =>
+                {
+                    b.Navigation("Responses");
+                });
+
             modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.BlockElement", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.Choice", b =>
+                {
+                    b.Navigation("Responses");
                 });
 
             modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.Question", b =>
@@ -269,6 +374,8 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
 
             modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Survey.Survey", b =>
                 {
+                    b.Navigation("AnswerOptions");
+
                     b.Navigation("SurveyBlocks");
                 });
 
