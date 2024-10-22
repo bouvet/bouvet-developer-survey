@@ -11,6 +11,7 @@ public class SurveyBuilderTest
     private readonly QuestionBuilder _questionBuilder = new();
     private readonly ChoiceBuilder _choiceBuilder = new();
     private readonly AnswerOptionsBuilder _answerOptionsBuilder = new();
+    private readonly ResponseBuilder _responseBuilder = new();
 
     [Fact]
     public void SurveyBuilder_ShouldCreateSurvey()
@@ -95,5 +96,19 @@ public class SurveyBuilderTest
         Assert.Equal(_answerOptionsBuilder.Id, answerOptions.Id);
         Assert.Equal(AnswerOptionsBuilder.Text, answerOptions.Text);
         Assert.Equal(AnswerOptionsBuilder.IndexId, answerOptions.IndexId);
+    }
+    
+    [Fact]
+    public void Survey_CreateResponseBuilder()
+    {
+        // Arrange
+        var response = _responseBuilder.Build();
+        
+        // Assert
+        Assert.NotNull(response);
+        Assert.Equal(_responseBuilder.Id, response.Id);
+        Assert.Equal(ResponseBuilder.CreatedAt, response.CreatedAt.ToString());
+        Assert.Equal(ResponseBuilder.UpdatedAt, response.UpdatedAt.ToString());
+        Assert.Equal(ResponseBuilder.DeletedAt, response.DeletedAt.ToString());
     }
 }

@@ -1,8 +1,10 @@
 using Bouvet.Developer.Survey.Service.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.Survey;
+using Bouvet.Developer.Survey.Service.Survey.Results;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Api.Extensions;
@@ -20,5 +22,6 @@ public static class ServiceLayer
         services.AddTransient<IChoiceService, ChoiceService>();
         services.AddTransient<IBlockElementService, BlockElementService>();
         services.AddTransient<IAnswerOptionService, AnswerOptionService>();
+        services.AddTransient<IResponseService, ResponseService>();
     }
 }

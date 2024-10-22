@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
@@ -108,12 +109,17 @@ public class SurveysController : ControllerBase
             return BadRequest("No file uploaded.");
         }
 
-        using (var stream = new MemoryStream())
+        using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        stream.Position = 0;
+        try
         {
-            await file.CopyToAsync(stream);
-            stream.Position = 0;
-            var json = await _csvToJsonService.GetQuestionsFromStream(stream, surveyId);
-            return Ok(json);
+            await _csvToJsonService.GetQuestionsFromStream(stream, surveyId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
 }
