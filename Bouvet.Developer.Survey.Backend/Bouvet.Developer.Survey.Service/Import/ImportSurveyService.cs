@@ -86,23 +86,27 @@ public class ImportSurveyService : IImportSurveyService
         var records = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(csvRecords);
     
         // Create a HashSet of DateExportTags from questions for quick lookup
-        var exportTagSet = new HashSet<string>(questions.Select(q => q.DateExportTag));
+        var exportTagSet = new HashSet<string>(questions.Select(q => q.DateExportTag)!);
 
         // Filter the records to include only those fields present in the exportTagSet and contain numeric values
-        var filteredFields = records
-            .SelectMany(record => 
-                exportTagSet
-                    .Where(tag => record.ContainsKey(tag) && IsNumeric(record[tag]?.ToString())) // Check if the value is a valid number
-                    .Select(tag => new FieldDto // Create a new DTO with the field name and its value
-                    {
-                        FieldName = tag,
-                        Value = record[tag].ToString()
-                    })
-            )
-            .Distinct()
-            .ToList();
+        if (records != null)
+        {
+            var filteredFields = records
+                .SelectMany(record => 
+                    exportTagSet
+                        .Where(tag => record.ContainsKey(tag) && 
+                                      IsNumeric(record[tag].ToString() ?? throw new InvalidOperationException())) // Check if the value is a valid number
+                        .Select(tag => new FieldDto // Create a new DTO with the field name and its value
+                        {
+                            FieldName = tag,
+                            Value = record[tag].ToString()
+                        })
+                )
+                .Distinct()
+                .ToList();
         
-        await MapFieldsToResponse(filteredFields, surveyId);
+            await MapFieldsToResponse(filteredFields, surveyId);
+        }
     }
 
     private async Task MapFieldsToResponse(List<FieldDto> fieldDto, string surveyId)
@@ -113,12 +117,15 @@ public class ImportSurveyService : IImportSurveyService
 
         var questions = await _questionService.GetQuestionsBySurveyIdAsync(surveyId);
         
+        if(questions == null) throw new NotFoundException("Questions not found");
+        
         // Group fields by FieldName and add them to a list
         var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
             
         foreach (var group in groupedFields)
         {
-            var summaryResponse = await _resultService.SummarizeFields(group.Select(g => g).ToList(), questions, survey);
+            var summaryResponse = await _resultService.SummarizeFields(
+                group.Select(g => g).ToList(), questions, survey);
             
             await _responseService.CreateResponse(summaryResponse);
         }
