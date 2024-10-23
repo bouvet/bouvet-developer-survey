@@ -19,17 +19,12 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 public class SurveysController : ControllerBase
 {
     private readonly ISurveyService _surveyService;
-    private readonly ICsvToJsonService _csvToJsonService;
     private readonly IImportSurveyService _importSurveyService;
-    private readonly IQuestionService _questionService;
     
-    public SurveysController(ISurveyService surveyService, ICsvToJsonService csvToJsonService, 
-        IImportSurveyService importSurveyService, IQuestionService questionService)
+    public SurveysController(ISurveyService surveyService, IImportSurveyService importSurveyService)
     {
         _surveyService = surveyService;
-        _csvToJsonService = csvToJsonService;
         _importSurveyService = importSurveyService;
-        _questionService = questionService;
     }
     
     /// <summary>
@@ -59,14 +54,6 @@ public class SurveysController : ControllerBase
     public async Task<IActionResult> GetSurvey(Guid surveyId)
     {
         var survey = await _surveyService.GetSurveyAsync(surveyId);
-        return Ok(survey);
-    }
-    
-    [HttpGet("GetQuestionsSurvey")]
-    public async Task<IActionResult> GetQuestionsSurvey(string surveyId)
-    {
-        // var survey = await _questionService.GetQuestionsBySurveyIdAsync(surveyId);
-        var survey = await _csvToJsonService.GetQuestions(surveyId);
         return Ok(survey);
     }
     
@@ -114,7 +101,7 @@ public class SurveysController : ControllerBase
         stream.Position = 0;
         try
         {
-            await _csvToJsonService.GetQuestionsFromStream(stream, surveyId);
+            await _importSurveyService.GetQuestionsFromStream(stream, surveyId);
             return Ok();
         }
         catch (Exception e)

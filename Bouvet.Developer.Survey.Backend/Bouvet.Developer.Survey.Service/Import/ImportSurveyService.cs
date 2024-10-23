@@ -2,8 +2,10 @@ using System.Text.Json;
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,15 +18,21 @@ public class ImportSurveyService : IImportSurveyService
     private readonly DeveloperSurveyContext _context;
     private readonly ISurveyBlockService _surveyBlockService;
     private readonly IBlockElementService _blockElementService;
+    private readonly IResponseService _responseService;
+    private readonly IResultService _resultService;
+    private readonly ICsvToJsonService _csvToJsonService;
     
     public ImportSurveyService(ISurveyService surveyService, DeveloperSurveyContext context, IQuestionService questionService, ISurveyBlockService surveyBlockService,
-            IBlockElementService blockElementService)
+            IBlockElementService blockElementService, IResponseService responseService, IResultService resultService, ICsvToJsonService csvToJsonService)
     {
         _surveyService = surveyService;
         _context = context; 
         _questionService = questionService;
         _surveyBlockService = surveyBlockService;
         _blockElementService = blockElementService;
+        _responseService = responseService;
+        _resultService = resultService;
+        _csvToJsonService = csvToJsonService;
     }
     
     public async Task<SurveyBlocksDto> UploadSurvey(Stream stream)
@@ -65,6 +73,55 @@ public class ImportSurveyService : IImportSurveyService
         .ToArray();
         
         await MapJsonQuestions(surveyQuestionsDto);
+    }
+    
+    public async Task GetQuestionsFromStream(Stream csvStream, string surveyId)
+    {
+        var questions = await _resultService.GetQuestions(surveyId);
+    
+        // Convert the CSV stream to JSON format
+        var csvRecords = await _csvToJsonService.ConvertCsvToJson(csvStream);
+    
+        // Deserialize the CSV records to a list of dictionaries
+        var records = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(csvRecords);
+    
+        // Create a HashSet of DateExportTags from questions for quick lookup
+        var exportTagSet = new HashSet<string>(questions.Select(q => q.DateExportTag));
+
+        // Filter the records to include only those fields present in the exportTagSet and contain numeric values
+        var filteredFields = records
+            .SelectMany(record => 
+                exportTagSet
+                    .Where(tag => record.ContainsKey(tag) && IsNumeric(record[tag]?.ToString())) // Check if the value is a valid number
+                    .Select(tag => new FieldDto // Create a new DTO with the field name and its value
+                    {
+                        FieldName = tag,
+                        Value = record[tag].ToString()
+                    })
+            )
+            .Distinct()
+            .ToList();
+        
+        await MapFieldsToResponse(filteredFields, surveyId);
+    }
+
+    private async Task MapFieldsToResponse(List<FieldDto> fieldDto, string surveyId)
+    {
+        var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.SurveyId == surveyId);
+
+        if (survey == null) throw new NotFoundException("Survey not found");
+
+        var questions = await _questionService.GetQuestionsBySurveyIdAsync(surveyId);
+        
+        // Group fields by FieldName and add them to a list
+        var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
+            
+        foreach (var group in groupedFields)
+        {
+            var summaryResponse = await _resultService.SummarizeFields(group.Select(g => g).ToList(), questions, survey);
+            
+            await _responseService.CreateResponse(summaryResponse);
+        }
     }
     
     private async Task MapJsonSurveyBlocks(SurveyBlocksDto surveyBlockDto)
@@ -170,5 +227,11 @@ public class ImportSurveyService : IImportSurveyService
 
         if (survey != null) survey.LastSyncedAt = DateTimeOffset.Now;
         await _context.SaveChangesAsync();
+    }
+    
+    // Helper method to check if a string is numeric
+    private bool IsNumeric(string value)
+    {
+        return !string.IsNullOrEmpty(value) && decimal.TryParse(value, out _); // Return true if the string can be parsed as a number
     }
 }

@@ -1,7 +1,9 @@
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.Survey.Results;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +32,11 @@ public class ImportServiceTest
         IQuestionService questionService = new QuestionService(context, choiceService, answerOptionService);
         ISurveyBlockService surveyBlockService = new SurveyBlockService(context);
         IBlockElementService blockElementService = new BlockElementService(context);
+        IResponseService responseService = new ResponseService(context);
+        IResultService resultService = new ResultService(context, questionService);
+        ICsvToJsonService csvToJsonService = new CsvToJsonService();
         _importSurvey = new ImportSurveyService(_surveyService, context, questionService, surveyBlockService, 
-            blockElementService);
+            blockElementService, responseService, resultService, csvToJsonService);
     }
 
     [Fact]
