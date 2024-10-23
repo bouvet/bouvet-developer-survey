@@ -10,3 +10,12 @@ export interface surveyStructure {
     questions: surveyQuestion[];
 }
 
+export interface surveyAnswer  {
+    answer: string | number;
+}
+
+export interface surveyAnswers  {
+    questionId: string;
+    answers: surveyAnswer[];
+    count?: number;
+}
