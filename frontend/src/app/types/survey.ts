@@ -1,4 +1,4 @@
-export interface surveyQquestion  {
+export interface surveyQuestion  {
     id: string;
     text: string;
     type: "multiple" | "single" | "text";
@@ -7,5 +7,6 @@ export interface surveyQquestion  {
 export interface surveyStructure {
     id: string;
     title: string;
-    questions: question[];
+    questions: surveyQuestion[];
 }
+
