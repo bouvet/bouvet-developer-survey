@@ -1,0 +1,11 @@
+{
+  "name":  "Programmeringsspråk: Top 10",
+  "data": [
+    {
+      "x": [65, 58, 57, 52, 51, 43, 40, 36, 12, 10 ],
+      "y": [
+        "Javascript", "SQL", "C#", "Typescript", "HTML/CSS", "Python", "PowerShell", "Bash/Shell", "Java", "Go"
+      ]
+    }
+  ]
+}

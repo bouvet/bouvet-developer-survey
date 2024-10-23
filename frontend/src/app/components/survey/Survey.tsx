@@ -4,6 +4,7 @@ import DotPlotChartJson from "@/app/components/charts/DotPlotChartJson";
 import { useClientTranslation } from "../../../../shared/i18n/src";
 import BarChart from "../charts/barchart/BarChart";
 import BarChartJson from "../charts/barchart/BarChartJson";
+import BarChartJsonTEST from "../charts/BarChart";
 
 const Survey = () => {
   const { t } = useClientTranslation();
@@ -48,6 +49,8 @@ const Survey = () => {
           <BarChart {...barchartData} />
 
           {/* <BarChartJson /> */}
+
+          {/* <BarChartJsonTEST /> Uncomment to see design of the bar char test with more air between the elements*/} 
         </div>
       </section>
     </div>
