@@ -1,4 +1,5 @@
 using Bouvet.Developer.Survey.Domain.Entities.Survey;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
 
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
@@ -10,6 +11,7 @@ public class ChoiceDto
     public string IndexId { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
+    public virtual ICollection<ResponseDto>? Responses { get; set; }
     
     
     public static ChoiceDto CreateFromEntity(Choice choice)
@@ -21,7 +23,8 @@ public class ChoiceDto
             Text = choice.Text,
             IndexId = choice.IndexId,
             CreatedAt = choice.CreatedAt,
-            UpdatedAt = choice.UpdatedAt
+            UpdatedAt = choice.UpdatedAt,
+            Responses = choice.Responses?.Select(ResponseDto.CreateFromEntity).ToList()
         };
     }
 }

@@ -70,7 +70,7 @@ public class QuestionServiceTest
         ]);
     }
 
-    private async Task<QuestionDto> CreateTestQuestionAsync()
+    private async Task<QuestionDetailsDto> CreateTestQuestionAsync()
     {
         await CreateInitialDataAsync();
 

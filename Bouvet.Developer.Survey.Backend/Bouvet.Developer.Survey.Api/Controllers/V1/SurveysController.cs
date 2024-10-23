@@ -1,10 +1,7 @@
 using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
-using Bouvet.Developer.Survey.Service.Interfaces.Survey;
-using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +17,13 @@ public class SurveysController : ControllerBase
 {
     private readonly ISurveyService _surveyService;
     private readonly IImportSurveyService _importSurveyService;
+    private readonly IQuestionService _questionService;
     
-    public SurveysController(ISurveyService surveyService, IImportSurveyService importSurveyService)
+    public SurveysController(ISurveyService surveyService, IImportSurveyService importSurveyService, IQuestionService questionService)
     {
         _surveyService = surveyService;
         _importSurveyService = importSurveyService;
+        _questionService = questionService;
     }
     
     /// <summary>
@@ -50,11 +49,18 @@ public class SurveysController : ControllerBase
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpGet("{surveyId:guid}")]
-    [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
+    [SwaggerResponse(200, "Returns a survey", typeof(DetailSurveyDto))]
     public async Task<IActionResult> GetSurvey(Guid surveyId)
     {
         var survey = await _surveyService.GetSurveyAsync(surveyId);
         return Ok(survey);
+    }
+    
+    [HttpGet("GetQuestionById/{questionId:guid}")]
+    public async Task<IActionResult> GetQuestionById(Guid questionId)
+    {
+        var question = await _questionService.GetQuestionByIdAsync(questionId);
+        return Ok(question);
     }
     
     /// <summary>

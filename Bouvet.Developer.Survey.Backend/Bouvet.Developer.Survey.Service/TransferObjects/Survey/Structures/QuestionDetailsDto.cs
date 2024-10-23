@@ -2,7 +2,7 @@ using Bouvet.Developer.Survey.Domain.Entities.Survey;
 
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
-public class QuestionDto
+public class QuestionDetailsDto
 {
     public Guid Id { get; set; }
     public Guid BlockElementId { get; set; }
@@ -13,10 +13,11 @@ public class QuestionDto
     public bool IsMultipleChoice { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
+    public virtual ICollection<ChoiceDto>? Choices { get; set; } = new List<ChoiceDto>();
     
-    public static QuestionDto CreateFromEntity(Question question)
+    public static QuestionDetailsDto CreateFromEntity(Question question)
     {
-        return new QuestionDto
+        return new QuestionDetailsDto
         {
             Id = question.Id,
             BlockElementId = question.BlockElementId,
@@ -27,6 +28,7 @@ public class QuestionDto
             IsMultipleChoice = question.IsMultipleChoice,
             CreatedAt = question.CreatedAt,
             UpdatedAt = question.UpdatedAt,
+            Choices = question.Choices?.Select(ChoiceDto.CreateFromEntity).ToList()
         };
     }
 }

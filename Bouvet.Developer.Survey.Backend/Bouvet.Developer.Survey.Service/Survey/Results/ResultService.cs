@@ -18,7 +18,7 @@ public class ResultService : IResultService
         _questionService = questionService;
     }
     
-    public async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, IEnumerable<QuestionDto> questions, Domain.Entities.Survey.Survey survey)
+    public async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, IEnumerable<QuestionDetailsDto> questions, Domain.Entities.Survey.Survey survey)
     {
         var responseDtos = new List<NewResponseDto>();
         string? questionChoiceNumber;
@@ -63,21 +63,21 @@ public class ResultService : IResultService
         return responseDtos;
     }
 
-    private async Task CheckField(string fieldValue, QuestionDto question, 
+    private async Task CheckField(string fieldValue, QuestionDetailsDto questionDetails, 
         Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtos, FieldDto field, string questionChoiceNumber)
     {
         var choice = await _context.Choices.FirstOrDefaultAsync(c =>
-            c.QuestionId == question.Id && c.IndexId == questionChoiceNumber);
+            c.QuestionId == questionDetails.Id && c.IndexId == questionChoiceNumber);
 
         if (choice == null)
         {
-            Console.WriteLine($"Choice not found for question: {question.Id} and index: {questionChoiceNumber}");
+            Console.WriteLine($"Choice not found for question: {questionDetails.Id} and index: {questionChoiceNumber}");
             return;
         }
 
         var answerId = Guid.Empty;
 
-        if (question.IsMultipleChoice)
+        if (questionDetails.IsMultipleChoice)
         {
 
             var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(a =>

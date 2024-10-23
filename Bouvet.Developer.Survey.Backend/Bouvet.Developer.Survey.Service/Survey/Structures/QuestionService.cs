@@ -3,6 +3,7 @@ using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 
@@ -100,7 +101,7 @@ public class QuestionService : IQuestionService
         
     }
 
-    public async Task<QuestionDto> CreateQuestionAsync(NewQuestionDto newQuestionDto)
+    public async Task<QuestionDetailsDto> CreateQuestionAsync(NewQuestionDto newQuestionDto)
     {
         var blockElement = await _context.BlockElements.FirstOrDefaultAsync(be => be.QuestionId == newQuestionDto.BlockElementId);
         
@@ -125,23 +126,23 @@ public class QuestionService : IQuestionService
         if(newQuestionDto.Choices != null)
             await _choiceService.CreateChoice(newQuestionDto.Choices, question.Id);
         
-        var dto = QuestionDto.CreateFromEntity(question);
+        var dto = QuestionDetailsDto.CreateFromEntity(question);
         
         return dto;
     }
 
-    public async Task<QuestionDto> GetQuestionByIdAsync(Guid questionId)
+    public async Task<QuestionResponseDto> GetQuestionByIdAsync(Guid questionId)
     {
         var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
         
         if (question == null) throw new NotFoundException("Question not found");
         
-        var dto = QuestionDto.CreateFromEntity(question);
+        var dto = QuestionResponseDto.CreateFromEntity(question);
         
         return dto;
     }
 
-    public async Task<IEnumerable<QuestionDto>> GetQuestionsBySurveyBlockIdAsync(Guid surveyBlockId)
+    public async Task<IEnumerable<QuestionDetailsDto>> GetQuestionsBySurveyBlockIdAsync(Guid surveyBlockId)
     {
         var questions = await _context.Questions
             .Where(q => q.BlockElementId == surveyBlockId)
@@ -149,12 +150,12 @@ public class QuestionService : IQuestionService
         
         if(questions.Count == 0) throw new NotFoundException("No questions found");
         
-        var dtoS = questions.Select(QuestionDto.CreateFromEntity).ToList();
+        var dtoS = questions.Select(QuestionDetailsDto.CreateFromEntity).ToList();
         
         return dtoS;
     }
     
-    public async Task<IEnumerable<QuestionDto>> GetQuestionsBySurveyIdAsync(string surveyId)
+    public async Task<IEnumerable<QuestionDetailsDto>> GetQuestionsBySurveyIdAsync(string surveyId)
     {
         var questions = await _context.Questions
             .Where(q => q.SurveyId == surveyId)
@@ -162,12 +163,12 @@ public class QuestionService : IQuestionService
         
         if(questions.Count == 0) throw new NotFoundException("No questions found");
         
-        var dtoS = questions.Select(QuestionDto.CreateFromEntity).ToList();
+        var dtoS = questions.Select(QuestionDetailsDto.CreateFromEntity).ToList();
         
         return dtoS;
     }
 
-    public async Task<QuestionDto> UpdateQuestionAsync(Guid questionId, NewQuestionDto updateQuestionDto)
+    public async Task<QuestionDetailsDto> UpdateQuestionAsync(Guid questionId, NewQuestionDto updateQuestionDto)
     {
         var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
         
@@ -199,7 +200,7 @@ public class QuestionService : IQuestionService
             await _context.SaveChangesAsync();
         }
         
-        var dto = QuestionDto.CreateFromEntity(question);
+        var dto = QuestionDetailsDto.CreateFromEntity(question);
         
         return dto;
     }
