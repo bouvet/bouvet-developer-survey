@@ -1,8 +1,21 @@
-import { useState, useEffect } from "react";
+
 import { surveyStructure } from "../types/survey";
+import { fetcher } from "../lib/fetcher";
+import useSWR from "swr";
+
+
 
 export const useSurveyStructure = () => {
 
+    // TODO: Use surveyStructure type when api structure is ready
+    const { data, error, isLoading } = useSWR('https://httpbin.org/get', fetcher)
+    return { 
+        data,
+        error,
+        isLoading
+    }
+
+    /*
     const [structure, setStructure] = useState<surveyStructure | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -24,7 +37,9 @@ export const useSurveyStructure = () => {
         fetchSurveyStructure();
     }, []);
 
-    return { structure, loading, error };
+    return { data, loading, error };
+    */
+
 };
 
 

@@ -1,54 +1,28 @@
+
+"use client";
 import React from "react";
-import DotPlotChart from "@/app/components/charts/DotPlotChart";
-import DotPlotChartJson from "@/app/components/charts/DotPlotChartJson";
-import { useClientTranslation } from "../../../../shared/i18n/src";
-import BarChart from "../charts/barchart/BarChart";
+import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
+import { useSurveyResults } from "@/app/hooks/useSurveyResults";
 import BarChartJson from "../charts/barchart/BarChartJson";
+import DotPlotChartJson from "../charts/DotPlotChartJson";
 
 const Survey = () => {
-  const { t } = useClientTranslation();
 
-  // Chart data example
-  const chartData = {
-    title: t("admired-and-desired"),
-    x1: [20, 30, 10],
-    x2: [60, 50, 80],
-    y: ["C#", "Typescript", "Python"],
-  };
+  // Get survey structure data
+  const {data, error, isLoading} = useSurveyStructure();
+  if (isLoading) return <div>Getting survey structure...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
-  const barchartData = {
-    title: "Programmeringsspråk: Topp 10",
-    x: [10, 12, 36, 40, 43, 51, 52, 57, 58, 65],
-    y: [
-      "Go",
-      "Java",
-      "Bash/Shell (all shells)",
-      "PowerShell",
-      "Python",
-      "HTML/CSS",
-      "TypeScript",
-      "C#",
-      "SQL",
-      "JavaScript",
-    ],
-  };
+
+  /* TOTO: Map through structure data to identify the question ids
+  and fetch the survey results for each question */
+  
 
   return (
     <div>
       <section className="mx-auto flex flex-col max-w-7xl lg:px-8">
-        <div className="w-full">
-          {/*
-                <DotPlotChart {...chartData} />
-                */}
-          <DotPlotChartJson />
-        </div>
-      </section>
-      <section className="mx-auto flex flex-col max-w-7xl lg:px-8">
-        <div className="w-full">
-          <BarChart {...barchartData} />
-
-          {/* <BarChartJson /> */}
-        </div>
+        <BarChartJson />
+        <DotPlotChartJson />
       </section>
     </div>
   );

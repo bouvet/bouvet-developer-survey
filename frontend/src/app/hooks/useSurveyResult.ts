@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
-import { surveyAnswer, surveyAnswers } from "../types/survey";
+import { surveyAnswers } from "../types/survey";
+import useSWR from "swr";
+import { fetcher } from "../lib/fetcher";
 
 export const useSurveyResult = (questionId: string) => {
 
+    const { data, error, isLoading } = useSWR(`/api/survey/result/${questionId}`, fetcher)
+    return { 
+        data,
+        error,
+        isLoading
+    }
+
+    /*
     const [answers, setAnswers] = useState<surveyAnswers | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -24,4 +34,5 @@ export const useSurveyResult = (questionId: string) => {
         fetchSurveyResult();
     }, [questionId]);
     return { answers, loading, error }; 
+    */
 };
