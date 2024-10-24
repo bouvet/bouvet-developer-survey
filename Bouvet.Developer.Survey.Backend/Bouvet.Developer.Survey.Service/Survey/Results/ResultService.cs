@@ -24,7 +24,7 @@ public class ResultService : IResultService
         string? questionChoiceNumber;
         string? questionExportTag;
 
-        // Select the first field to extract the qfield name
+        // Select the first field to extract the field name
         var field = fields.First();
         
         // Extract questionExportTag from fieldName
@@ -79,7 +79,6 @@ public class ResultService : IResultService
 
         if (questionDetails.IsMultipleChoice)
         {
-
             var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(a =>
                 a.SurveyId == survey.Id && a.IndexId == fieldValue);
 
@@ -91,14 +90,31 @@ public class ResultService : IResultService
                     
             answerId = answerOption.Id;
         }
-
-        if (field.FieldName != null)
-            AddOrUpdateResponse(responseDtos, choice.Id, field.FieldName, fieldValue, answerId);
+        
+        if (field.FieldName == null) return;
+        
+        if (questionDetails.IsMultipleChoice)
+        {
+            var existingResponse = responseDtos.FirstOrDefault(r => r.FieldValue == fieldValue);
+            AddOrUpdateResponse(responseDtos,existingResponse, choice.Id, questionDetails.DateExportTag, fieldValue, answerId);
+        }
+        else
+        {
+            if(questionDetails.Choices == null) return;
+        
+            var choiceOnIndex = questionDetails.Choices.FirstOrDefault(c => c.IndexId == fieldValue);
+        
+            if (choiceOnIndex == null) return;
+        
+            var existingResponse = responseDtos.FirstOrDefault(r => r.FieldValue == fieldValue);
+            
+            AddOrUpdateResponse(responseDtos,existingResponse, choiceOnIndex.Id, questionDetails.DateExportTag, fieldValue, answerId);
+        }
     }
     
-    private void AddOrUpdateResponse(List<NewResponseDto> responseDtos, Guid choiceId, string fieldName, string fieldValue, Guid answerId)
+    private void AddOrUpdateResponse(List<NewResponseDto> responseDtos, NewResponseDto? existingResponse,
+        Guid choiceId, string fieldName, string fieldValue, Guid answerId)
     {
-        var existingResponse = responseDtos.FirstOrDefault(r => r.FieldValue == fieldValue);
         if (existingResponse != null)
         {
             existingResponse.Value += 1; // Accumulate value
