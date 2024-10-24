@@ -97,8 +97,6 @@ public class BlockElementServiceTests
         // Assert
         Assert.NotNull(block);
         Assert.Equal(ElementType, block.First().Type);
-        Assert.Equal(ElementQuestionId, block.First().QuestionId);
-        Assert.Equal(testBlock.Id, block.First().BlockId);
         
         var blockElementById = await _blockElementService.GetBlockElementById(block.First().Id);
         

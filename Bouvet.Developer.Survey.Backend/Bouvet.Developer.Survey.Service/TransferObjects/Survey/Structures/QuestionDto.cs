@@ -6,7 +6,6 @@ public class QuestionDto
 {
     public Guid Id { get; set; }
     public Guid BlockElementId { get; set; }
-    public string SurveyId { get; set; } = null!;
     public string DateExportTag { get; set; } = null!;
     public string QuestionText { get; set; } = null!;
     public string QuestionDescription { get; set; } = null!;
@@ -20,7 +19,6 @@ public class QuestionDto
         {
             Id = question.Id,
             BlockElementId = question.BlockElementId,
-            SurveyId = question.SurveyId,
             DateExportTag = question.DateExportTag,
             QuestionText = question.QuestionText,
             QuestionDescription = question.QuestionDescription,

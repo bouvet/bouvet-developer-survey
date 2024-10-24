@@ -1,5 +1,6 @@
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;

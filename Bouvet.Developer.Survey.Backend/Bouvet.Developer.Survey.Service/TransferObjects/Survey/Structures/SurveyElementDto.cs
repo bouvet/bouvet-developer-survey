@@ -8,7 +8,6 @@ public class SurveyElementDto
     public Guid SurveyId { get; set; }
     public string? Type { get; set; }
     public string? Description { get; set; } = string.Empty;
-    public string SurveyBlockId { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public virtual ICollection<BlockElementDto>? BlockElements { get; set; }
@@ -21,7 +20,6 @@ public class SurveyElementDto
             SurveyId = surveyBlock.SurveyGuid,
             Type = surveyBlock.Type,
             Description = surveyBlock.Description,
-            SurveyBlockId = surveyBlock.SurveyBlockId,
             CreatedAt = surveyBlock.CreatedAt,
             UpdatedAt = surveyBlock.UpdatedAt,
             BlockElements = surveyBlock.BlockElements?.Select(BlockElementDto.CreateFromEntity).ToList()

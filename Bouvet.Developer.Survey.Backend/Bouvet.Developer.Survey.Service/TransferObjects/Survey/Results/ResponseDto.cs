@@ -1,4 +1,4 @@
-using Bouvet.Developer.Survey.Domain.Entities.Results;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
 
@@ -9,10 +9,11 @@ public class ResponseDto
     public int Value { get; set; }
     public string FieldName { get; set; } = null!;
     public Guid? AnswerOptionId { get; set; }
+    public virtual AnswerOptionDto? AnswerOption { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     
     
-    public static ResponseDto CreateFromEntity(Response response)
+    public static ResponseDto CreateFromEntity(Domain.Entities.Results.Response response)
     {
         return new ResponseDto
         {
@@ -21,7 +22,8 @@ public class ResponseDto
             FieldName = response.FieldName,
             ChoiceId = response.ChoiceId,
             AnswerOptionId = response.AnswerOptionId,
-            CreatedAt = response.CreatedAt
+            CreatedAt = response.CreatedAt,
+            AnswerOption = response.AnswerOption != null ? AnswerOptionDto.CreateFromEntity(response.AnswerOption) : null
         };
     }
 }
