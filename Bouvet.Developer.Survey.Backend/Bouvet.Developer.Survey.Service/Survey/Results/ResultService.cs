@@ -31,7 +31,7 @@ public class ResultService : IResultService
         if (field.FieldName != null && field.FieldName.Contains('_'))
         {
             questionExportTag = field.FieldName.Split('_').First();
-            questionChoiceNumber = field.FieldName.Split("_").Last();
+            questionChoiceNumber = field.FieldName.Split('_').Last();
         }
         else
         {

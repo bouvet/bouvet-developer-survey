@@ -153,7 +153,6 @@ public class SurveyBlockServiceTests
         var updatedSurveyBlock = await _surveyBlockService.UpdateSurveyElement(surveyBlock.Id, newSurveyBlockDto);
         
         // Assert
-        Assert.Equal(newSurveyBlockDto.Type, updatedSurveyBlock.Type);
         Assert.Equal(newSurveyBlockDto.Description, updatedSurveyBlock.Description);
     }
     

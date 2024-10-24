@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +57,16 @@ public class SurveysController : ControllerBase
         return Ok(survey);
     }
     
+    /// <summary>
+    ///  Get survey question by id and their responses
+    /// </summary>
+    /// <param name="questionId">The question guid</param>
+    /// <returns>A question and their responses</returns>
+    /// <response code="200">Returns a question and their responses</response>
+    /// <response code="401">If user is not authorized</response>
+    /// <response code="403">User not authorized to view</response>
     [HttpGet("GetQuestionById/{questionId:guid}")]
+    [SwaggerResponse(200, "Returns a question and their responses", typeof(QuestionResponseDto))]
     public async Task<IActionResult> GetQuestionById(Guid questionId)
     {
         var question = await _questionService.GetQuestionByIdAsync(questionId);
