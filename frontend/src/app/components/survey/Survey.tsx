@@ -6,6 +6,7 @@ import { useSurveyResults } from "@/app/hooks/useSurveyResults";
 import BarChartJson from "../charts/barchart/BarChartJson";
 import DotPlotChartJson from "../charts/DotPlotChartJson";
 
+
 const Survey = () => {
 
   // Get survey structure data
@@ -14,8 +15,11 @@ const Survey = () => {
   if (error) return <div>Error: {error.message}</div>;
 
 
-  /* TOTO: Map through structure data to identify the question ids
-  and fetch the survey results for each question */
+  /* TOTO:  
+  - Map through structure data to identify the question ids
+  - Fetch survey results / answers for each question id
+  - Render a chart witn answers for each question as input parameters
+  */
   
 
   return (
