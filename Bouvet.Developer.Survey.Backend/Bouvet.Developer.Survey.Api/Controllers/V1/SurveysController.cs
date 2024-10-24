@@ -49,7 +49,7 @@ public class SurveysController : ControllerBase
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpGet("{surveyId:guid}")]
-    [SwaggerResponse(200, "Returns a survey", typeof(DetailSurveyDto))]
+    [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
     public async Task<IActionResult> GetSurvey(Guid surveyId)
     {
         var survey = await _surveyService.GetSurveyAsync(surveyId);
