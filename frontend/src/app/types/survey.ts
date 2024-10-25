@@ -4,8 +4,7 @@ export interface BaseEntity {
     createdAt: string;
     updatedAt: string | null;
   }
-  
-  // Question interface
+
   export interface Question extends BaseEntity {
     blockElementId: string;
     dateExportTag: string;
@@ -13,14 +12,12 @@ export interface BaseEntity {
     questionDescription: string;
     isMultipleChoice: boolean;
   }
-  
-  // BlockElement interface
+
   export interface BlockElement extends BaseEntity {
     type: string;
     questions: Question[];
   }
-  
-  // SurveyBlock interface
+
   export interface SurveyBlock extends BaseEntity {
     surveyId: string;
     type: string;
@@ -28,7 +25,6 @@ export interface BaseEntity {
     blockElements: BlockElement[];
   }
   
-  // Main Survey interface
   export interface Survey extends BaseEntity {
     name: string;
     surveyId: string;

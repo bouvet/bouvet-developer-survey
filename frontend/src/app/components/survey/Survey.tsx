@@ -14,9 +14,6 @@ const Survey = () => {
   if (isLoading) return <div>Getting survey structure...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  //Temporary overwrite api data with json file for testing
-  data = structure;
-
   return data.surveyBlocks.map((block: SurveyBlock, index: number) => (
     <section className="mx-auto flex flex-col max-w-7xl lg:px-8" key={index}>
       <h2>{block.description}</h2>
