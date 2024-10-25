@@ -13,4 +13,6 @@ public interface IDeveloperSurveyContext
     public DbSet<BlockElement> BlockElements { get; }
     public DbSet<AnswerOption> AnswerOptions { get; }
     public DbSet<Response> Responses { get; }
+    public DbSet<User> Users { get; }
+    public DbSet<ResponseUser> ResponseUsers { get; }
 }

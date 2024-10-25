@@ -3,6 +3,7 @@ using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bouvet.Developer.Survey.Service.Survey.Results;
@@ -10,10 +11,12 @@ namespace Bouvet.Developer.Survey.Service.Survey.Results;
 public class ResponseService : IResponseService
 {
     private readonly DeveloperSurveyContext _context;
+    private readonly IUserService _userService;
     
-    public ResponseService(DeveloperSurveyContext context)
+    public ResponseService(DeveloperSurveyContext context, IUserService userService)
     {
         _context = context;
+        _userService = userService;
     }
     
     public async Task<List<ResponseDto>> CreateResponse(List<NewResponseDto> newResponseDtos)
@@ -23,6 +26,11 @@ public class ResponseService : IResponseService
             .Where(r => r.AnswerOptionId != null)
             .Select(r => r.AnswerOptionId.Value)
             .ToList();
+        
+        foreach (var newResponseDto in newResponseDtos)
+        {
+            Console.WriteLine($"Creating response for ResponseId: {newResponseDto.ResponseId}");
+        }
         
         // Fetch all required choices and answer options in one query
         var choices = await _context.Choices
@@ -56,7 +64,7 @@ public class ResponseService : IResponseService
                 AnswerOptionId = answerFound ? newResponseDto.AnswerOptionId : null,
                 CreatedAt = DateTimeOffset.Now
             };
-
+            
             responses.Add(response);
         }
 
@@ -66,6 +74,8 @@ public class ResponseService : IResponseService
 
         return responses.Select(ResponseDto.CreateFromEntity).ToList();
     }
+    
+    // private async Task MapUsers
     
     public async Task<ResponseDto> GetResponse(Guid responseId)
     {

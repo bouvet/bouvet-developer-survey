@@ -23,5 +23,10 @@ public class ResponsesConfiguration : IEntityTypeConfiguration<Response>
             .WithMany(a => a.Responses)
             .HasForeignKey(r => r.AnswerOptionId)
             .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasMany(r => r.ResponseUsers)
+            .WithOne(rr => rr.Response)
+            .HasForeignKey(rr => rr.ResponseId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

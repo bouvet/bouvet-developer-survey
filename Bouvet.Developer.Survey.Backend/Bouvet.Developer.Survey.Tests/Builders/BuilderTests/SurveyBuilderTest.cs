@@ -12,6 +12,8 @@ public class SurveyBuilderTest
     private readonly ChoiceBuilder _choiceBuilder = new();
     private readonly AnswerOptionsBuilder _answerOptionsBuilder = new();
     private readonly ResponseBuilder _responseBuilder = new();
+    private readonly UserBuilder _userBuilder = new();
+    private readonly ResponseUserBuilder _responseUserBuilder = new();
 
     [Fact]
     public void SurveyBuilder_ShouldCreateSurvey()
@@ -110,5 +112,30 @@ public class SurveyBuilderTest
         Assert.Equal(ResponseBuilder.CreatedAt, response.CreatedAt.ToString());
         Assert.Equal(ResponseBuilder.UpdatedAt, response.UpdatedAt.ToString());
         Assert.Equal(ResponseBuilder.DeletedAt, response.DeletedAt.ToString());
+    }
+    
+    [Fact]
+    public void Survey_CreateUserBuilder()
+    {
+        // Arrange
+        var user = _userBuilder.Build();
+        
+        // Assert
+        Assert.NotNull(user);
+        Assert.Equal(_userBuilder.Id, user.Id);
+        Assert.Equal(UserBuilder.RespondId, user.RespondId);
+        Assert.Equal(_surveyBuilder.Id, user.SurveyId);
+    }
+    
+    [Fact]
+    public void Survey_CreateResponseUserBuilder()
+    {
+        // Arrange
+        var responseUser = _responseUserBuilder.Build();
+        
+        // Assert
+        Assert.NotNull(responseUser);
+        Assert.Equal(_userBuilder.Id, responseUser.UserId);
+        Assert.Equal(_responseBuilder.Id, responseUser.ResponseId);
     }
 }

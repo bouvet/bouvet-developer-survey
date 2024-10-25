@@ -15,4 +15,6 @@ public class Response : IEntitiesDateTimeOffsett
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
+    
+    public virtual ICollection<ResponseUser>? ResponseUsers { get; set; }
 }

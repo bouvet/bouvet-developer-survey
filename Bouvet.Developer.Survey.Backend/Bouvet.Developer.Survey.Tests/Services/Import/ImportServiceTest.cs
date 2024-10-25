@@ -32,11 +32,12 @@ public class ImportServiceTest
         IQuestionService questionService = new QuestionService(context, choiceService, answerOptionService);
         ISurveyBlockService surveyBlockService = new SurveyBlockService(context);
         IBlockElementService blockElementService = new BlockElementService(context);
-        IResponseService responseService = new ResponseService(context);
+        IResponseService responseService = new ResponseService(context, new UserService(context));
         IResultService resultService = new ResultService(context, questionService);
         ICsvToJsonService csvToJsonService = new CsvToJsonService();
+        IUserService userService = new UserService(context);
         _importSurvey = new ImportSurveyService(_surveyService, context, questionService, surveyBlockService, 
-            blockElementService, responseService, resultService, csvToJsonService);
+            blockElementService, responseService, resultService, csvToJsonService, userService);
     }
 
     [Fact]

@@ -22,5 +22,10 @@ public class SurveyConfiguration : IEntityTypeConfiguration<Domain.Entities.Surv
             .WithOne(a => a.Survey)
             .HasForeignKey(a => a.SurveyId)
             .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasMany(s => s.Users)
+            .WithOne(u => u.Survey)
+            .HasForeignKey(u => u.SurveyId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

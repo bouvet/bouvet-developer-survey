@@ -24,5 +24,6 @@ public static class ServiceLayer
         services.AddTransient<IAnswerOptionService, AnswerOptionService>();
         services.AddTransient<IResponseService, ResponseService>();
         services.AddTransient<IResultService, ResultService>();
+        services.AddTransient<IUserService, UserService>();
     }
 }

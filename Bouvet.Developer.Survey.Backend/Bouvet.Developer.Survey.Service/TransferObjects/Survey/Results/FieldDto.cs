@@ -7,6 +7,7 @@ public class ExportTagDto
 
 public class FieldDto
 {
+    public string? ResponseId { get; set; }
     public string? FieldName { get; set; }
     public string? Value { get; set; }
 }

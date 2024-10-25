@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
@@ -19,12 +20,14 @@ public class SurveysController : ControllerBase
     private readonly ISurveyService _surveyService;
     private readonly IImportSurveyService _importSurveyService;
     private readonly IQuestionService _questionService;
+    private readonly IUserService _userService;
     
-    public SurveysController(ISurveyService surveyService, IImportSurveyService importSurveyService, IQuestionService questionService)
+    public SurveysController(ISurveyService surveyService, IImportSurveyService importSurveyService, IQuestionService questionService, IUserService userService)
     {
         _surveyService = surveyService;
         _importSurveyService = importSurveyService;
         _questionService = questionService;
+        _userService = userService;
     }
     
     /// <summary>
@@ -72,6 +75,14 @@ public class SurveysController : ControllerBase
         var question = await _questionService.GetQuestionByIdAsync(questionId);
         return Ok(question);
     }
+    
+    [HttpGet("GetUserResponse/{userId:guid}")]
+    public async Task<IActionResult> GetUserResponse(Guid userId)
+    {
+        var userResponse = await _userService.GetUserResponses(userId);
+        return Ok(userResponse);
+    }
+    
     
     /// <summary>
     /// Import a survey from JSON

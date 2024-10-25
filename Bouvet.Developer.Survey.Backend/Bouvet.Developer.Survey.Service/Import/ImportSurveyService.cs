@@ -6,6 +6,7 @@ using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.User;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +22,11 @@ public class ImportSurveyService : IImportSurveyService
     private readonly IResponseService _responseService;
     private readonly IResultService _resultService;
     private readonly ICsvToJsonService _csvToJsonService;
+    private readonly IUserService _userService;
     
     public ImportSurveyService(ISurveyService surveyService, DeveloperSurveyContext context, IQuestionService questionService, ISurveyBlockService surveyBlockService,
-            IBlockElementService blockElementService, IResponseService responseService, IResultService resultService, ICsvToJsonService csvToJsonService)
+            IBlockElementService blockElementService, IResponseService responseService, IResultService resultService,
+            ICsvToJsonService csvToJsonService, IUserService userService)
     {
         _surveyService = surveyService;
         _context = context; 
@@ -33,6 +36,7 @@ public class ImportSurveyService : IImportSurveyService
         _responseService = responseService;
         _resultService = resultService;
         _csvToJsonService = csvToJsonService;
+        _userService = userService;
     }
     
     public async Task<SurveyBlocksDto> UploadSurvey(Stream stream)
@@ -98,13 +102,14 @@ public class ImportSurveyService : IImportSurveyService
                                       IsNumeric(record[tag].ToString() ?? throw new InvalidOperationException())) // Check if the value is a valid number
                         .Select(tag => new FieldDto // Create a new DTO with the field name and its value
                         {
+                            ResponseId = record.ContainsKey("ResponseId") ? record["ResponseId"].ToString() : null,
                             FieldName = tag,
                             Value = record[tag].ToString()
                         })
                 )
                 .Distinct()
                 .ToList();
-        
+            
             await MapFieldsToResponse(filteredFields, surveyId);
         }
     }
@@ -112,25 +117,76 @@ public class ImportSurveyService : IImportSurveyService
     private async Task MapFieldsToResponse(List<FieldDto> fieldDto, string surveyId)
     {
         var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.SurveyId == surveyId);
-
+        
         if (survey == null) throw new NotFoundException("Survey not found");
 
         var questions = await _questionService.GetQuestionsBySurveyIdAsync(surveyId);
         
         if(questions == null) throw new NotFoundException("Questions not found");
         
+        var respondents = fieldDto.Select(f => f.ResponseId).Distinct().ToList();
+        
+        await CheckForUsers(respondents, survey.Id);
+        
         // Group fields by FieldName and add them to a list
-        var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
+        var groupedFields = fieldDto.GroupBy(f => new { f.ResponseId, f.FieldName }).ToList();
+
             
         foreach (var group in groupedFields)
         {
             var summaryResponse = await _resultService.SummarizeFields(
                 group.Select(g => g).ToList(), questions, survey);
-            
+    
             await _responseService.CreateResponse(summaryResponse);
         }
+        
+        await ConnectResponseToUsers(fieldDto);
     }
     
+    private async Task ConnectResponseToUsers(List<FieldDto> fieldDto)
+    {
+        var responseUsers = new List<NewResponseUserDto>();
+        
+        foreach (var field in fieldDto)
+        {
+            var response = await _context.Responses.FirstOrDefaultAsync(r => r.FieldName == field.FieldName);
+            
+            if (response == null) continue;
+            
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RespondId == field.ResponseId);
+            
+            if (user == null) throw new NotFoundException("User not found");
+            
+            responseUsers.Add(new NewResponseUserDto
+            {
+                ResponseId = response.Id,
+                UserId = user.Id
+            });
+        }
+        
+        await _userService.ConnectResponseToUser(responseUsers);
+    }
+
+    private async Task CheckForUsers(List<string?> respondents, Guid surveyId)
+    {
+        var users = await _userService.GetUsersBySurveyId(surveyId);
+        
+        var existingUsers = users.Select(u => u.RespondId).ToList();
+        
+        var newUsers = respondents.Except(existingUsers).ToList();
+        
+        if (newUsers.Count > 0)
+        {
+            var newUserDtos = newUsers.Select(u => new NewUserDto
+            {
+                SurveyId = surveyId,
+                RespondId = u
+            }).ToList();
+            
+            await _userService.CreateUserBatch(newUserDtos, surveyId);
+        }
+    }
+
     private async Task MapJsonSurveyBlocks(SurveyBlocksDto surveyBlockDto)
     {
         var checkSurveyExists = await 

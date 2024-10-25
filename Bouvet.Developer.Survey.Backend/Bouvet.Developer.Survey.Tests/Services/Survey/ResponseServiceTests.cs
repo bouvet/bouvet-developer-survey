@@ -35,7 +35,7 @@ public class ResponseServiceTests
 
         // Injecting the in-memory context into the service
         _choiceService = new ChoiceService(context);
-        _responseService = new ResponseService(context);
+        _responseService = new ResponseService(context, new UserService(context));
         _choiceService = new ChoiceService(context);
         _blockElementService = new BlockElementService(context);
         _surveyBlockService = new SurveyBlockService(context);

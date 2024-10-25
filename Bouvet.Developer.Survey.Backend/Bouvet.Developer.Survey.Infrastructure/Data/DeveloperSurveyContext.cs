@@ -18,6 +18,8 @@ public class DeveloperSurveyContext : DbContext, IDeveloperSurveyContext
     public DbSet<BlockElement> BlockElements => Set<BlockElement>();
     public DbSet<AnswerOption> AnswerOptions => Set<AnswerOption>();
     public DbSet<Response> Responses => Set<Response>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<ResponseUser> ResponseUsers => Set<ResponseUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

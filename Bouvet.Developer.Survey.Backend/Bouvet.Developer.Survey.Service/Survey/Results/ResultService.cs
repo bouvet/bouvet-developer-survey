@@ -18,9 +18,10 @@ public class ResultService : IResultService
         _questionService = questionService;
     }
     
-    public async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, IEnumerable<QuestionDetailsDto> questions, Domain.Entities.Survey.Survey survey)
+    public async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, 
+        IEnumerable<QuestionDetailsDto> questions, Domain.Entities.Survey.Survey survey)
     {
-        var responseDtos = new List<NewResponseDto>();
+        var responseDtoS = new List<NewResponseDto>();
         string? questionChoiceNumber;
         string? questionExportTag;
 
@@ -38,13 +39,13 @@ public class ResultService : IResultService
             questionExportTag = field.FieldName;
             questionChoiceNumber = field.Value;
         }
-
+        
         var question = questions.FirstOrDefault(q => q.DateExportTag == questionExportTag);
 
         if (question == null)
         {
             Console.WriteLine("Question not found for export tag: " + questionExportTag);
-            return responseDtos;
+            return responseDtoS;
         }
 
         foreach (var fieldInstance in fields)
@@ -56,15 +57,15 @@ public class ResultService : IResultService
 
             foreach (var fieldValue in fieldValues)
             {
-                await CheckField(fieldValue, question, survey, responseDtos, fieldInstance, questionChoiceNumber);
+                await CheckField(fieldValue, question, survey, responseDtoS, fieldInstance, questionChoiceNumber);
             }
         }
-
-        return responseDtos;
+        
+        return responseDtoS;
     }
 
     private async Task CheckField(string fieldValue, QuestionDetailsDto questionDetails, 
-        Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtos, FieldDto field, string questionChoiceNumber)
+        Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtoS, FieldDto field, string questionChoiceNumber)
     {
         var choice = await _context.Choices.FirstOrDefaultAsync(c =>
             c.QuestionId == questionDetails.Id && c.IndexId == questionChoiceNumber);
@@ -95,8 +96,8 @@ public class ResultService : IResultService
         
         if (questionDetails.IsMultipleChoice)
         {
-            var existingResponse = responseDtos.FirstOrDefault(r => r.FieldValue == fieldValue);
-            AddOrUpdateResponse(responseDtos,existingResponse, choice.Id, questionDetails.DateExportTag, fieldValue, answerId);
+            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldValue == fieldValue);
+            AddOrUpdateResponse(responseDtoS,existingResponse, choice.Id, questionDetails.DateExportTag, fieldValue,field.ResponseId, answerId);
         }
         else
         {
@@ -106,14 +107,14 @@ public class ResultService : IResultService
         
             if (choiceOnIndex == null) return;
         
-            var existingResponse = responseDtos.FirstOrDefault(r => r.FieldValue == fieldValue);
+            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldValue == fieldValue);
             
-            AddOrUpdateResponse(responseDtos,existingResponse, choiceOnIndex.Id, questionDetails.DateExportTag, fieldValue, answerId);
+            AddOrUpdateResponse(responseDtoS,existingResponse, choiceOnIndex.Id, questionDetails.DateExportTag, fieldValue,field.ResponseId, answerId);
         }
     }
     
     private void AddOrUpdateResponse(List<NewResponseDto> responseDtos, NewResponseDto? existingResponse,
-        Guid choiceId, string fieldName, string fieldValue, Guid answerId)
+        Guid choiceId, string fieldName, string fieldValue, string responseId, Guid answerId)
     {
         if (existingResponse != null)
         {
@@ -126,6 +127,7 @@ public class ResultService : IResultService
                 ChoiceId = choiceId,
                 FieldName = fieldName,
                 FieldValue = fieldValue,
+                ResponseId = responseId,
                 AnswerOptionId = answerId == Guid.Empty ? null : answerId,
                 Value = 1
             });
