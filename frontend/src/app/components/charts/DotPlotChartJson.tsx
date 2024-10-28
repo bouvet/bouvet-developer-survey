@@ -14,7 +14,7 @@ const DotPlotChartJson = (data: DotPlot) => {
   const traces = data.map((trace) => {
     return {
       x: [trace.x1, trace.x2],
-      y: new Array(2).fill(trace.label), // create an array with the same y label for each value
+      y: [trace.label, trace.label], // create an array with the same y label for each value
       mode: "lines+markers+text",
       name: trace.label,
       type: "scatter",
@@ -33,6 +33,7 @@ const DotPlotChartJson = (data: DotPlot) => {
   });
 
   const layout = {
+    height:1500,
     title: chartData.name,
     xaxis: {
       showgrid: false,
@@ -65,7 +66,7 @@ const DotPlotChartJson = (data: DotPlot) => {
   const config = { responsive: true, displayModeBar: false };
 
   return (
-    <Plot className="w-full" data={traces} layout={layout} config={config} />
+    <Plot data={traces} layout={layout} config={config} />
   );
 };
 
