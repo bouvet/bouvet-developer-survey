@@ -67,12 +67,13 @@ public class ResultService : IResultService
     private async Task CheckField(string fieldValue, QuestionDetailsDto questionDetails, 
         Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtoS, FieldDto field, string questionChoiceNumber)
     {
+        var choiceNumbers = questionChoiceNumber.Split(',').Select(num => num.Trim());
         var choice = await _context.Choices.FirstOrDefaultAsync(c =>
-            c.QuestionId == questionDetails.Id && c.IndexId == questionChoiceNumber);
+            c.QuestionId == questionDetails.Id && choiceNumbers.Contains(c.IndexId));
 
         if (choice == null)
         {
-            Console.WriteLine($"Choice not found for question: {questionDetails.Id} and index: {questionChoiceNumber}");
+            Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DateExportTag} and index: {questionChoiceNumber}");
             return;
         }
 
@@ -118,6 +119,7 @@ public class ResultService : IResultService
     {
         if (existingResponse != null)
         {
+            Console.WriteLine("Existing response found");
             existingResponse.Value += 1; // Accumulate value
         }
         else

@@ -27,11 +27,6 @@ public class ResponseService : IResponseService
             .Select(r => r.AnswerOptionId.Value)
             .ToList();
         
-        foreach (var newResponseDto in newResponseDtos)
-        {
-            Console.WriteLine($"Creating response for ResponseId: {newResponseDto.ResponseId}");
-        }
-        
         // Fetch all required choices and answer options in one query
         var choices = await _context.Choices
             .Where(x => choiceIds.Contains(x.Id))
@@ -49,6 +44,7 @@ public class ResponseService : IResponseService
         }
         
         // Prepare the responses for bulk insert
+        var newUserResponseDto = new List<NewResponseUserDto>();
         var responses = new List<Response>();
         foreach (var newResponseDto in newResponseDtos)
         {
@@ -65,6 +61,13 @@ public class ResponseService : IResponseService
                 CreatedAt = DateTimeOffset.Now
             };
             
+            var userResponse = new NewResponseUserDto
+            {
+                ResponseId = response.Id,
+                ResponseIdString = newResponseDto.ResponseId,
+            };
+            newUserResponseDto.Add(userResponse);
+            
             responses.Add(response);
         }
 
@@ -72,10 +75,33 @@ public class ResponseService : IResponseService
         await _context.Responses.AddRangeAsync(responses);
         await _context.SaveChangesAsync();
 
+        
+        // Connect responses to users
+       // await ConnectResponseToUsers(newUserResponseDto);
+        
         return responses.Select(ResponseDto.CreateFromEntity).ToList();
     }
     
     // private async Task MapUsers
+    private async Task ConnectResponseToUsers(List<NewResponseUserDto> responses)
+    {
+        var responseUsers = new List<NewResponseUserDto>();
+        
+        foreach (var field in responses)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RespondId == field.ResponseIdString);
+            
+            if (user == null) throw new NotFoundException("User not found");
+            
+            responseUsers.Add(new NewResponseUserDto
+            {
+                ResponseId = field.ResponseId,
+                UserId = user.Id
+            });
+        }
+        
+        await _userService.ConnectResponseToUser(responseUsers);
+    }
     
     public async Task<ResponseDto> GetResponse(Guid responseId)
     {
