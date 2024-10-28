@@ -9,7 +9,9 @@ const SurveyAnswers = (questionId: string) => {
     if (isLoading) return <div>Getting answers...</div>;
     if (error) return <div>Error: {error.message}</div>;
   
-    return <div>data</div>;
+    return (
+      <div>{JSON.stringify(data.id)}</div>
+    );
   };
   
   export default SurveyAnswers;
