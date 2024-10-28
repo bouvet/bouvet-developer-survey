@@ -5,6 +5,7 @@ import SurveyAnswers from "./SurveyAnswers";
 import { Question, SurveyBlock, BlockElement } from "@/app/types/survey";
 
 const Survey = () => {  
+  
   // Get survey structure data
   const { data, error, isLoading } = useSurveyStructure();
   if (isLoading) return <div>Getting survey structure...</div>;
@@ -19,7 +20,7 @@ const Survey = () => {
             {block.blockElements.map((element: BlockElement) => {
               return element.questions.map((question: Question) => (
                 <div key={question.id}>
-                  <SurveyAnswers questionId={question.id.toString()} />
+                  <SurveyAnswers questionId={question.id} />
                 </div>
               ));
             })}

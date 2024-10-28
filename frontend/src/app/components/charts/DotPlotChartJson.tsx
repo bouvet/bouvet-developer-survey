@@ -2,22 +2,23 @@
 import dynamic from "next/dynamic";
 import chartData from "./chartData.json";
 import { chartConfig } from "./chartConfig";
+import { DotPlot } from "@/app/types/plot";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), {
   ssr: false,
-  loading: () => <p>Laster...</p>,
+  loading: () => <p>Laster plot</p>,
 });
 
-const DotPlotChartJson = () => {
-  const traces = chartData.data.map((trace) => {
+const DotPlotChartJson = (data: DotPlot) => {
+  const traces = data.map((trace) => {
     return {
-      x: [trace.xMin, trace.xMax],
+      x: [trace.x1, trace.x2],
       y: new Array(2).fill(trace.label), // create an array with the same y label for each value
       mode: "lines+markers+text",
       name: trace.label,
       type: "scatter",
-      text: [trace.xMin + " %", trace.xMax + " %"],
+      text: [trace.x1 + " %", trace.x2 + " %"],
       textposition: ["left", "right"],
       marker: {
         color: [chartConfig.dotMinColor, chartConfig.dotMaxColor],

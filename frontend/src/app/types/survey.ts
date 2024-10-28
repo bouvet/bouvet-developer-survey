@@ -31,3 +31,34 @@ export interface BaseEntity {
     lastSyncedAt: string;
     surveyBlocks: SurveyBlock[];
   }
+
+  export interface Answer extends BaseEntity {
+    id: string;
+    dataExportTag: string;
+    questionText: string;
+    questionDescription: string;
+    isMultipleChoice: boolean;
+    createdAt: string;
+    updatedAt: string | null;
+    choices: Choice[];
+
+  }
+
+export interface Choice extends BaseEntity {
+    id: string;
+    text: string;
+    indexId: number;
+    createdAt: string;
+    updatedAt: string | null;
+    responses: Response[];
+  }
+
+export interface Response extends BaseEntity {
+  id: string;
+  value: number;
+  answerOptionId: {
+    text: string;
+    createdAt: string;
+    updatedAt: string | null;
+  }
+}
