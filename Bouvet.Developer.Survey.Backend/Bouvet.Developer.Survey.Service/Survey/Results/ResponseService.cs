@@ -11,12 +11,10 @@ namespace Bouvet.Developer.Survey.Service.Survey.Results;
 public class ResponseService : IResponseService
 {
     private readonly DeveloperSurveyContext _context;
-    private readonly IUserService _userService;
     
-    public ResponseService(DeveloperSurveyContext context, IUserService userService)
+    public ResponseService(DeveloperSurveyContext context)
     {
         _context = context;
-        _userService = userService;
     }
     
     public async Task<List<ResponseDto>> CreateResponse(List<NewResponseDto> newResponseDtos)
@@ -44,7 +42,6 @@ public class ResponseService : IResponseService
         }
         
         // Prepare the responses for bulk insert
-        var newUserResponseDto = new List<NewResponseUserDto>();
         var responses = new List<Response>();
         foreach (var newResponseDto in newResponseDtos)
         {
@@ -61,13 +58,6 @@ public class ResponseService : IResponseService
                 CreatedAt = DateTimeOffset.Now
             };
             
-            var userResponse = new NewResponseUserDto
-            {
-                ResponseId = response.Id,
-                ResponseIdString = newResponseDto.ResponseId,
-            };
-            newUserResponseDto.Add(userResponse);
-            
             responses.Add(response);
         }
 
@@ -80,27 +70,6 @@ public class ResponseService : IResponseService
        // await ConnectResponseToUsers(newUserResponseDto);
         
         return responses.Select(ResponseDto.CreateFromEntity).ToList();
-    }
-    
-    // private async Task MapUsers
-    private async Task ConnectResponseToUsers(List<NewResponseUserDto> responses)
-    {
-        var responseUsers = new List<NewResponseUserDto>();
-        
-        foreach (var field in responses)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.RespondId == field.ResponseIdString);
-            
-            if (user == null) throw new NotFoundException("User not found");
-            
-            responseUsers.Add(new NewResponseUserDto
-            {
-                ResponseId = field.ResponseId,
-                UserId = user.Id
-            });
-        }
-        
-        await _userService.ConnectResponseToUser(responseUsers);
     }
     
     public async Task<ResponseDto> GetResponse(Guid responseId)

@@ -67,9 +67,8 @@ public class ResultService : IResultService
     private async Task CheckField(string fieldValue, QuestionDetailsDto questionDetails, 
         Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtoS, FieldDto field, string questionChoiceNumber)
     {
-        var choiceNumbers = questionChoiceNumber.Split(',').Select(num => num.Trim());
         var choice = await _context.Choices.FirstOrDefaultAsync(c =>
-            c.QuestionId == questionDetails.Id && choiceNumbers.Contains(c.IndexId));
+            c.QuestionId == questionDetails.Id && c.IndexId == questionChoiceNumber);
 
         if (choice == null)
         {
@@ -98,7 +97,7 @@ public class ResultService : IResultService
         if (questionDetails.IsMultipleChoice)
         {
             var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldValue == fieldValue);
-            AddOrUpdateResponse(responseDtoS,existingResponse, choice.Id, questionDetails.DateExportTag, fieldValue,field.ResponseId, answerId);
+            AddOrUpdateResponse(responseDtoS,existingResponse, choice.Id, field.FieldName, fieldValue, answerId);
         }
         else
         {
@@ -110,16 +109,15 @@ public class ResultService : IResultService
         
             var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldValue == fieldValue);
             
-            AddOrUpdateResponse(responseDtoS,existingResponse, choiceOnIndex.Id, questionDetails.DateExportTag, fieldValue,field.ResponseId, answerId);
+            AddOrUpdateResponse(responseDtoS,existingResponse, choiceOnIndex.Id, field.FieldName, fieldValue, answerId);
         }
     }
     
     private void AddOrUpdateResponse(List<NewResponseDto> responseDtos, NewResponseDto? existingResponse,
-        Guid choiceId, string fieldName, string fieldValue, string responseId, Guid answerId)
+        Guid choiceId, string fieldName, string fieldValue, Guid answerId)
     {
         if (existingResponse != null)
         {
-            Console.WriteLine("Existing response found");
             existingResponse.Value += 1; // Accumulate value
         }
         else
@@ -129,7 +127,6 @@ public class ResultService : IResultService
                 ChoiceId = choiceId,
                 FieldName = fieldName,
                 FieldValue = fieldValue,
-                ResponseId = responseId,
                 AnswerOptionId = answerId == Guid.Empty ? null : answerId,
                 Value = 1
             });

@@ -129,7 +129,7 @@ public class ImportSurveyService : IImportSurveyService
         await CheckForUsers(respondents, survey.Id);
         
         // Group fields by FieldName and add them to a list
-        var groupedFields = fieldDto.GroupBy(f => new { f.ResponseId, f.FieldName }).ToList();
+        var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
 
             
         foreach (var group in groupedFields)
@@ -139,6 +139,32 @@ public class ImportSurveyService : IImportSurveyService
     
             await _responseService.CreateResponse(summaryResponse);
         }
+        
+        await ConnectResponseToUsers(fieldDto);
+    }
+    
+    private async Task ConnectResponseToUsers(List<FieldDto> fieldDto)
+    {
+        var responseUsers = new List<NewResponseUserDto>();
+        
+        foreach (var field in fieldDto)
+        {
+            var response = await _context.Responses.FirstOrDefaultAsync(r => r.FieldName == field.FieldName);
+            
+            if (response == null) continue;
+            
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RespondId == field.ResponseId);
+            
+            if (user == null) throw new NotFoundException("User not found");
+            
+            responseUsers.Add(new NewResponseUserDto
+            {
+                ResponseId = response.Id,
+                UserId = user.Id
+            });
+        }
+        
+        await _userService.ConnectResponseToUser(responseUsers);
     }
     
     private async Task CheckForUsers(List<string?> respondents, Guid surveyId)
