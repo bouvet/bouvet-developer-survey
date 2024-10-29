@@ -18,11 +18,6 @@ const SurveyAnswers = (questionId: string) => {
   const plotTitle: string = data.dateExportTag;
 
   // temporary calculate percentage before we get it from the API
-  let x1Percent: number, x2Percent: number;
-  let x1Label: string, x2Label: string;
-
-
-
   const calculatePercentage = (value: number): number => {
     return Math.round((value / DEFAULT_PARTICPIANTS) * 100);
   }
@@ -36,10 +31,9 @@ const SurveyAnswers = (questionId: string) => {
     
     if(responses.length < 2) return; // dont plot if there are less than 2 values
 
-    x1Percent = responses[0].value;
-    x2Percent = responses[1].value;
-    x1Label = responses[0].answerOption.text;
-    x2Label = responses[1].answerOption.text;
+    // Extract the properties using map
+    let [x1Percent, x2Percent] = responses.map(item => item.value);
+    let [x1Label, x2Label] = responses.map(item => item.answerOption.text);
 
     // if the value for "Ønsket" is not the first value, swap the values to give a consistent plot
     if(x2Label.includes("Ønsker")) {
@@ -62,7 +56,6 @@ const SurveyAnswers = (questionId: string) => {
 
   // sort the data based on x1 value (Most desired first)
   plot.sort((a, b) => a.x1 - b.x1);
-
 
   return DotPlotChartJson(plotTitle, plot);
 };
