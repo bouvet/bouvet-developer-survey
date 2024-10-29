@@ -31,7 +31,7 @@ const SurveyAnswers = (questionId: string) => {
     
     if(responses.length < 2) return; // dont plot if there are less than 2 values
 
-    // Extract the properties using map
+    // Extract the properties
     let [x1Percent, x2Percent] = responses.map(item => item.value);
     let [x1Label, x2Label] = responses.map(item => item.answerOption.text);
 
