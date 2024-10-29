@@ -1,6 +1,5 @@
 "use client";
 import dynamic from "next/dynamic";
-import chartData from "./chartData.json";
 import { chartConfig } from "./chartConfig";
 import { DotPlot } from "@/app/types/plot";
 
@@ -10,7 +9,7 @@ const Plot = dynamic(() => import("react-plotly.js"), {
   loading: () => <p>Laster plot</p>,
 });
 
-const DotPlotChartJson = (data: DotPlot) => {
+const DotPlotChartJson = (plotTitle: string, data: DotPlot) => {
 
   // calculate the height of the plot based on the number of choices
   const numberOfChoices = data.length;
@@ -38,7 +37,7 @@ const DotPlotChartJson = (data: DotPlot) => {
   });
 
   const layout = {
-    title: chartData.name,
+    title: plotTitle +  ": Ønsket og Beundret",
     xaxis: {
       showgrid: false,
       visible: false,

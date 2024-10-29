@@ -6,11 +6,13 @@ import { Plot } from "@/app/types/plot";
 import DotPlotChartJson from "../charts/DotPlotChartJson";
 
 const SurveyAnswers = (questionId: string) => {
+
   // get survey answers for question id
   const { data, error, isLoading } = useSurveyResult(questionId);
   if (isLoading) return <div>Getting answers...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
+  const plotTitle: string = data.dateExportTag;
 
   // temporary calculate percentage before we get it from the API
   let x1Percent: number, x2Percent: number;
@@ -29,13 +31,13 @@ const SurveyAnswers = (questionId: string) => {
     x1Label = choice.responses[0].answerOption.text;
     x2Label = choice.responses[1].answerOption.text;
 
-    // if the value for "Ønsket" is not the first value, swap the values
+    // if the value for "Ønsket" is not the first value, swap the values to give a consistent plot
     if(x2Label.includes("Ønsker")) {
       [x1Percent, x2Percent] = [x2Percent, x1Percent];
       [x1Label, x2Label] = [x2Label, x1Label];
     }
     
-    // convert response value to percentage 
+    // convert response value to percentage. 
     x1Percent = Math.round((x1Percent / totalSurveyParticipants) * 100);
     x2Percent = Math.round((x2Percent / totalSurveyParticipants) * 100);
 
@@ -49,12 +51,10 @@ const SurveyAnswers = (questionId: string) => {
   });
 
 
-  // sort the data based on 
+  // sort the data based on x1 value (Most desired first)
   plot.sort((a, b) => a.x1 - b.x1);
 
-  console.log(plot);
-
-  return DotPlotChartJson(plot);
+  return DotPlotChartJson(plotTitle, plot);
 };
 
 export default SurveyAnswers;
