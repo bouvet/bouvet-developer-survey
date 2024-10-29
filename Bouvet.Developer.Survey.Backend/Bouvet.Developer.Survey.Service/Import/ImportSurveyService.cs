@@ -19,13 +19,12 @@ public class ImportSurveyService : IImportSurveyService
     private readonly DeveloperSurveyContext _context;
     private readonly ISurveyBlockService _surveyBlockService;
     private readonly IBlockElementService _blockElementService;
-    private readonly IResponseService _responseService;
     private readonly IResultService _resultService;
     private readonly ICsvToJsonService _csvToJsonService;
     private readonly IUserService _userService;
     
     public ImportSurveyService(ISurveyService surveyService, DeveloperSurveyContext context, IQuestionService questionService, ISurveyBlockService surveyBlockService,
-            IBlockElementService blockElementService, IResponseService responseService, IResultService resultService,
+            IBlockElementService blockElementService, IResultService resultService,
             ICsvToJsonService csvToJsonService, IUserService userService)
     {
         _surveyService = surveyService;
@@ -33,7 +32,6 @@ public class ImportSurveyService : IImportSurveyService
         _questionService = questionService;
         _surveyBlockService = surveyBlockService;
         _blockElementService = blockElementService;
-        _responseService = responseService;
         _resultService = resultService;
         _csvToJsonService = csvToJsonService;
         _userService = userService;
@@ -128,17 +126,7 @@ public class ImportSurveyService : IImportSurveyService
         
         await CheckForUsers(respondents, survey.Id);
         
-        // Group fields by FieldName and add them to a list
-        var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
-
-            
-        foreach (var group in groupedFields)
-        {
-            var summaryResponse = await _resultService.SummarizeFields(
-                group.Select(g => g).ToList(), questions, survey);
-    
-            await _responseService.CreateResponse(summaryResponse);
-        }
+        await _resultService.CheckForDifferences(fieldDto, questions, survey);
         
         await ConnectResponseToUsers(fieldDto);
     }
@@ -147,15 +135,23 @@ public class ImportSurveyService : IImportSurveyService
     {
         var responseUsers = new List<NewResponseUserDto>();
         
+        var users = await _context.Users.ToListAsync();
+        
         foreach (var field in fieldDto)
         {
             var response = await _context.Responses.FirstOrDefaultAsync(r => r.FieldName == field.FieldName);
             
             if (response == null) continue;
             
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.RespondId == field.ResponseId);
+            var user = users.FirstOrDefault(u => u.RespondId == field.ResponseId);
             
             if (user == null) throw new NotFoundException("User not found");
+            
+            //Check if the response is already connected to the user
+            var responseUser = await _context.ResponseUsers
+                .FirstOrDefaultAsync(ru => ru.ResponseId == response.Id && ru.UserId == user.Id);
+            
+            if(responseUser != null) continue;
             
             responseUsers.Add(new NewResponseUserDto
             {

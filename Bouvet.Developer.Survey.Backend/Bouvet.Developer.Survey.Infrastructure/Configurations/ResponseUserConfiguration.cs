@@ -8,7 +8,7 @@ public class ResponseUserConfiguration : IEntityTypeConfiguration<ResponseUser>
 {
     public void Configure(EntityTypeBuilder<ResponseUser> builder)
     {
-        builder.ToTable("ResponseUser");
+        builder.ToTable("ResponseUsers");
         
         builder.HasKey(rr => new { rr.ResponseId, rr.UserId });
         

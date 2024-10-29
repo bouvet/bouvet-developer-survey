@@ -1,3 +1,4 @@
+using Bouvet.Developer.Survey.Domain.Entities.Survey;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
@@ -11,15 +12,39 @@ public class ResultService : IResultService
 {
     private readonly DeveloperSurveyContext _context;
     private readonly IQuestionService _questionService;
+    private readonly IResponseService _responseService;
     
-    public ResultService(DeveloperSurveyContext context, IQuestionService questionService)
+    public ResultService(DeveloperSurveyContext context, IQuestionService questionService, IResponseService responseService)
     {
         _context = context;
         _questionService = questionService;
+        _responseService = responseService;
     }
-    
-    public async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, 
-        IEnumerable<QuestionDetailsDto> questions, Domain.Entities.Survey.Survey survey)
+
+    public async Task CheckForDifferences(List<FieldDto> fieldDto, List<QuestionDetailsDto> questions, 
+        Domain.Entities.Survey.Survey survey)
+    {
+        var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
+        var answerOptions = await _context.AnswerOptions.Where(a => a.SurveyId == survey.Id).ToListAsync();
+        foreach (var group in groupedFields)
+        {
+            var summaryResponse = await SummarizeFields(
+                group.Select(g => g).ToList(), questions, answerOptions,survey);
+
+            try
+            {
+                await _responseService.CheckForDifferences(summaryResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+           
+        }
+    }
+
+    private async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, 
+        IEnumerable<QuestionDetailsDto> questions,List<AnswerOption> answerOptionsList, Domain.Entities.Survey.Survey survey)
     {
         var responseDtoS = new List<NewResponseDto>();
         string? questionChoiceNumber;
@@ -47,7 +72,12 @@ public class ResultService : IResultService
             Console.WriteLine("Question not found for export tag: " + questionExportTag);
             return responseDtoS;
         }
-
+        
+        // Load all choices for the question at once
+        var choicesDictionary = await _context.Choices
+            .Where(c => c.QuestionId == question.Id)
+            .ToDictionaryAsync(c => c.IndexId);
+        
         foreach (var fieldInstance in fields)
         {
             if(fieldInstance.Value == null || questionChoiceNumber == null) continue;
@@ -57,7 +87,8 @@ public class ResultService : IResultService
 
             foreach (var fieldValue in fieldValues)
             {
-                await CheckField(fieldValue, question, survey, responseDtoS, fieldInstance, questionChoiceNumber);
+                await CheckField(fieldValue, question, survey, responseDtoS,answerOptionsList, fieldInstance, 
+                    questionChoiceNumber, choicesDictionary);
             }
         }
         
@@ -65,12 +96,10 @@ public class ResultService : IResultService
     }
 
     private async Task CheckField(string fieldValue, QuestionDetailsDto questionDetails, 
-        Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtoS, FieldDto field, string questionChoiceNumber)
+        Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtoS,List<AnswerOption> answerOptionsList,
+        FieldDto field, string questionChoiceNumber, Dictionary<string, Choice> choicesDictionary)
     {
-        var choice = await _context.Choices.FirstOrDefaultAsync(c =>
-            c.QuestionId == questionDetails.Id && c.IndexId == questionChoiceNumber);
-
-        if (choice == null)
+        if (!choicesDictionary.TryGetValue(questionChoiceNumber, out var choice))
         {
             Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DateExportTag} and index: {questionChoiceNumber}");
             return;
@@ -80,8 +109,7 @@ public class ResultService : IResultService
 
         if (questionDetails.IsMultipleChoice)
         {
-            var answerOption = await _context.AnswerOptions.FirstOrDefaultAsync(a =>
-                a.SurveyId == survey.Id && a.IndexId == fieldValue);
+            var answerOption = answerOptionsList.FirstOrDefault(a => a.IndexId == fieldValue);
 
             if (answerOption == null)
             {
@@ -96,20 +124,21 @@ public class ResultService : IResultService
         
         if (questionDetails.IsMultipleChoice)
         {
-            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldValue == fieldValue);
-            AddOrUpdateResponse(responseDtoS,existingResponse, choice.Id, field.FieldName, fieldValue, answerId);
+            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldName == field.FieldName && r.FieldValue == fieldValue);
+            AddOrUpdateResponse(responseDtoS, existingResponse, choice.Id, field.FieldName, fieldValue, answerId);
         }
         else
         {
-            if(questionDetails.Choices == null) return;
-        
+            if (questionDetails.Choices == null) return;
+
             var choiceOnIndex = questionDetails.Choices.FirstOrDefault(c => c.IndexId == fieldValue);
-        
+
             if (choiceOnIndex == null) return;
-        
-            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldValue == fieldValue);
-            
-            AddOrUpdateResponse(responseDtoS,existingResponse, choiceOnIndex.Id, field.FieldName, fieldValue, answerId);
+
+            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldName == field.FieldName && r.FieldValue == fieldValue);
+
+            AddOrUpdateResponse(responseDtoS, existingResponse, choiceOnIndex.Id, field.FieldName, fieldValue,
+                answerId);
         }
     }
     
@@ -147,7 +176,7 @@ public class ResultService : IResultService
             if (question.Choices != null && question.Choices.Count > 0)
             {
                 exportTags.Add(new ExportTagDto { DateExportTag = question.DateExportTag });
-                for (int i = 0; i < question.Choices.Count; i++)
+                for (var i = 0; i < question.Choices.Count; i++)
                 {
                     // Append the choice index to the DateExportTag
                     var choiceTag = $"{question.DateExportTag}_{i + 1}"; // Index starts from 1 for user-friendliness

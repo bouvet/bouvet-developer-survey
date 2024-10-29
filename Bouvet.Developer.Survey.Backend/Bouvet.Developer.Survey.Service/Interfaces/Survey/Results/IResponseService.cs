@@ -5,10 +5,17 @@ namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 public interface IResponseService
 {
     /// <summary>
+    /// Check for differences from response csv
+    /// </summary>
+    /// <param name="newResponseDtos">List of responses</param>
+    /// <returns>Task</returns>
+    Task CheckForDifferences(List<NewResponseDto> newResponseDtos);
+
+    /// <summary>
     /// Create a new response
     /// </summary>
-    /// <param name="newResponseDtos">The response to create</param>
-    /// <returns>The created response</returns>
+    /// <param name="newResponseDtos">List of responses</param>
+    /// <returns>The created responses</returns>
     Task<List<ResponseDto>> CreateResponse(List<NewResponseDto> newResponseDtos);
     
     /// <summary>

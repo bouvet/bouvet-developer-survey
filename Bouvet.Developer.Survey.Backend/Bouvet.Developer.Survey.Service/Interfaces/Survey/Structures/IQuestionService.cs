@@ -26,7 +26,7 @@ public interface IQuestionService
     /// </summary>
     /// <param name="surveyId">String of survey id </param>
     /// <returns></returns>
-    Task<IEnumerable<QuestionDetailsDto>> GetQuestionsBySurveyIdAsync(string surveyId);
+    Task<List<QuestionDetailsDto>> GetQuestionsBySurveyIdAsync(string surveyId);
 
     /// <summary>
     /// Check for differences in questions

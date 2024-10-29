@@ -6,13 +6,13 @@ namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 public interface IResultService
 {
     /// <summary>
-    /// Summarize fields for a survey
+    /// Check for differences from response csv
     /// </summary>
-    /// <param name="fields">List of fields</param>
+    /// <param name="fieldDto">List of fields</param>
     /// <param name="questions">List of questions</param>
     /// <param name="survey">The survey</param>
-    /// <returns>List of summarized fields</returns>
-    Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, IEnumerable<QuestionDetailsDto> questions,
+    /// <returns>Task</returns>
+    Task CheckForDifferences(List<FieldDto> fieldDto, List<QuestionDetailsDto> questions,
         Domain.Entities.Survey.Survey survey);
     
     /// <summary>

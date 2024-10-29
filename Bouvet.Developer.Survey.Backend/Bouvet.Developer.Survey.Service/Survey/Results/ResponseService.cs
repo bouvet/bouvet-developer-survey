@@ -3,7 +3,6 @@ using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bouvet.Developer.Survey.Service.Survey.Results;
@@ -15,6 +14,36 @@ public class ResponseService : IResponseService
     public ResponseService(DeveloperSurveyContext context)
     {
         _context = context;
+    }
+    
+    //TODO check for differences from response csv
+    public async Task CheckForDifferences(List<NewResponseDto> newResponseDtos)
+    {
+        var newResponsesList = new List<NewResponseDto>();
+        foreach (var newResponseDto in newResponseDtos)
+        {
+           var response = await _context.Responses.FirstOrDefaultAsync(x => x.FieldName == newResponseDto.FieldName && x.AnswerOptionId == newResponseDto.AnswerOptionId && x.ChoiceId == newResponseDto.ChoiceId);
+           if (response == null)
+           {
+               Console.WriteLine($"Response with field name {newResponseDto.FieldName} not found, creating new response");
+               // await CreateResponse(newResponseDto);
+               newResponsesList.Add(newResponseDto);
+           }
+           
+           if(response != null && response.Value != newResponseDto.Value)
+           {
+               Console.WriteLine($"Response with field name {response.FieldName} has changed from {response.Value} to {newResponseDto.Value}");
+               response.Value = newResponseDto.Value;
+               response.UpdatedAt = DateTimeOffset.Now;
+               
+               await _context.SaveChangesAsync();
+           }
+        }
+        
+        if (newResponsesList.Count > 0)
+        {
+            await CreateResponse(newResponsesList);
+        }
     }
     
     public async Task<List<ResponseDto>> CreateResponse(List<NewResponseDto> newResponseDtos)
@@ -71,6 +100,32 @@ public class ResponseService : IResponseService
         
         return responses.Select(ResponseDto.CreateFromEntity).ToList();
     }
+    
+    //Make this support batch creation
+    // public async Task<ResponseDto> CreateResponse2(List<NewResponseDto> newResponseDto)
+    // {
+    //     var answerFound = newResponseDto.AnswerOptionId != null &&
+    //                         await _context.AnswerOptions.AnyAsync(x => x.Id == newResponseDto.AnswerOptionId);
+    //     
+    //     var choiceFound = await _context.Choices.FirstOrDefaultAsync(x => x.Id == newResponseDto.ChoiceId);
+    //     
+    //     if(choiceFound == null) throw new NotFoundException("Choice not found");
+    //
+    //     var response = new Response
+    //     {
+    //         Id = Guid.NewGuid(),
+    //         ChoiceId = newResponseDto.ChoiceId,
+    //         Value = newResponseDto.Value,
+    //         FieldName = newResponseDto.FieldName,
+    //         AnswerOptionId = answerFound ? newResponseDto.AnswerOptionId : null,
+    //         CreatedAt = DateTimeOffset.Now
+    //     };
+    //     
+    //     await _context.Responses.AddAsync(response);
+    //     await _context.SaveChangesAsync();
+    //     
+    //     return ResponseDto.CreateFromEntity(response);
+    // }
     
     public async Task<ResponseDto> GetResponse(Guid responseId)
     {

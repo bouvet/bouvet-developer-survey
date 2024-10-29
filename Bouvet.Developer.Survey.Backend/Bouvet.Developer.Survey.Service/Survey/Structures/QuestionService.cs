@@ -156,7 +156,7 @@ public class QuestionService : IQuestionService
         return dtoS;
     }
     
-    public async Task<IEnumerable<QuestionDetailsDto>> GetQuestionsBySurveyIdAsync(string surveyId)
+    public async Task<List<QuestionDetailsDto>> GetQuestionsBySurveyIdAsync(string surveyId)
     {
         var questions = await _context.Questions
             .Where(q => q.SurveyId == surveyId)
