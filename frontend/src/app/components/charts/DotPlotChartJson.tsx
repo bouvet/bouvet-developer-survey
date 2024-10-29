@@ -11,12 +11,17 @@ const Plot = dynamic(() => import("react-plotly.js"), {
 });
 
 const DotPlotChartJson = (data: DotPlot) => {
+
+  // calculate the height of the plot based on the number of choices
+  const numberOfChoices = data.length;
+  const plotHeight = numberOfChoices * chartConfig.yItemHeight;
+
   const traces = data.map((trace) => {
     return {
       x: [trace.x1, trace.x2],
-      y: [trace.label, trace.label], // create an array with the same y label for each value
+      y: [trace.yLabel, trace.yLabel], // create an array with the same y label for each value
       mode: "lines+markers+text",
-      name: trace.label,
+      name: trace.yLabel,
       type: "scatter",
       text: [trace.x1 + " %", trace.x2 + " %"],
       textposition: ["left", "right"],
@@ -33,22 +38,24 @@ const DotPlotChartJson = (data: DotPlot) => {
   });
 
   const layout = {
-    height:1500,
     title: chartData.name,
     xaxis: {
       showgrid: false,
       visible: false,
+      range: [-5, 100] //range is set from -5 to achieve padding between y values and chart.
     },
     yaxis: {
+      automaring: true,
       showline: false,
       gridwidth: chartConfig.dottedLineWidth,
       gridcolor: chartConfig.dottedLineColor,
+
     },
     margin: {
-      l: 80,
+      l: 100,
       r: 40,
       b: 50,
-      t: 80,
+      t: 40,
     },
     legend: {
       visible: false,
@@ -66,7 +73,13 @@ const DotPlotChartJson = (data: DotPlot) => {
   const config = { responsive: true, displayModeBar: false };
 
   return (
-    <Plot data={traces} layout={layout} config={config} />
+    <Plot
+      data={traces}
+      layout={layout}
+      config={config}
+      useResizeHandler={true}
+      style={{ width: '100%', height: plotHeight }}
+    />  
   );
 };
 

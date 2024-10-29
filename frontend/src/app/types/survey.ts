@@ -56,7 +56,7 @@ export interface Choice extends BaseEntity {
 export interface Response extends BaseEntity {
   id: string;
   value: number;
-  answerOptionId: {
+  answerOption: {
     text: string;
     createdAt: string;
     updatedAt: string | null;
