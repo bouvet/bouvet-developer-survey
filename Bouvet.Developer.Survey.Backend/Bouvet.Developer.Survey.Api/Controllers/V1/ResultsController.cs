@@ -1,9 +1,9 @@
 using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
-using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.User;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +15,15 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 [ApiVersion("1.0")]
 [Authorize(Roles = RoleConstants.ReadRole)]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class SurveysController : ControllerBase
+public class ResultsController : ControllerBase
 {
     private readonly ISurveyService _surveyService;
-    private readonly IImportSurveyService _importSurveyService;
     private readonly IQuestionService _questionService;
     private readonly IUserService _userService;
     
-    public SurveysController(ISurveyService surveyService, IImportSurveyService importSurveyService, IQuestionService questionService, IUserService userService)
+    public ResultsController(ISurveyService surveyService, IQuestionService questionService, IUserService userService)
     {
         _surveyService = surveyService;
-        _importSurveyService = importSurveyService;
         _questionService = questionService;
         _userService = userService;
     }
@@ -76,64 +74,19 @@ public class SurveysController : ControllerBase
         return Ok(question);
     }
     
+    /// <summary>
+    /// Get all response to a user to a survey
+    /// </summary>
+    /// <param name="userId">The user ID</param>
+    /// <returns>A user response</returns>
+    /// <response code="200">Returns a user response</response>
+    /// <response code="401">If user is not authorized</response>
+    /// <response code="403">User not authorized to view</response>
     [HttpGet("GetUserResponse/{userId:guid}")]
+    [SwaggerResponse(200, "Returns a user response", typeof(UserResponseDto))]
     public async Task<IActionResult> GetUserResponse(Guid userId)
     {
         var userResponse = await _userService.GetUserResponses(userId);
         return Ok(userResponse);
-    }
-    
-    
-    /// <summary>
-    /// Import a survey from JSON
-    /// </summary>
-    /// <param name="file">The file to upload</param>
-    [HttpPost("ImportSurvey")]
-    [SwaggerResponse(200, "Survey created")]
-    public async Task<IActionResult> ImportSurvey(IFormFile? file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest("No file uploaded or file is empty.");
-        }
-
-        try
-        {
-            using var stream = new MemoryStream();
-
-            await file.CopyToAsync(stream);
-            stream.Position = 0;
-            await _importSurveyService.UploadSurvey(stream);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-    
-    /// <summary>
-    /// Import a survey from CSV
-    /// </summary>
-    [HttpPost("import")]
-    public async Task<IActionResult> ImportCsv(IFormFile file, string surveyId)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest("No file uploaded.");
-        }
-
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-        stream.Position = 0;
-        try
-        {
-            await _importSurveyService.GetQuestionsFromStream(stream, surveyId);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
     }
 }

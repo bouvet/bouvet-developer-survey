@@ -77,9 +77,13 @@ public class ImportSurveyService : IImportSurveyService
         await MapJsonQuestions(surveyQuestionsDto);
     }
     
-    public async Task GetQuestionsFromStream(Stream csvStream, string surveyId)
+    public async Task GetQuestionsFromStream(Stream csvStream, Guid surveyId)
     {
-        var questions = await _resultService.GetQuestions(surveyId);
+        var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
+        
+        if (survey == null) throw new NotFoundException("Survey not found");
+        
+        var questions = await _resultService.GetQuestions(survey.SurveyId);
     
         // Convert the CSV stream to JSON format
         var csvRecords = await _csvToJsonService.ConvertCsvToJson(csvStream);
@@ -108,7 +112,7 @@ public class ImportSurveyService : IImportSurveyService
                 .Distinct()
                 .ToList();
             
-            await MapFieldsToResponse(filteredFields, surveyId);
+            await MapFieldsToResponse(filteredFields, survey.SurveyId);
         }
     }
 
