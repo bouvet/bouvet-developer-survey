@@ -21,6 +21,8 @@ export default function Header() {
   const { t } = useClientTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState(null);
+  const [activeTab, setActiveTab] = useState("");
+
   const redirect = useRedirect();
   const pathname = usePathname();
   const params = useRouteParams();
@@ -35,15 +37,18 @@ export default function Header() {
     if (route.path) {
       const path =
         typeof route.path === "function" ? route.path(params) : route.path;
+      setActiveTab(route.name);
       redirect(path);
       if (menuOpen) setMenuOpen(false);
     }
   };
 
+  console.log(currentTab);
+
   // Render
   if (currentTab) return null;
   return (
-    <header className="bg-inherit">
+    <header className="bg-inherit fixed w-full z-50">
       <nav
         aria-label="Global"
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
@@ -57,6 +62,7 @@ export default function Header() {
           selectedTabPosition={selectedTabPosition}
           tabs={tabsDefinition}
           onClickTab={changePage}
+          activeTab={activeTab}
         />
         <HeaderUser title={t(["login"])} />
       </nav>

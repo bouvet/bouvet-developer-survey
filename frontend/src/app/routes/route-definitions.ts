@@ -6,14 +6,14 @@ export type RouteParams = {
 // Define Routes
 export enum ROUTES {
   ROOT = "/:lng",
-  HOME = "/:lng/home",
-  DEVELOPER_PROFILE = "/:lng/developer_profile",
-  LANGUAGES_AND_FRAMEWORKS = "/:lng/languages_and_frameworks",
-  DATABASE = "/:lng/database",
-  AI = "/:lng/ai",
-  SECURITY = "/:lng/security",
-  TOOLS = "/:lng/tools",
-  ABOUT = "/:lng/about"
+  HOME = "/:lng/",
+  DEVELOPER_PROFILE = "/:lng/#developer_profile",
+  LANGUAGES_AND_FRAMEWORKS = "/:lng/#languages_and_frameworks",
+  DATABASE = "/:lng/#database",
+  AI = "/:lng/#ai",
+  SECURITY = "/:lng/#security",
+  TOOLS = "/:lng/#tools",
+  ABOUT = "/:lng/#about",
 }
 
 /**

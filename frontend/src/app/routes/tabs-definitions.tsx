@@ -8,8 +8,6 @@ import {
   SquaresPlusIcon,
   GlobeAsiaAustraliaIcon,
 } from "@heroicons/react/24/outline";
-import { useClientTranslation } from '../../../shared/i18n/src';
-
 
 // Tabs definition type
 export type TabsDefinitionType = {
