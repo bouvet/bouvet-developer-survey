@@ -1,7 +1,7 @@
 "use client";
 
-import { RtkQueryFetcherStatus } from "../../../../shared/rtk/src";
-import HomeLayout from "./HomeLayout";
+import { RtkQueryFetcherStatus } from "../../../shared/rtk/src";
+import HomeLayout from "./layout";
 
 // Component
 export default function HomeClient() {
