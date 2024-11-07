@@ -12,7 +12,8 @@ export default function Home() {
   return (
     <HomeContextProvider>
       <Header />
-      <main className="snap-y snap-mandatory overflow-y-scroll h-screen scroll-smooth">
+      {/* Remove tailwind scrolling on main element to enable testing */}
+      <main className="">
         <Hero />
         <Survey />
         <Top10 />
