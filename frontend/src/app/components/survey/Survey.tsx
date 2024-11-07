@@ -1,34 +1,44 @@
-"use client";
-import React from "react";
-import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
-import SurveyAnswers from "./SurveyAnswers";
-import { Question, SurveyBlock, BlockElement } from "@/app/types/survey";
+import React, { useRef } from "react";
+import DotPlotChart from "@/app/components/charts/DotPlotChart";
+import DotPlotChartJson from "@/app/components/charts/DotPlotChartJson";
+import { useClientTranslation } from "../../../../shared/i18n/src";
+import BarChart from "../charts/barchart/BarChart";
+import BarChartJson from "../charts/barchart/BarChartJson";
+import useOnScreen from "@/app/hooks/useOnScreen";
 
-const Survey = () => {  
-  // Get survey structure data
-  const { data, error, isLoading } = useSurveyStructure();
+const Survey = () => {
+  const { t } = useClientTranslation();
+
+  // Chart data example
+  const chartData = {
+    title: t("admired-and-desired"),
+    x1: [20, 30, 10],
+    x2: [60, 50, 80],
+    y: ["C#", "Typescript", "Python"],
+  };
 
   return (
-    <div className="mx-auto flex flex-col max-w-7xl lg:px-8">
-      {isLoading && <div>Henter undersøkelsen...</div>}
-      {error && <div>Error: {error.message}</div>}
-      {!isLoading && !error && (
-        <>
-          {data.surveyBlocks.map((block: SurveyBlock, index: number) => {
-            return (
-              <section key={index}>
-                {block.blockElements.map((element: BlockElement) => {
-                  return element.questions.map((question: Question) => (
-                    <div key={question.id}>
-                      <SurveyAnswers questionId={question.id} />
-                    </div>
-                  ));
-                })}
-              </section>
-            );
-          })}
-        </>
-      )}
+    <div
+      id="languages_and_frameworks"
+      className="mx-auto relative h-screen flex justify-center flex-col max-w-7xl lg:px-8 snap-center"
+    >
+      <div className="text-lg pb-20">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus velit
+        consectetur possimus at illo sit aliquam maiores non animi assumenda ab,
+        eum fuga quo, rerum repudiandae alias. Nesciunt rerum in deleniti
+        suscipit doloremque ut explicabo consequatur magni voluptas eaque
+        aperiam, facere iusto molestias reprehenderit quam quae unde officia
+        quod minus quis temporibus! Ratione, impedit quia suscipit nobis magni
+        distinctio at explicabo maiores in labore ipsam dolore nisi accusamus id
+        quasi vel earum delectus, reprehenderit corporis quis, ex beatae minima.
+        Tempora.
+      </div>
+      <div className="w-full">
+        {/*
+                <DotPlotChart {...chartData} />
+                */}
+        <DotPlotChartJson />
+      </div>
     </div>
   );
 };
