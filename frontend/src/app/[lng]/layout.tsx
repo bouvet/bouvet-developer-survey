@@ -2,7 +2,7 @@
 
 import { Header } from "@/app/components/Header";
 import { HomeContextProvider } from "./context/HomeContextProvider";
-import Survey from "@/app/components/survey/Survey";
+import Survey from "@/app/components/survey/SurveyWithMockData";
 import Hero from "@/app/components/hero/Hero";
 import Top10 from "@/app/components/survey/Top10";
 
