@@ -1,23 +1,28 @@
 "use client";
 import dynamic from "next/dynamic";
-import chartData from "./chartData.json";
 import { chartConfig } from "./chartConfig";
+import { DotPlot } from "@/app/types/plot";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), {
   ssr: false,
-  loading: () => <p>Laster...</p>,
+  loading: () => <div>Lager diagrammer...</div>,
 });
 
-const DotPlotChartJson = () => {
-  const traces = chartData.data.map((trace) => {
+const DotPlotChartJson = (plotTitle: string, data: DotPlot) => {
+
+  // calculate the height of the plot based on the number of choices
+  const numberOfChoices = data.length;
+  const plotHeight = numberOfChoices * chartConfig.yItemHeight;
+
+  const traces = data.map((trace) => {
     return {
-      x: [trace.xMin, trace.xMax],
-      y: new Array(2).fill(trace.label), // create an array with the same y label for each value
+      x: [trace.x1, trace.x2],
+      y: [trace.yLabel, trace.yLabel], // create an array with the same y label for each value
       mode: "lines+markers+text",
-      name: trace.label,
+      name: trace.yLabel,
       type: "scatter",
-      text: [trace.xMin + " %", trace.xMax + " %"],
+      text: [trace.x1 + " %", trace.x2 + " %"],
       textposition: ["left", "right"],
       marker: {
         color: [chartConfig.dotMinColor, chartConfig.dotMaxColor],
@@ -32,21 +37,24 @@ const DotPlotChartJson = () => {
   });
 
   const layout = {
-    title: chartData.name,
+    title: plotTitle +  ": Ønsket og Beundret",
     xaxis: {
       showgrid: false,
       visible: false,
+      range: [-5, 100] //range is set from -5 to achieve padding between y values and chart.
     },
     yaxis: {
+      automaring: true,
       showline: false,
       gridwidth: chartConfig.dottedLineWidth,
       gridcolor: chartConfig.dottedLineColor,
+
     },
     margin: {
-      l: 80,
+      l: 100,
       r: 40,
       b: 50,
-      t: 80,
+      t: 40,
     },
     legend: {
       visible: false,
@@ -64,7 +72,13 @@ const DotPlotChartJson = () => {
   const config = { responsive: true, displayModeBar: false };
 
   return (
-    <Plot className="w-full" data={traces} layout={layout} config={config} />
+    <Plot
+      data={traces}
+      layout={layout}
+      config={config}
+      useResizeHandler={true}
+      style={{ width: '100%', height: plotHeight }}
+    />  
   );
 };
 
