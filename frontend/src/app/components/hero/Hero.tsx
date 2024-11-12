@@ -1,6 +1,6 @@
 const Survey = () => {
   return (
-    <div
+    <section
       id="developer_profile"
       className="mx-auto relative flex justify-center flex-col max-w-7xl lg:px-8 pb-20 text-lg h-screen snap-center"
     >
@@ -25,7 +25,7 @@ const Survey = () => {
         Denne rapporten presenterer svarene fra undersøkelsen, og viser trendene
         våre innen programmeringsspråk, rammeverk, KI og sikkerhetsverktøy
       </p>
-    </div>
+    </section>
   );
 };
 
