@@ -15,7 +15,7 @@ export type TabsDefinitionType = {
 // Tabs definition
 const tabs: TabsDefinitionType[] = [
   {
-    name: "Introduksjon",
+    name: "Intro",
     path: ROUTES.INTRO,
     showHeader: true
   },

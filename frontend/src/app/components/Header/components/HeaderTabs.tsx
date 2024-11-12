@@ -20,7 +20,7 @@ export default function HeaderTabs({
 
   // Render
   return (
-    <PopoverGroup className="hidden lg:flex lg:gap-x-12">
+    <PopoverGroup className="hidden lg:flex lg:gap-x-10">
       {tabs.map((tab) => (
         <Popover className="relative" key={tab.name}>
           <PopoverButton
