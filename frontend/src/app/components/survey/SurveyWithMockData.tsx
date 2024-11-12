@@ -9,7 +9,7 @@ const Survey = () => {
   const { data, error, isLoading } = useSurveyStructure();
 
   return (
-    <div id="languages_and_frameworks" className="mx-auto flex flex-col max-w-7xl lg:px-8">
+    <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
       {isLoading && <div>Henter undersøkelsen...</div>}
       {error && <div>Error: {error.message}</div>}
       {!isLoading && !error && (
@@ -29,7 +29,7 @@ const Survey = () => {
           })}
         </>
       )}
-    </div>
+    </section>
   );
 };
 

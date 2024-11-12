@@ -5,6 +5,7 @@ import { HomeContextProvider } from "./context/HomeContextProvider";
 import Survey from "@/app/components/survey/SurveyWithMockData";
 import Hero from "@/app/components/hero/Hero";
 import Top10 from "@/app/components/survey/Top10";
+import Summary from "@/app/components/summary/Summary";
 
 // Component
 export default function Home() {
@@ -15,8 +16,9 @@ export default function Home() {
       {/* Remove tailwind scrolling on main element to enable testing */}
       <main className="">
         <Hero />
-        <Survey />
+        <Summary />
         <Top10 />
+        <Survey />
       </main>
     </HomeContextProvider>
   );

@@ -7,13 +7,15 @@ export type RouteParams = {
 export enum ROUTES {
   ROOT = "/:lng",
   HOME = "/:lng/",
-  DEVELOPER_PROFILE = "/:lng/#developer_profile",
-  LANGUAGES_AND_FRAMEWORKS = "/:lng/#languages_and_frameworks",
-  DATABASE = "/:lng/#database",
-  AI = "/:lng/#ai",
-  SECURITY = "/:lng/#security",
-  TOOLS = "/:lng/#tools",
+  INTRO = "/:lng/#intro",
   ABOUT = "/:lng/#about",
+  PROGRAMMING_LANGUAGES = "/:lng/#languages_and_frameworks",
+  WEB_FRAMEWORKS = "/:lng/#web_frameworks",
+  AI_SEARCH = "/:lng/#ai",
+  DATABASES = "/:lng/#databases",
+  COMPILER_AND_TEST = "/:lng/#compiler_and_test",
+  SECURITY = "/:lng/#security",
+  OTHER_TOOLS = "/:lng/#other_tools",
 }
 
 /**

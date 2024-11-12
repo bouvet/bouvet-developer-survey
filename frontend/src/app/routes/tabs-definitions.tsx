@@ -1,13 +1,6 @@
 import { ReactElement } from "react";
 import { ROUTES, RouteParams } from "./route-definitions";
-import {
-  ArrowPathIcon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  GlobeAsiaAustraliaIcon,
-} from "@heroicons/react/24/outline";
+
 
 // Tabs definition type
 export type TabsDefinitionType = {
@@ -22,47 +15,51 @@ export type TabsDefinitionType = {
 // Tabs definition
 const tabs: TabsDefinitionType[] = [
   {
-    name: "Developer profile",
-    path: ROUTES.DEVELOPER_PROFILE,
-    showHeader: true,
-    icon: <ChartPieIcon />,
+    name: "Intro",
+    path: ROUTES.INTRO,
+    showHeader: true
   },
   {
-    name: "Languages and frameworks",
-    path: ROUTES.LANGUAGES_AND_FRAMEWORKS,
-    showHeader: true,
-    icon: <CursorArrowRaysIcon />,
+    name: "Om deltakerne",
+    path: ROUTES.ABOUT,
+    showHeader: true
   },
   {
-    name: "Database",
-    path: ROUTES.DATABASE,
-    showHeader: true,
-    icon: <SquaresPlusIcon />,
+    name: "Språk",
+    path: ROUTES.PROGRAMMING_LANGUAGES,
+    showHeader: true
+  },
+  {
+    name: "Rammeverk",
+    path: ROUTES.WEB_FRAMEWORKS,
+    showHeader: true
   },
   {
     name: "AI",
-    path: ROUTES.AI,
-    showHeader: true,
-    icon: <FingerPrintIcon />,
+    path: ROUTES.AI_SEARCH,
+    showHeader: true
   },
   {
-    name: "Security",
+    name: "Databaser",
+    path: ROUTES.DATABASES,
+    showHeader: true
+  },
+  {
+    name: "Kompiler og test",
+    path: ROUTES.COMPILER_AND_TEST,
+    showHeader: true
+  },
+  {
+    name: "Sikkerhet",
     path: ROUTES.SECURITY,
-    showHeader: true,
-    icon: <ArrowPathIcon />,
+    showHeader: true
   },
   {
-    name: "Tools",
-    path: ROUTES.TOOLS,
-    showHeader: true,
-    icon: <GlobeAsiaAustraliaIcon />,
+    name: "Annet",
+    path: ROUTES.OTHER_TOOLS,
+    showHeader: true
   },
-  {
-    name: "About the Survey",
-    path: ROUTES.ABOUT,
-    showHeader: true,
-    icon: <GlobeAsiaAustraliaIcon />,
-  },
+
 ];
 
 // Tabs definition
