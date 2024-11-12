@@ -17,8 +17,8 @@ export default function Home() {
       <main className="">
         <Hero />
         <Summary />
-        <Survey />
         <Top10 />
+        <Survey />
       </main>
     </HomeContextProvider>
   );
