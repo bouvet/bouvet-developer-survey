@@ -1,11 +1,11 @@
 name: Build and deploy frontend on PR
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "*" ]
     paths:
       - 'frontend/**'  # Only trigger on changes in frontend directory
   pull_request:
-    branches: [ "main" ]
+    branches: [ "*" ]
     paths:
       - 'frontend/**'  # Only trigger on changes in frontend directory
 jobs:
