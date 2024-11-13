@@ -34,7 +34,7 @@ const Survey = () => {
       </p>
       <p>
         Dette tyder på at C# opprettholder sin popularitet ved praktis bruk. På den andre siden viser Rust, et toppvalg blant utviklere som ønsker å prøve en ny teknologi, en betydelig avstand (&gt;60 prosentpoeng).
-        Dette antyder at Rust skaper interesse og beundering etterhvert som utviklere får erfaring med det. "Beundret og Ønsket" git verdifull innsikt i hvilke teknologier som er på vei opp og ned i popularitet.
+        Dette antyder at Rust skaper interesse og beundering etterhvert som utviklere får erfaring med det. &quot;Beundret og Ønsket&quot; git verdifull innsikt i hvilke teknologier som er på vei opp og ned i popularitet.
       </p>
       <h3 className="mt-10 font-bold text-left">Datagrunnlag:</h3>
       <p className="pb-5">

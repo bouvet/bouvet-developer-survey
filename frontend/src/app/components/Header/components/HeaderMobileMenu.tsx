@@ -5,13 +5,12 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 // Component
 export default function MobileMenu({
-  title,
   mobileMenuOpen,
   onClick,
 }: {
   title: string;
   mobileMenuOpen: boolean;
-  onClick: (bool: any) => void;
+  onClick: (bool: unknown) => void;
 }) {
   // Render
   return (

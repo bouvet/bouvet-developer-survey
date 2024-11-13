@@ -48,6 +48,7 @@ const BarChartJson = () => {
   const config = { responsive: true, displayModeBar: false };
 
   return (
+    // @ts-expect-error Disable type check for Plot
     <Plot className="w-full" data={data} layout={layout} config={config} />
   );
 };

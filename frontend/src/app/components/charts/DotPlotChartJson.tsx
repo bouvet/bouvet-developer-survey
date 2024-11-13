@@ -72,13 +72,8 @@ const DotPlotChartJson = (plotTitle: string, data: DotPlot) => {
   const config = { responsive: true, displayModeBar: false };
 
   return (
-    <Plot
-      data={traces}
-      layout={layout}
-      config={config}
-      useResizeHandler={true}
-      style={{ width: '100%', height: plotHeight }}
-    />  
+    // @ts-expect-error Disable type check for Plot
+    <Plot data={traces} layout={layout} config={config} useResizeHandler={true} style={{ width: '100%', height: plotHeight }} />  
   );
 };
 

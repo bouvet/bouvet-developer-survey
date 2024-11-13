@@ -1,8 +1,4 @@
 import React from "react";
-import BarChart from "../charts/barchart/BarChart";
-import BarChartJson from "../charts/barchart/BarChartJson";
-import { render } from "react-dom";
-
 
 const Summary = () => {
 

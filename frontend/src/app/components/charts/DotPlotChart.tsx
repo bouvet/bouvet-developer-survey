@@ -80,11 +80,7 @@ export default function DotPlotChart(data: chartProps) {
     const plot = [trace1, trace2];
 
     return (
-        <Plot
-            className="w-full"
-            data={plot}
-            layout={layout}
-            config={config}
-        />
+        // @ts-expect-error Disable type check for Plot
+        <Plot className="w-full" data={plot} layout={layout} config={config} />
     );
 }

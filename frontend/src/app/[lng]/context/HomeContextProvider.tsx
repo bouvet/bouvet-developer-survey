@@ -3,7 +3,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 
 // Create context
-type ContextProps = {};
+type ContextProps = object;
 
 const HomeContext = createContext<ContextProps | undefined>(undefined);
 

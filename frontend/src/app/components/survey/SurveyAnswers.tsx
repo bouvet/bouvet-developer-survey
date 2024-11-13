@@ -2,12 +2,12 @@
 import React from "react";
 import { useSurveyResult } from "@/app/hooks/useSurveyResult";
 import { Choice } from "@/app/types/survey";
-import { Plot } from "@/app/types/plot";
+import { DotPlot } from "@/app/types/plot";
 import DotPlotChartJson from "../charts/DotPlotChartJson";
 
 const DEFAULT_PARTICPIANTS: number = 255;
 
-const SurveyAnswers = (questionId: string) => {
+const SurveyAnswers = ({ questionId }: { questionId: string }) => {
 
   // get survey answers for question id
   const { data, error, isLoading } = useSurveyResult(questionId);
@@ -23,7 +23,7 @@ const SurveyAnswers = (questionId: string) => {
   }
 
   // initialize the plot array
-  const plot: Plot = [];
+  const plot: DotPlot = [];
 
   data.choices.forEach((choice: Choice) => {
 
@@ -55,7 +55,7 @@ const SurveyAnswers = (questionId: string) => {
   });
 
   // sort the data based on x1 value (Most desired first)
-  plot.sort((a, b) => a.x1 - b.x1);
+  plot.sort((a, b) => (a.x1 !== null && b.x1 !== null) ? a.x1 - b.x1 : 0);
 
   return DotPlotChartJson(plotTitle, plot);
 };

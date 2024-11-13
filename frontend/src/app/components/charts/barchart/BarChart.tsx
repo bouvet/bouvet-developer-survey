@@ -49,7 +49,9 @@ export default function BarChart(props: chartProps) {
 
   const config = { responsive: true, displayModeBar: false };
 
+  
   return (
+    // @ts-expect-error Disable type check for Plot
     <Plot className="w-full" data={chartData} layout={layout} config={config} />
   );
 }
