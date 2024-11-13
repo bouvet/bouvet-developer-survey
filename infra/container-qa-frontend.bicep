@@ -32,7 +32,7 @@ module containerEnv 'modules/containerEnv.bicep' = {
   }
 }
 
-module containerApp 'modules/containerApp.bicep' = {
+module containerApp 'modules/containerAppFrontend.bicep' = {
   name: containerAppName
   params: {
     location: location
