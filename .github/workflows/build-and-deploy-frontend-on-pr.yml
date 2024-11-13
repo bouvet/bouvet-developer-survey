@@ -53,3 +53,21 @@ jobs:
         docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
+
+    - name: Deploy to Container Apps
+          uses: azure/arm-deploy@v1
+          with:
+            subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            resourceGroupName: ${{ secrets.AZURE_RG }}
+            template: ./container-qa-frontend.bicep
+            parameters: >
+              location=norwayeast 
+              acrServer=${{ env.LOGIN_SERVER }} 
+              acrUsername=${{ env.LOGIN_NAME }} 
+              acrPassword=${{ env.PASSWORD }}
+              containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+
+    - name: Get Container App URL
+      run: |
+        fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG }} --query properties.configuration.ingress.fqdn -o tsv)
+        echo "Container App is deployed at: https://$fqdn"
