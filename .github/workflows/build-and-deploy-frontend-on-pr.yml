@@ -23,12 +23,25 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-    - name: 'Login to ACR'
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ secrets.ACR_SERVER }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+    - name: Enable ACR Admin Account
+      run: |
+        az acr update -n bouvetSurveyContainerRegistryProd --admin-enabled true
+
+    - name: Get ACR name
+      id: getacrname
+      run: |
+        acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].name" -o tsv)
+        echo "ACR_NAME=$acrName" >> $GITHUB_ENV
+
+    - name: Get ACR Credentials
+      id: getacrcreds
+      run: |
+        loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].loginServer" -o tsv)
+        loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG }} --query username -o tsv)
+        password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG }} --query "passwords[0].value" -o tsv)
+        echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
+        echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
+        echo "PASSWORD=$password" >> $GITHUB_ENV
         
     - name: Build and push the Docker image
       working-directory: ./frontend
