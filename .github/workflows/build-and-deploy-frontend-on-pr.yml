@@ -6,6 +6,8 @@ on:
     paths:
       - 'frontend/**'
       - '.github/workflows/build-and-deploy-frontend-on-pr.yml'
+      - 'infra/container-qa-frontend.bicep'
+      - 'infra/modules/containerAppFrontend.bicep'
   pull_request:
     branches: 
       - '**'
