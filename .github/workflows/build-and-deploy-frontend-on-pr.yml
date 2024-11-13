@@ -27,7 +27,7 @@ jobs:
         
     - name: Enable ACR Admin Account
       run: |
-        az acr update -n bouvetSurveyContainerRegistryProd --admin-enabled true
+        az acr update -n bouvetSurveyContainerRegistry --admin-enabled true
 
     - name: Get ACR name
       id: getacrname
