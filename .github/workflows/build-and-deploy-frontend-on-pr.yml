@@ -50,6 +50,6 @@ jobs:
         username: ${{ env.LOGIN_NAME }}
         password: ${{ env.PASSWORD }}
     - run: |
-        docker build . -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+        docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
