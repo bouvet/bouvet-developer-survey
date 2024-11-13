@@ -1,6 +1,4 @@
 "use client";
-
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useRedirect } from "@/app/hooks";
 import { useRouteParams } from "@/app/hooks";
@@ -13,24 +11,21 @@ import {
   TabsDefinitionType,
   tabsDefinition,
 } from "@/app/routes/tabs-definitions";
-import { resolveRoute } from "@/app/routes/route-definitions";
 import { useClientTranslation } from "../../../../shared/i18n/src";
 
 // Component
 export default function Header() {
   const { t } = useClientTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [currentTab, setCurrentTab] = useState(null);
+  const [currentTab] = useState(null);
   const [activeTab, setActiveTab] = useState("");
 
   const redirect = useRedirect();
-  const pathname = usePathname();
   const params = useRouteParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // ! todo
   const selectedTabPosition = 1;
-  const resolvedRoute = resolveRoute(pathname, params);
 
   // Methods
   const changePage = (route: TabsDefinitionType) => () => {
@@ -64,7 +59,7 @@ export default function Header() {
           onClickTab={changePage}
           activeTab={activeTab}
         />
-        <HeaderUser title={t(["login"])} />
+        <HeaderUser />
       </nav>
       <HeaderMobileMenu
         title={t(["b"])}

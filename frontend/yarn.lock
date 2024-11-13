@@ -1190,6 +1190,11 @@
   resolved "https://registry.npmjs.org/@types/pbf/-/pbf-3.0.5.tgz"
   integrity sha512-j3pOPiEcWZ34R6a6mN07mUkM4o4Lwf6hPNt8eilOeZhTFbxFXmKhvXl9Y28jotFPaI1bpPDJsbCprUoNke6OrA==
 
+"@types/plotly.js@*":
+  version "2.33.5"
+  resolved "https://registry.npmjs.org/@types/plotly.js/-/plotly.js-2.33.5.tgz"
+  integrity sha512-TSXtrlc/4Zz7FP8HyDjmhsFFZ9JlzRk0KdHxXieDno4yZB4Jm5ET873QH+qPm5iZMaRZAEJMOrs1AGgN7r4e4g==
+
 "@types/prop-types@*":
   version "15.7.13"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.13.tgz"
@@ -1200,6 +1205,14 @@
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.3.1.tgz"
   integrity sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==
   dependencies:
+    "@types/react" "*"
+
+"@types/react-plotly.js@^2.6.3":
+  version "2.6.3"
+  resolved "https://registry.npmjs.org/@types/react-plotly.js/-/react-plotly.js-2.6.3.tgz"
+  integrity sha512-HBQwyGuu/dGXDsWhnQrhH+xcJSsHvjkwfSRjP+YpOsCCWryIuXF78ZCBjpfgO3sCc0Jo8sYp4NOGtqT7Cn3epQ==
+  dependencies:
+    "@types/plotly.js" "*"
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^18", "@types/react@^18.0.0":

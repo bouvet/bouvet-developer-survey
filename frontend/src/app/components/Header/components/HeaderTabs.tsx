@@ -2,11 +2,9 @@
 
 import { Popover, PopoverButton, PopoverGroup } from "@headlessui/react";
 import { TabsDefinitionType } from "@/app/routes/tabs-definitions";
-import { useClientTranslation } from "../../../../../shared/i18n/src";
 
 // Component
 export default function HeaderTabs({
-  selectedTabPosition,
   tabs,
   onClickTab,
   activeTab,
@@ -16,7 +14,6 @@ export default function HeaderTabs({
   onClickTab: (tab: TabsDefinitionType) => () => void;
   activeTab: string;
 }) {
-  const { t } = useClientTranslation();
 
   // Render
   return (

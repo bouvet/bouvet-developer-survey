@@ -1,9 +1,7 @@
-import React, { useRef } from "react";
-import { useClientTranslation } from "../../../../shared/i18n/src";
+import React from "react";
 import BarChart from "../charts/barchart/BarChart";
 
 const Top10 = () => {
-  const { t } = useClientTranslation();
   const barchartData = {
     title: "Programmeringsspråk: Topp 10",
     x: [10, 12, 36, 40, 43, 51, 52, 57, 58, 65],
