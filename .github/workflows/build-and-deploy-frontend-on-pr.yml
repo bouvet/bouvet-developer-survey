@@ -5,7 +5,7 @@ on:
       - '**'
     paths:
       - 'frontend/**'  # Only trigger on changes in frontend directory
-      - '.github/workflows/build-and-deploy-frontend-on-pr.yml
+      - '.github/workflows/build-and-deploy-frontend-on-pr.yml'
   pull_request:
     branches: 
       - '**'
