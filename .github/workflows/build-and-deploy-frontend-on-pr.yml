@@ -1,20 +1,75 @@
-name: Build and deploy frontend on PR
+name: Build and deploy frontend on Push/PR
 on:
   push:
     branches: 
       - '**'
     paths:
-      - 'frontend/**'  # Only trigger on changes in frontend directory
+      - 'frontend/**'
+      - '.github/workflows/build-and-deploy-frontend-on-pr.yml'
+      - 'infra/container-qa-frontend.bicep'
+      - 'infra/modules/containerAppFrontend.bicep'
   pull_request:
     branches: 
       - '**'
     paths:
-      - 'frontend/**'  # Only trigger on changes in frontend directory
+      - 'frontend/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      working-directory: ./frontend  # Set working directory to frontend
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    
+    - name: 'Azure login'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
+        
+    - name: Enable ACR Admin Account
+      run: |
+        az acr update -n bouvetSurveyContainerRegistryProd --admin-enabled true
+
+    - name: Get ACR name
+      id: getacrname
+      run: |
+        acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].name" -o tsv)
+        echo "ACR_NAME=$acrName" >> $GITHUB_ENV
+
+    - name: Get ACR Credentials
+      id: getacrcreds
+      run: |
+        loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
+        loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
+        password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
+        echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
+        echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
+        echo "PASSWORD=$password" >> $GITHUB_ENV
+        
+    - name: Build and Push Frontend Image to ACR
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.LOGIN_SERVER }}
+        username: ${{ env.LOGIN_NAME }}
+        password: ${{ env.PASSWORD }}
+    - run: |
+        docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+        docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+        echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
+
+    - name: Deploy to Container Apps
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+        template: ./infra/container-qa-frontend.bicep
+        parameters: >
+          location=norwayeast 
+          acrServer=${{ env.LOGIN_SERVER }} 
+          acrUsername=${{ env.LOGIN_NAME }} 
+          acrPassword=${{ env.PASSWORD }}
+          containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+
+    - name: Get Container App URL
+      run: |
+        fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG_TEST }} --query properties.configuration.ingress.fqdn -o tsv)
+        echo "Container App is deployed at: https://$fqdn"

@@ -8,10 +8,34 @@ const Survey = () => {
   // Get survey structure data
   const { data, error, isLoading } = useSurveyStructure();
 
+
+  if (isLoading) {
+    return (
+      <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+        <div>Henter undersøkelsen...</div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+        <div>Error: {error.message}</div>
+      </section>
+    );
+  }
+
+  // Check for required data structure
+  if (!data?.surveyBlocks || !Array.isArray(data.surveyBlocks)) {
+    return (
+      <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+        <div>Undersøkelsen mangler eller har feil format</div>
+      </section>
+    );
+  }
+
   return (
     <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
-      {isLoading && <div>Henter undersøkelsen...</div>}
-      {error && <div>Error: {error.message}</div>}
       {!isLoading && !error && (
         <>
           {data.surveyBlocks.map((block: SurveyBlock, index: number) => {
