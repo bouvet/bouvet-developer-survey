@@ -1,4 +1,4 @@
-name: Build and deploy frontend
+name: Build and deploy frontend on PR
 on:
   push:
     branches: [ "main" ]
