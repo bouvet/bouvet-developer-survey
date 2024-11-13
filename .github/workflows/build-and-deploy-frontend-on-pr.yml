@@ -43,8 +43,13 @@ jobs:
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
         
-    - name: Build and push the Docker image
-      working-directory: ./frontend
-      run: |
-        docker build . --file Dockerfile --tag ${{ secrets.ACR_SERVER }}/bds-frontend-image:${{ github.sha }}
-        docker push ${{ secrets.ACR_SERVER }}/bds-frontend-image:${{ github.sha }}
+    - name: Build and Push Frontend Image to ACR
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.LOGIN_SERVER }}
+        username: ${{ env.LOGIN_NAME }}
+        password: ${{ env.PASSWORD }}
+    - run: |
+        docker build . -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+        docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+        echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
