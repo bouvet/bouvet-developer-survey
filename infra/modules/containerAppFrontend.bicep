@@ -31,7 +31,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
       activeRevisionsMode: 'Multiple'
       ingress: {
         external: true
-        targetPort: 5001
+        targetPort: 3000
         allowInsecure: false
       }
       secrets: [

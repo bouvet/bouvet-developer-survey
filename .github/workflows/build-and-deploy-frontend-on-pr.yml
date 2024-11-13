@@ -23,7 +23,7 @@ jobs:
     - name: 'Azure login'
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
         
     - name: Enable ACR Admin Account
       run: |
@@ -32,15 +32,15 @@ jobs:
     - name: Get ACR name
       id: getacrname
       run: |
-        acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].name" -o tsv)
+        acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].name" -o tsv)
         echo "ACR_NAME=$acrName" >> $GITHUB_ENV
 
     - name: Get ACR Credentials
       id: getacrcreds
       run: |
-        loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG }} --query "[0].loginServer" -o tsv)
-        loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG }} --query username -o tsv)
-        password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG }} --query "passwords[0].value" -o tsv)
+        loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
+        loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
+        password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
         echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
@@ -60,7 +60,7 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ secrets.AZURE_RG }}
+        resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
         template: ./infra/container-qa-frontend.bicep
         parameters: >
           location=norwayeast 
@@ -71,5 +71,5 @@ jobs:
 
     - name: Get Container App URL
       run: |
-        fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG }} --query properties.configuration.ingress.fqdn -o tsv)
+        fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG_TEST }} --query properties.configuration.ingress.fqdn -o tsv)
         echo "Container App is deployed at: https://$fqdn"
