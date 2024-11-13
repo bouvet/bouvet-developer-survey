@@ -4,18 +4,34 @@ on:
     branches: 
       - '**'
     paths:
-      - 'frontend/**'  # Only trigger on changes in frontend directory
+      - 'frontend/**'
       - '.github/workflows/build-and-deploy-frontend-on-pr.yml'
   pull_request:
     branches: 
       - '**'
     paths:
-      - 'frontend/**'  # Only trigger on changes in frontend directory
+      - 'frontend/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      working-directory: ./frontend  # Set working directory to frontend
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    
+    - name: 'Azure login'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: 'Login to ACR'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.ACR_SERVER }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+        
+    - name: Build and push the Docker image
+      working-directory: ./frontend
+      run: |
+        docker build . --file Dockerfile --tag ${{ secrets.ACR_SERVER }}/bds-frontend-image:${{ github.sha }}
+        docker push ${{ secrets.ACR_SERVER }}/bds-frontend-image:${{ github.sha }}
