@@ -35,7 +35,7 @@ const Survey = () => {
   }
 
   return (
-    <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+    <section className="pl-5 pr-5 mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
       {!isLoading && !error && (
         <>
           {data.surveyBlocks.map((block: SurveyBlock, index: number) => {

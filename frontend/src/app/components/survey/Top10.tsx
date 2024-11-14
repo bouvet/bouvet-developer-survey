@@ -21,7 +21,7 @@ const Top10 = () => {
 
   return (
     <section id="languages_and_frameworks"
-      className="flex flex-col mx-auto max-w-7xl lg:px-8 pt-40">
+      className="pl-5 pr-5 flex flex-col mx-auto max-w-7xl lg:px-8 pt-40">
       <h2 className="text-3xl font-bold mb-5">Programmeringsspråk</h2>
         <BarChart {...barchartData} />
     </section>
