@@ -6,15 +6,10 @@ import HeaderUser from "./components/HeaderUser";
 import HeaderMobileMenu from "./components/HeaderMobileMenu";
 import HeaderMobileMenuButton from "./components/HeaderMobileMenuButton";
 
-
-
 export default function Header() {
 
-  const [currentTab] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Render
-  if (currentTab) return null;
   return (
     <header className="shadow-md bg-inherit fixed w-full z-50">
       <nav
@@ -22,9 +17,7 @@ export default function Header() {
         className="mx-auto flex justify-between max-w-7xl p-6 lg:px-8"
       >
         <HeaderTitle />
-        <HeaderMobileMenuButton
-          onClick={() => setMobileMenuOpen(true)}
-        />
+        <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
         <HeaderTabs />
         <HeaderUser />
       </nav>

@@ -2,8 +2,9 @@
 
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { menuItems } from "./menuItems";
+import { useState } from 'react';
 
-// Component
 export default function MobileMenu({
   mobileMenuOpen,
   onClick,
@@ -11,17 +12,18 @@ export default function MobileMenu({
   mobileMenuOpen: boolean;
   onClick: (bool: unknown) => void;
 }) {
-  // Render
+  const [activeTab, setActiveTab] = useState('intro');
+
   return (
     <Dialog
       open={mobileMenuOpen}
       onClose={() => onClick(false)}
       className="lg:hidden"
     >
-      <div className="fixed inset-0 z-10" />
-      <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-        <div className="flex items-center justify-between">
-          <a href="#" className="-m-1.5 p-1.5">
+      <div className="fixed inset-0 z-10 bg-black/30" aria-hidden="true" />
+      <DialogPanel className="fixed inset-x-0 top-0 z-20 w-full bg-white">
+        <div className="px-6 py-4 flex items-center justify-between border-b border-gray-200">
+          <a href="#" className="p-1">
             <span className="sr-only">Your Company</span>
             <img
               alt=""
@@ -32,68 +34,36 @@ export default function MobileMenu({
           <button
             type="button"
             onClick={() => onClick(false)}
-            className="-m-2.5 rounded-md p-2.5 text-gray-700"
+            className="rounded-md p-2 text-gray-700 hover:bg-gray-100"
           >
             <span className="sr-only">Close menu</span>
             <XMarkIcon aria-hidden="true" className="h-6 w-6" />
           </button>
         </div>
-        <div className="mt-6 flow-root">
-          <div className="-my-6 divide-y divide-gray-500/10">
-            <div className="space-y-2 py-6">
+        <nav className="px-4 py-2">
+          <div className="space-y-3">
+            {menuItems.map((item) => (
               <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  onClick(false);
+                }}
+                className={`
+                  block px-3 py-1 text-base font-bold
+                  hover:underline decoration-2 underline-offset-
+                  ${activeTab === item.id 
+                    ? 'text-[#11133C] underline' 
+                    : 'text-gray-600'
+                  }
+                `}
               >
-                Utviklerprofil
+                {item.label}
               </a>
-              <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                Språk og rammeverk
-              </a>
-              <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                Database
-              </a>
-              <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                AI
-              </a>
-              <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                Sikkerhet
-              </a>
-              <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                Verktøy
-              </a>
-              <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                Om undersøkelsen
-              </a>
-            </div>
-            <div className="py-6">
-              <a
-                href="#"
-                className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                Logg inn
-              </a>
-            </div>
+            ))}
           </div>
-        </div>
+        </nav>
       </DialogPanel>
     </Dialog>
   );
