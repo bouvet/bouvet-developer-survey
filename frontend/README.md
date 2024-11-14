@@ -17,3 +17,5 @@ bun dev
 Open [http://localhost:3000/home](http://localhost:3000/home) with your browser to see the result.
 
 ## CI/CD
+
+Descrive workflow
