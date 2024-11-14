@@ -14,7 +14,7 @@ export default function Home() {
     <HomeContextProvider>
       <Header />
       {/* Remove tailwind scrolling on main element to enable testing */}
-      <main className="">
+      <main className="scroll-smooth">
         <Hero />
         <Summary />
         <Top10 />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { RouteParams } from "../routes/route-definitions";
+import { RouteParams } from "../routes/_route-definitions";
 
 /**
  * @returns the router params.

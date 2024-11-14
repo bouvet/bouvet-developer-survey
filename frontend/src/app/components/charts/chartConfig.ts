@@ -6,7 +6,7 @@ export const chartConfig = {
   dottedLineWidth: 1,
   thickLineWidth: 3,
   markerSize: 15,
-  graphBackgroundColor: "#faf1e3",
+  graphBackgroundColor: "rgb(252, 248, 243)",
   fontColor: "#555",
   fontSize: 11,
   yItemHeight: 30,

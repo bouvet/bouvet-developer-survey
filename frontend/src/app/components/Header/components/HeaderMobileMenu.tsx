@@ -8,7 +8,6 @@ export default function MobileMenu({
   mobileMenuOpen,
   onClick,
 }: {
-  title: string;
   mobileMenuOpen: boolean;
   onClick: (bool: unknown) => void;
 }) {

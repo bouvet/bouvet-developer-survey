@@ -1,5 +1,5 @@
 export const barchartConfig = {
-  graphBackgroundColor: "#faf1e3",
+  graphBackgroundColor: "rgb(252, 248, 243)",
   fontColor: "#555",
   fontSize: 11,
   barColor: "#11133c",
