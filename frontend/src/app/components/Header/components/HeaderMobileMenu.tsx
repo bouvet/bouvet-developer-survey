@@ -51,7 +51,7 @@ export default function MobileMenu({
                   onClick(false);
                 }}
                 className={`
-                  block px-3 py-1 text-base font-bold
+                  block px-3 py-1 text-sm font-bold
                   hover:underline decoration-2 underline-offset-
                   ${activeTab === item.id 
                     ? 'text-[#11133C] underline' 
