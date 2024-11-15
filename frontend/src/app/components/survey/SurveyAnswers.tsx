@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { useSurveyResult } from "@/app/hooks/useSurveyResult";
 import { Choice } from "@/app/types/survey";

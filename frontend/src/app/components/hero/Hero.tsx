@@ -1,6 +1,6 @@
 const Survey = () => {
   return (
-    <section id="intro" className="pl-5 pr-5 mx-auto justify-center max-w-7xl lg:px-8 text-lg pt-40">
+    <section id="intro" className="survey-section">
       {/* TODO: Get text dynamically from Survey API? */}
       <h2 className="text-3xl font-bold mb-5">Introduksjon</h2>
       <p className="pb-5">

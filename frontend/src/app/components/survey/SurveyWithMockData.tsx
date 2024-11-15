@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import SurveyAnswers from "./SurveyAnswers";
@@ -28,14 +27,14 @@ const Survey = () => {
   // Check for required data structure
   if (!data?.surveyBlocks || !Array.isArray(data.surveyBlocks)) {
     return (
-      <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+      <section className="survey-section">
         <div>Undersøkelsen mangler eller har feil format</div>
       </section>
     );
   }
 
   return (
-    <section className="pl-5 pr-5 mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+    <section className="survey-section">
       {!isLoading && !error && (
         <>
           {data.surveyBlocks.map((block: SurveyBlock, index: number) => {

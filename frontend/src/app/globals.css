@@ -23,3 +23,10 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer components {
+  /* Survey section */
+  .survey-section {
+    @apply pl-5 pr-5 mx-auto flex flex-col max-w-7xl lg:px-8 pt-40;
+  }
+}
