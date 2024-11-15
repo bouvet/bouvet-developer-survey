@@ -1,5 +1,4 @@
 "use client";
-
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { menuItems } from "./menuItems";

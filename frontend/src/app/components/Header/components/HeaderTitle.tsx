@@ -1,7 +1,5 @@
-"use client";
 import Logo from "@/app/components/Header/Logo";
 
-// Component
 export default function HeaderTitle() {
   // Render
   return (

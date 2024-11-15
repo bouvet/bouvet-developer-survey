@@ -1,4 +1,3 @@
-"use client";
 import dynamic from "next/dynamic";
 import { chartConfig } from "./chartConfig";
 import { DotPlot } from "@/app/types/plot";
