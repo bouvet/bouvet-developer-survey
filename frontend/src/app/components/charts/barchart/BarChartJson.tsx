@@ -4,7 +4,6 @@ import { barchartConfig } from "./barchartConfig";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), {
-  ssr: false,
   loading: () => <p>Laster...</p>,
 });
 

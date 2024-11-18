@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { barchartConfig } from "./barchartConfig";
 
 // lazy load 'react-plotly.js'
-const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
+const Plot = dynamic(() => import("react-plotly.js"));
 
 interface chartProps {
   title: string;

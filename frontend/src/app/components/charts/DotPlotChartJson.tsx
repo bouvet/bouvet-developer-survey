@@ -4,7 +4,6 @@ import { DotPlot } from "@/app/types/plot";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), {
-  ssr: false,
   loading: () => <div>Lager diagrammer...</div>,
 });
 
