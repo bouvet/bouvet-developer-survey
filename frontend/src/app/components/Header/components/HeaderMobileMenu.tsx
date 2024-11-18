@@ -22,14 +22,6 @@ export default function MobileMenu({
       <div className="fixed inset-0 z-10 bg-black/30" aria-hidden="true" />
       <DialogPanel className="fixed inset-x-0 top-0 z-20 w-full bg-white">
         <div className="px-6 py-4 flex items-center justify-between border-b border-gray-200">
-          <a href="#" className="p-1">
-            <span className="sr-only">Your Company</span>
-            <img
-              alt=""
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              className="h-8 w-auto"
-            />
-          </a>
           <button
             type="button"
             onClick={() => onClick(false)}
