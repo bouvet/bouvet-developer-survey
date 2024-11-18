@@ -2,7 +2,7 @@ name: Build and deploy frontend on Push/PR
 on:
   push:
     branches: 
-      - '**'
+      - main
     paths:
       - 'frontend/**'
       - '.github/workflows/build-and-deploy-frontend-on-pr.yml'
@@ -10,7 +10,7 @@ on:
       - 'infra/modules/containerAppFrontend.bicep'
   pull_request:
     branches: 
-      - '**'
+      - main
     paths:
       - 'frontend/**'
 
