@@ -58,6 +58,7 @@ public class UserService : IUserService
             {
                 UserId = responseUserDto.UserId,
                 ResponseId = responseUserDto.ResponseId,
+                QuestionId = responseUserDto.QuestionId,
                 CreatedAt = DateTimeOffset.Now
             };
             

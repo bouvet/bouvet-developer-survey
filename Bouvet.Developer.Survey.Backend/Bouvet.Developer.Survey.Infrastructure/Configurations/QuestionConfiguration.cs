@@ -23,5 +23,10 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
             .WithMany(e => e.Questions)
             .HasForeignKey(q => q.BlockElementId)
             .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasMany(q => q.ResponseUsers)
+            .WithOne(rr => rr.Question)
+            .HasForeignKey(rr => rr.QuestionId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

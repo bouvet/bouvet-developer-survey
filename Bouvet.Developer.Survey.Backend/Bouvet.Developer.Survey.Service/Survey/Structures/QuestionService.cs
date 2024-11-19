@@ -138,7 +138,13 @@ public class QuestionService : IQuestionService
         
         if (question == null) throw new NotFoundException("Question not found");
         
-        var dto = QuestionResponseDto.CreateFromEntity(question);
+        var respondents = await _context.ResponseUsers
+            .Where(r => r.QuestionId == questionId)
+            .Select(r => r.UserId)
+            .Distinct()
+            .ToListAsync();
+        
+        var dto = QuestionResponseDto.CreateFromEntity(question, respondents.Count);
         
         return dto;
     }

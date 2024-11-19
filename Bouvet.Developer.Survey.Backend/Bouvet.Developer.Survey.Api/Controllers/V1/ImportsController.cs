@@ -55,12 +55,12 @@ public class ImportsController : ControllerBase
     /// Import a survey from CSV
     /// </summary>
     /// <param name="file">The file to upload</param>
-    /// <param name="surveyId">The survey id</param>
+    /// <param name="surveyGuid">The survey Guid</param>
     /// <response code="200">Success</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpPost("import")]
-    public async Task<IActionResult> ImportCsv(IFormFile file, Guid surveyId)
+    public async Task<IActionResult> ImportCsv(IFormFile file, Guid surveyGuid)
     {
         if (file.Length == 0)
         {
@@ -72,7 +72,7 @@ public class ImportsController : ControllerBase
         stream.Position = 0;
         try
         {
-            await _importSurveyService.GetQuestionsFromStream(stream, surveyId);
+            await _importSurveyService.GetQuestionsFromStream(stream, surveyGuid);
             return Ok();
         }
         catch (Exception e)

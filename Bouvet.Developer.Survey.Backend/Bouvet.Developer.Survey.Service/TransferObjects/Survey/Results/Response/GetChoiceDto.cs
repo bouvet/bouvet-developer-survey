@@ -12,7 +12,7 @@ public class GetChoiceDto
     public virtual ICollection<GetResponseDto>? Responses { get; set; }
     
     
-    public static GetChoiceDto CreateFromEntity(Choice choice)
+    public static GetChoiceDto CreateFromEntity(Choice choice, int respondents)
     {
         return new GetChoiceDto
         {
@@ -21,7 +21,9 @@ public class GetChoiceDto
             IndexId = choice.IndexId,
             CreatedAt = choice.CreatedAt,
             UpdatedAt = choice.UpdatedAt,
-            Responses = choice.Responses?.Select(GetResponseDto.CreateFromEntity).ToList()
+            Responses = choice.Responses?
+                .Select(response => GetResponseDto.CreateFromEntity(response, respondents))
+                .ToList()
         };
     }
 }

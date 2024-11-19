@@ -1,5 +1,4 @@
 using Bouvet.Developer.Survey.Domain.Entities.Survey;
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
 
@@ -14,7 +13,7 @@ public class QuestionResponseDto
     public DateTimeOffset? UpdatedAt { get; set; }
     public virtual ICollection<GetChoiceDto>? Choices { get; set; }
     
-    public static QuestionResponseDto CreateFromEntity(Question question)
+    public static QuestionResponseDto CreateFromEntity(Question question,int respondents)
     {
         return new QuestionResponseDto
         {
@@ -27,7 +26,7 @@ public class QuestionResponseDto
             UpdatedAt = question.UpdatedAt,
             Choices = question.Choices?
                 .OrderBy(c => c.IndexId)
-                .Select(GetChoiceDto.CreateFromEntity)
+                .Select(choice => GetChoiceDto.CreateFromEntity(choice, respondents))
                 .ToList()
         };
     }

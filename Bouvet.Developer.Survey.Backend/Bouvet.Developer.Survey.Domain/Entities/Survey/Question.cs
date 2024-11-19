@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Bouvet.Developer.Survey.Domain.Entities.Results;
 using Bouvet.Developer.Survey.Domain.Interfaces;
 
 namespace Bouvet.Developer.Survey.Domain.Entities.Survey;
@@ -23,4 +24,5 @@ public class Question : IEntitiesDateTimeOffsett
     public DateTimeOffset? DeletedAt { get; set; }
     
     public virtual ICollection<Choice>? Choices { get; set; }
+    public virtual ICollection<ResponseUser>? ResponseUsers { get; set; }
 }

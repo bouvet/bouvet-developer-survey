@@ -157,10 +157,19 @@ public class ImportSurveyService : IImportSurveyService
             
             if(responseUser != null) continue;
             
+            var choice = await _context.Choices.FirstOrDefaultAsync(c => c.Id == response.ChoiceId);
+            
+            if (choice == null) throw new NotFoundException("Choice not found");
+            
+            var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == choice.QuestionId);
+            
+            if (question == null) throw new NotFoundException("Question not found");
+            
             responseUsers.Add(new NewResponseUserDto
             {
                 ResponseId = response.Id,
-                UserId = user.Id
+                UserId = user.Id,
+                QuestionId = question.Id,
             });
         }
         

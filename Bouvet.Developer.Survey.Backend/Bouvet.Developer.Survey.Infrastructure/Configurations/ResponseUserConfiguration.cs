@@ -23,5 +23,10 @@ public class ResponseUserConfiguration : IEntityTypeConfiguration<ResponseUser>
             .WithMany(u => u.ResponseUsers)
             .HasForeignKey(rr => rr.UserId)
             .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasOne(rr => rr.Question)
+            .WithMany(q => q.ResponseUsers)
+            .HasForeignKey(rr => rr.QuestionId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -137,5 +137,6 @@ public class SurveyBuilderTest
         Assert.NotNull(responseUser);
         Assert.Equal(_userBuilder.Id, responseUser.UserId);
         Assert.Equal(_responseBuilder.Id, responseUser.ResponseId);
+        Assert.Equal(_questionBuilder.Id, responseUser.QuestionId);
     }
 }
