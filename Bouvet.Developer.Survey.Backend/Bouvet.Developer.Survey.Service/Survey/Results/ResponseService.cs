@@ -94,38 +94,10 @@ public class ResponseService : IResponseService
         await _context.Responses.AddRangeAsync(responses);
         await _context.SaveChangesAsync();
 
-        
-        // Connect responses to users
-       // await ConnectResponseToUsers(newUserResponseDto);
-        
+            
         return responses.Select(ResponseDto.CreateFromEntity).ToList();
     }
     
-    //Make this support batch creation
-    // public async Task<ResponseDto> CreateResponse2(List<NewResponseDto> newResponseDto)
-    // {
-    //     var answerFound = newResponseDto.AnswerOptionId != null &&
-    //                         await _context.AnswerOptions.AnyAsync(x => x.Id == newResponseDto.AnswerOptionId);
-    //     
-    //     var choiceFound = await _context.Choices.FirstOrDefaultAsync(x => x.Id == newResponseDto.ChoiceId);
-    //     
-    //     if(choiceFound == null) throw new NotFoundException("Choice not found");
-    //
-    //     var response = new Response
-    //     {
-    //         Id = Guid.NewGuid(),
-    //         ChoiceId = newResponseDto.ChoiceId,
-    //         Value = newResponseDto.Value,
-    //         FieldName = newResponseDto.FieldName,
-    //         AnswerOptionId = answerFound ? newResponseDto.AnswerOptionId : null,
-    //         CreatedAt = DateTimeOffset.Now
-    //     };
-    //     
-    //     await _context.Responses.AddAsync(response);
-    //     await _context.SaveChangesAsync();
-    //     
-    //     return ResponseDto.CreateFromEntity(response);
-    // }
     
     public async Task<ResponseDto> GetResponse(Guid responseId)
     {

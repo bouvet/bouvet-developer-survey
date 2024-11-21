@@ -20,7 +20,6 @@ public class AnswerServiceTests
     private const string AnswerText = "Test answer";
     private const string AnswerIndexId = "1";
     
-    
     public AnswerServiceTests()
     {
         // Setting up an in-memory database for the context

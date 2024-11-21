@@ -9,7 +9,7 @@ using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Bouvet.Developer.Survey.Tests.Services.Survey;
+namespace Bouvet.Developer.Survey.Tests.Services.Result;
 
 public class ResponseServiceTests
 {

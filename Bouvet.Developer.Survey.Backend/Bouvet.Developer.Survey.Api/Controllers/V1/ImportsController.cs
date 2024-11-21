@@ -21,7 +21,7 @@ public class ImportsController : ControllerBase
     }
     
     /// <summary>
-    /// Import a survey from JSON
+    /// Import a survey structure from json
     /// </summary>
     /// <param name="file">The file to upload</param>
     /// <response code="200">Success</response>
@@ -52,7 +52,7 @@ public class ImportsController : ControllerBase
     }
     
     /// <summary>
-    /// Import a survey from CSV
+    /// Import survey results from csv
     /// </summary>
     /// <param name="file">The file to upload</param>
     /// <param name="surveyGuid">The survey Guid</param>
