@@ -1,4 +1,5 @@
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
 
 namespace Bouvet.Developer.Survey.Service.Interfaces.Import;
 
@@ -32,4 +33,12 @@ public interface IImportSurveyService
     /// <param name="surveyId">The survey id</param>
     /// <returns>Task</returns>
     Task GetQuestionsFromStream(Stream csvStream, Guid surveyId);
+    
+    /// <summary>
+    /// Map fields to response
+    /// </summary>
+    /// <param name="fieldDto">The list of fields</param>
+    /// <param name="surveyId">The survey id</param>
+    /// <returns></returns>
+    Task MapFieldsToResponse(List<FieldDto> fieldDto, string surveyId);
 }

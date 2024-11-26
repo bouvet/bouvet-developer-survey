@@ -116,7 +116,7 @@ public class ImportSurveyService : IImportSurveyService
         }
     }
 
-    private async Task MapFieldsToResponse(List<FieldDto> fieldDto, string surveyId)
+    public async Task MapFieldsToResponse(List<FieldDto> fieldDto, string surveyId)
     {
         var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.SurveyId == surveyId);
         
