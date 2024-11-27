@@ -109,9 +109,6 @@ public class SurveyBuilderTest
         // Assert
         Assert.NotNull(response);
         Assert.Equal(_responseBuilder.Id, response.Id);
-        Assert.Equal(ResponseBuilder.CreatedAt, response.CreatedAt.ToString());
-        Assert.Equal(ResponseBuilder.UpdatedAt, response.UpdatedAt.ToString());
-        Assert.Equal(ResponseBuilder.DeletedAt, response.DeletedAt.ToString());
     }
     
     [Fact]

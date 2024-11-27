@@ -22,6 +22,9 @@ param acrPassword string
 @description('The name of the container image.')
 param containerImage string
 
+@description('The target port for the container app.')
+param targetPort int
+
 resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   name: containerAppName
   location: location
@@ -31,7 +34,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
       activeRevisionsMode: 'Multiple'
       ingress: {
         external: true
-        targetPort: 3000
+        targetPort: targetPort
         allowInsecure: false
       }
       secrets: [
