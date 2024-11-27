@@ -22,6 +22,9 @@ param acrPassword string
 @description('The name of the container image.')
 param containerImage string
 
+@description('The target port for the container app.')
+param targetPort int
+
 resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   name: containerAppName
   location: location
@@ -31,7 +34,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
       activeRevisionsMode: 'Multiple'
       ingress: {
         external: true
-        targetPort: 5001
+        targetPort: targetPort
         allowInsecure: false
       }
       secrets: [
@@ -54,14 +57,14 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
           name: containerAppName
           image: '${acrLoginServer}/backend-image:${containerImage}'
           resources: {
-            cpu: json('1.0')
-            memory: '2Gi'
+            cpu: json('0.5')
+            memory: '1Gi'
           }
         }
       ]
       scale: {
-        minReplicas: 1
-        maxReplicas: 3
+        minReplicas: 0
+        maxReplicas: 2
       }
     }
   }

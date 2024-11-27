@@ -42,6 +42,7 @@ module containerApp 'modules/containerAppFrontend.bicep' = {
     acrUsername: acrUsername
     acrPassword: acrPassword
     containerImage: containerImage
+    targetPort: 3000
   }
 }
 
