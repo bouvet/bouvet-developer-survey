@@ -1,4 +1,6 @@
 using Bouvet.Developer.Survey.Domain.Entities;
+using Bouvet.Developer.Survey.Domain.Entities.Results;
+using Bouvet.Developer.Survey.Domain.Entities.Survey;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bouvet.Developer.Survey.Infrastructure.Data;
@@ -9,11 +11,16 @@ public class DeveloperSurveyContext : DbContext, IDeveloperSurveyContext
     {
     }
     
-    public DbSet<Domain.Entities.Survey> Surveys => Set<Domain.Entities.Survey>();
-    public DbSet<Block> Blocks => Set<Block>();
-    public DbSet<Option> Options => Set<Option>();
-    public DbSet<AiAnalyse> AiAnalyses => Set<AiAnalyse>();
-    
+    public DbSet<Domain.Entities.Survey.Survey> Surveys => Set<Domain.Entities.Survey.Survey>();
+    public DbSet<SurveyBlock> SurveyBlocks => Set<SurveyBlock>();
+    public DbSet<Question> Questions => Set<Question>();
+    public DbSet<Choice> Choices => Set<Choice>();
+    public DbSet<BlockElement> BlockElements => Set<BlockElement>();
+    public DbSet<AnswerOption> AnswerOptions => Set<AnswerOption>();
+    public DbSet<Response> Responses => Set<Response>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<ResponseUser> ResponseUsers => Set<ResponseUser>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DeveloperSurveyContext).Assembly, type => 

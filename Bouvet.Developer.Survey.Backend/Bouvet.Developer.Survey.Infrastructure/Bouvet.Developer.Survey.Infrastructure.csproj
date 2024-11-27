@@ -20,8 +20,4 @@
     <ItemGroup>
       <ProjectReference Include="..\Bouvet.Developer.Survey.Domain\Bouvet.Developer.Survey.Domain.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations\" />
-    </ItemGroup>
 </Project>
