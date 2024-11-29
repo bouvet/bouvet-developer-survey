@@ -1,3 +1,4 @@
+using Bouvet.Developer.Survey.Domain.Entities.Results;
 using Bouvet.Developer.Survey.Domain.Entities.Survey;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -27,6 +28,11 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
         builder.HasMany(q => q.ResponseUsers)
             .WithOne(rr => rr.Question)
             .HasForeignKey(rr => rr.QuestionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasOne(q => q.AiAnalyse)
+            .WithOne(a => a.Question)
+            .HasForeignKey<AiAnalyse>(a => a.QuestionId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -20,6 +20,7 @@ public class DeveloperSurveyContext : DbContext, IDeveloperSurveyContext
     public DbSet<Response> Responses => Set<Response>();
     public DbSet<User> Users => Set<User>();
     public DbSet<ResponseUser> ResponseUsers => Set<ResponseUser>();
+    public DbSet<AiAnalyse> AiAnalyses => Set<AiAnalyse>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

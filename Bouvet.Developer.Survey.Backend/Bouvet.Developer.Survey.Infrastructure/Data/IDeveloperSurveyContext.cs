@@ -15,4 +15,5 @@ public interface IDeveloperSurveyContext
     public DbSet<Response> Responses { get; }
     public DbSet<User> Users { get; }
     public DbSet<ResponseUser> ResponseUsers { get; }
+    public DbSet<AiAnalyse> AiAnalyses { get; }
 }

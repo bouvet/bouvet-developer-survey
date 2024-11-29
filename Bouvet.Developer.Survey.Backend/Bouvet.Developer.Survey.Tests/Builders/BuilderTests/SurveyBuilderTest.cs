@@ -14,6 +14,7 @@ public class SurveyBuilderTest
     private readonly ResponseBuilder _responseBuilder = new();
     private readonly UserBuilder _userBuilder = new();
     private readonly ResponseUserBuilder _responseUserBuilder = new();
+    private readonly AiAnalyseBuilder _aiAnalyseBuilder = new();
 
     [Fact]
     public void SurveyBuilder_ShouldCreateSurvey()
@@ -135,5 +136,17 @@ public class SurveyBuilderTest
         Assert.Equal(_userBuilder.Id, responseUser.UserId);
         Assert.Equal(_responseBuilder.Id, responseUser.ResponseId);
         Assert.Equal(_questionBuilder.Id, responseUser.QuestionId);
+    }
+    
+    [Fact]
+    public void Survey_CreateAiAnalyseBuilder()
+    {
+        // Arrange
+        var aiAnalyse = _aiAnalyseBuilder.Build();
+        
+        // Assert
+        Assert.NotNull(aiAnalyse);
+        Assert.Equal(_aiAnalyseBuilder.Id, aiAnalyse.Id);
+        Assert.Equal(AiAnalyseBuilder.Text, aiAnalyse.Text);
     }
 }
