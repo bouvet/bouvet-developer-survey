@@ -35,7 +35,7 @@ const Survey = () => {
     <article>
       {!isLoading && !error && (
         <>
-          {data.surveyBlocks.map((block: SurveyBlock, index: number) =>
+          {data.surveyBlocks.map((block: SurveyBlock) =>
             block.blockElements.map((element: BlockElement) => {
               return element.questions.map((question: Question) => (
                 <SurveyAnswers key={question.id} questionId={question.id} />
