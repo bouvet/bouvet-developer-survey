@@ -33,17 +33,15 @@ const Survey = () => {
 
   return (
     <article>
-      {!isLoading && !error && (
-        <>
-          {data.surveyBlocks.map((block: SurveyBlock) =>
-            block.blockElements.map((element: BlockElement) => {
-              return element.questions.map((question: Question) => (
-                <SurveyAnswers key={question.id} questionId={question.id} />
-              ));
-            })
-          )}
-        </>
-      )}
+      {!isLoading &&
+        !error &&
+        data.surveyBlocks.map((block: SurveyBlock) =>
+          block.blockElements.map((element: BlockElement) => {
+            return element.questions.map((question: Question) => (
+              <SurveyAnswers key={question.id} questionId={question.id} />
+            ));
+          })
+        )}
     </article>
   );
 };
