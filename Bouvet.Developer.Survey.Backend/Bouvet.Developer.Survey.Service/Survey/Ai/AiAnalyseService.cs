@@ -1,6 +1,7 @@
 using Bouvet.Developer.Survey.Domain.Entities.Results;
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Ai;
 using Microsoft.EntityFrameworkCore;
