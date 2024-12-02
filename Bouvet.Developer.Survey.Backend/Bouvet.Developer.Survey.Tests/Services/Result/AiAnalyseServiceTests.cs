@@ -1,10 +1,12 @@
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Survey.Results;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Ai;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Ai;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -114,9 +116,9 @@ public class AiAnalyseServiceTests
         
         Assert.Equal("Question not found", error.Message);
         
-        var testFromDbError = await Assert.ThrowsAsync<NotFoundException>(() => _aiAnalyseService.GetAiAnalysesByQuestionId(new Guid()));
+        var testFromDbError = await _aiAnalyseService.GetAiAnalysesByQuestionId(new Guid());
         
-        Assert.Equal("AiAnalyse not found", testFromDbError.Message);
+        Assert.Null(testFromDbError);
     }
     
     [Fact]
@@ -161,9 +163,9 @@ public class AiAnalyseServiceTests
         
         await _aiAnalyseService.DeleteAiAnalyse(aiAnalyse.Id);
         
-        var getAiAnalyse = await Assert.ThrowsAsync<NotFoundException>(() => _aiAnalyseService.GetAiAnalysesByQuestionId(question.Id));
+        var testFromDbError = await _aiAnalyseService.GetAiAnalysesByQuestionId(new Guid());
         
-        Assert.Equal("AiAnalyse not found", getAiAnalyse.Message);
+        Assert.Null(testFromDbError);
         
         var testErrorHandling = await Assert.ThrowsAsync<NotFoundException>(() => _aiAnalyseService.DeleteAiAnalyse(new Guid()));
         

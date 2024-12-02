@@ -1,13 +1,16 @@
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Survey.Results;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace Bouvet.Developer.Survey.Tests.Services.Result;
@@ -21,6 +24,8 @@ public class ResultServiceTests
     private readonly ISurveyBlockService _surveyBlockService;
     private readonly IBlockElementService _blockElementService;
     private readonly IImportSurveyService _importSurveyService;
+    private readonly IConfiguration _configuration;
+    
     
     private const string SurveyId = "g_tag";
     private const string SurveyLanguage = "English";
@@ -43,8 +48,12 @@ public class ResultServiceTests
         _surveyBlockService = new SurveyBlockService(context);
         _blockElementService = new BlockElementService(context);
         _resultService = new ResultService(context, _questionService, _responseService);
+        IChoiceService choiceService = new ChoiceService(context);
+        IAnswerOptionService answerOptionService = new AnswerOptionService(context);
+        IQuestionService questionService = new QuestionService(context, choiceService, answerOptionService);
+        IAiService aiService = new AiService(_configuration, questionService, new AiAnalyseService(context), context);
         _importSurveyService = new ImportSurveyService(_surveyService,context,_questionService,_surveyBlockService,
-            _blockElementService,_resultService, new CsvToJsonService(), new UserService(context));
+            _blockElementService,_resultService, new CsvToJsonService(), new UserService(context), aiService);
     }
     
     private async Task CreateInitialDataAsync()

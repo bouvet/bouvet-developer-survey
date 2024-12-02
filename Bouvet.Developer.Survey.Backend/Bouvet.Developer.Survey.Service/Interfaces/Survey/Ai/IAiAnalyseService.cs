@@ -1,7 +1,6 @@
-using Bouvet.Developer.Survey.Domain.Entities.Results;
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Ai;
+using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Ai;
 
-namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
+namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 
 public interface IAiAnalyseService
 {
@@ -10,14 +9,14 @@ public interface IAiAnalyseService
     /// </summary>
     /// <param name="aiAnalyseDto">The AiAnalyse to create </param>
     /// <returns>The created AiAnalyse</returns>
-    Task<AiAnalyseDto> CreateAiAnalyse(NewAiAnalyseDto aiAnalyseDto);
+    Task<AiAnalyseDto?> CreateAiAnalyse(NewAiAnalyseDto aiAnalyseDto);
     
     /// <summary>
     /// Get AiAnalyse by QuestionId
     /// </summary>
     /// <param name="questionId">The QuestionId to get AiAnalyse by</param>
     /// <returns>The AiAnalyse</returns>
-    Task<AiAnalyseDto> GetAiAnalysesByQuestionId(Guid questionId);
+    Task<AiAnalyseDto?> GetAiAnalysesByQuestionId(Guid questionId);
     
     /// <summary>
     /// Get AiAnalyse by Id
@@ -25,7 +24,7 @@ public interface IAiAnalyseService
     /// <param name="aiAnalyseId">The AiAnalyseId to get AiAnalyse by</param>
     /// <param name="aiAnalyseDto">The AiAnalyse to update</param>
     /// <returns>The updated AiAnalyse</returns>
-    Task<AiAnalyseDto> UpdateAiAnalyse(Guid aiAnalyseId, NewAiAnalyseDto aiAnalyseDto);
+    Task<AiAnalyseDto?> UpdateAiAnalyse(Guid aiAnalyseId, NewAiAnalyseDto aiAnalyseDto);
     
     /// <summary>
     /// Delete AiAnalyse by Id

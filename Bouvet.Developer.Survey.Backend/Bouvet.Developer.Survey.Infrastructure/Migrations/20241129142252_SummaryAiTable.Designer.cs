@@ -4,6 +4,7 @@ using Bouvet.Developer.Survey.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bouvet.Developer.Survey.Infrastructure.Migrations
 {
     [DbContext(typeof(DeveloperSurveyContext))]
-    partial class DeveloperSurveyContextModelSnapshot : ModelSnapshot
+    [Migration("20241129142252_SummaryAiTable")]
+    partial class SummaryAiTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
                     b.HasIndex("QuestionId")
                         .IsUnique();
 
-                    b.ToTable("AiAnalyses", (string)null);
+                    b.ToTable("ai_analyses", (string)null);
                 });
 
             modelBuilder.Entity("Bouvet.Developer.Survey.Domain.Entities.Results.Response", b =>

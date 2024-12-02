@@ -1,4 +1,4 @@
-namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Ai;
+namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Ai;
 
 public class NewAiAnalyseDto
 {

@@ -1,6 +1,6 @@
 using Bouvet.Developer.Survey.Domain.Entities.Results;
 
-namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Ai;
+namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Ai;
 
 public class AiAnalyseDto
 {
@@ -8,7 +8,7 @@ public class AiAnalyseDto
     public string Text { get; set; } = null!;
     
     
-    public static AiAnalyseDto CreateFromEntity(AiAnalyse aiAnalyse)
+    public static AiAnalyseDto? CreateFromEntity(AiAnalyse aiAnalyse)
     {
         return new AiAnalyseDto
         {

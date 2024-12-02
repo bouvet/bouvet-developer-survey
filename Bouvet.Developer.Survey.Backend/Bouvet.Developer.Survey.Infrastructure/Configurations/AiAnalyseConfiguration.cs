@@ -8,7 +8,7 @@ public class AiAnalyseConfiguration : IEntityTypeConfiguration<AiAnalyse>
 {
     public void Configure(EntityTypeBuilder<AiAnalyse> builder)
     {
-        builder.ToTable("ai_analyses");
+        builder.ToTable("AiAnalyses");
         
         builder.HasKey(a => a.Id);
         

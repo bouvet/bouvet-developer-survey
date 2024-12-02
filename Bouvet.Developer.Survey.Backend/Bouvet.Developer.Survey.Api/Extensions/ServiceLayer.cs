@@ -1,9 +1,11 @@
 using Bouvet.Developer.Survey.Service.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.Survey;
+using Bouvet.Developer.Survey.Service.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Survey.Results;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
 
@@ -25,5 +27,10 @@ public static class ServiceLayer
         services.AddTransient<IResponseService, ResponseService>();
         services.AddTransient<IResultService, ResultService>();
         services.AddTransient<IUserService, UserService>();
+        
+        //Open AI
+        services.AddTransient<IAiService, AiService>();
+        services.AddTransient<IAiAnalyseService, AiAnalyseService>();
+        
     }
 }

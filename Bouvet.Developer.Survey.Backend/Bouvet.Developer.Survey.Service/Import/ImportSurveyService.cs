@@ -2,6 +2,7 @@ using System.Text.Json;
 using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
@@ -22,10 +23,11 @@ public class ImportSurveyService : IImportSurveyService
     private readonly IResultService _resultService;
     private readonly ICsvToJsonService _csvToJsonService;
     private readonly IUserService _userService;
+    private readonly IAiService _aiService;
     
     public ImportSurveyService(ISurveyService surveyService, DeveloperSurveyContext context, IQuestionService questionService, ISurveyBlockService surveyBlockService,
             IBlockElementService blockElementService, IResultService resultService,
-            ICsvToJsonService csvToJsonService, IUserService userService)
+            ICsvToJsonService csvToJsonService, IUserService userService, IAiService aiService)
     {
         _surveyService = surveyService;
         _context = context; 
@@ -35,6 +37,7 @@ public class ImportSurveyService : IImportSurveyService
         _resultService = resultService;
         _csvToJsonService = csvToJsonService;
         _userService = userService;
+        _aiService = aiService;
     }
     
     public async Task<SurveyBlocksDto> UploadSurvey(Stream stream)
@@ -133,6 +136,9 @@ public class ImportSurveyService : IImportSurveyService
         await _resultService.CheckForDifferences(fieldDto, questions, survey);
         
         await ConnectResponseToUsers(fieldDto);
+        
+        await _aiService.CheckForDifferenceAsync(survey.SurveyId);
+        
     }
     
     private async Task ConnectResponseToUsers(List<FieldDto> fieldDto)
@@ -155,7 +161,7 @@ public class ImportSurveyService : IImportSurveyService
             var responseUser = await _context.ResponseUsers
                 .FirstOrDefaultAsync(ru => ru.ResponseId == response.Id && ru.UserId == user.Id);
             
-            if(responseUser != null) continue;
+            if (responseUser != null) continue;
             
             var choice = await _context.Choices.FirstOrDefaultAsync(c => c.Id == response.ChoiceId);
             
@@ -171,6 +177,8 @@ public class ImportSurveyService : IImportSurveyService
                 UserId = user.Id,
                 QuestionId = question.Id,
             });
+            
+            
         }
         
         await _userService.ConnectResponseToUser(responseUsers);

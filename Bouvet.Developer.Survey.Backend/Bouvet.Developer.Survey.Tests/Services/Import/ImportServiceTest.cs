@@ -1,12 +1,15 @@
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Import;
 using Bouvet.Developer.Survey.Service.Interfaces.Import;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
+using Bouvet.Developer.Survey.Service.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Survey.Results;
 using Bouvet.Developer.Survey.Service.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace Bouvet.Developer.Survey.Tests.Services.Import;
@@ -15,6 +18,7 @@ public class ImportServiceTest
 {
     private readonly IImportSurveyService _importSurvey;
     private readonly ISurveyService _surveyService;
+    private readonly IConfiguration _configuration;
 
     public ImportServiceTest()
     {
@@ -34,9 +38,10 @@ public class ImportServiceTest
         IBlockElementService blockElementService = new BlockElementService(context);
         IResultService resultService = new ResultService(context, questionService, new ResponseService(context));
         ICsvToJsonService csvToJsonService = new CsvToJsonService();
+        IAiService aiService = new AiService(_configuration, questionService, new AiAnalyseService(context), context);
         IUserService userService = new UserService(context);
-        _importSurvey = new ImportSurveyService(_surveyService, context, questionService, surveyBlockService, 
-            blockElementService, resultService, csvToJsonService, userService);
+        _importSurvey = new ImportSurveyService(_surveyService, context, questionService, surveyBlockService,
+            blockElementService, resultService, csvToJsonService, userService, aiService);
     }
 
     [Fact]
