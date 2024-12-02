@@ -7,7 +7,7 @@ export interface BaseEntity {
 
   export interface Question extends BaseEntity {
     blockElementId: string;
-    dateExportTag: string;
+    dateExportTag: string; // TODO: fix typo when fixed in backend 
     questionText: string;
     questionDescription: string;
     isMultipleChoice: boolean;
@@ -34,14 +34,13 @@ export interface BaseEntity {
 
   export interface Answer extends BaseEntity {
     id: string;
-    dataExportTag: string;
+    dateExportTag: string; // TODO: fix typo when fixed in backend 
     questionText: string;
     questionDescription: string;
     isMultipleChoice: boolean;
     createdAt: string;
     updatedAt: string | null;
     choices: Choice[];
-
   }
 
 export interface Choice extends BaseEntity {
@@ -55,7 +54,7 @@ export interface Choice extends BaseEntity {
 
 export interface Response extends BaseEntity {
   id: string;
-  value: number;
+  percentage: number;
   createdAt: string;
   answerOption: {
     text: string;
