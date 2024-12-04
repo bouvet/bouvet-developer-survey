@@ -23,7 +23,7 @@ const Top10: React.FC<Props> = ({ data }) => {
 
         acc.push({
           text: choice.text || "",
-          percentage: admiredResponse.percentage,
+          percentage: Math.round(admiredResponse.percentage),
         });
       }
       return acc;
