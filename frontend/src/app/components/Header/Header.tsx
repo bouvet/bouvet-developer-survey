@@ -4,9 +4,9 @@ import HeaderTitle from "./components/HeaderTitle";
 import HeaderTabs from "./components/HeaderTabs";
 import HeaderMobileMenu from "./components/HeaderMobileMenu";
 import HeaderMobileMenuButton from "./components/HeaderMobileMenuButton";
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -19,10 +19,11 @@ export default function Header() {
         <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
         <HeaderTabs />
       </nav>
-      <HeaderMobileMenu 
+      <HeaderMobileMenu
         mobileMenuOpen={mobileMenuOpen}
         onClick={() => setMobileMenuOpen(false)}
       />
+      <DarkModeToggle />
     </header>
   );
 }
