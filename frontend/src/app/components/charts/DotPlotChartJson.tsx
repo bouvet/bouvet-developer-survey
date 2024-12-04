@@ -8,7 +8,12 @@ const Plot = dynamic(() => import("react-plotly.js"), {
   loading: () => <div>Lager diagrammer...</div>,
 });
 
-const DotPlotChartJson = (plotTitle: string, data: DotPlot) => {
+interface DotPlotChartJsonProps {
+  plotTitle: string;
+  data: DotPlot;
+}
+
+const DotPlotChartJson = ({ plotTitle, data }: DotPlotChartJsonProps) => {
 
   // calculate the height of the plot based on the number of choices
   const numberOfChoices = data.length;

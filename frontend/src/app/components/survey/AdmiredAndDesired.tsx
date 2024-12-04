@@ -1,6 +1,7 @@
 import { DotPlot } from "@/app/types/plot";
 import { Answer } from "@/app/types/survey";
 import DotPlotChartJson from "../charts/DotPlotChartJson";
+import ChartCounter from "../charts/ChartCounter";
 
 interface Props {
   data: Answer;
@@ -8,7 +9,7 @@ interface Props {
 
 const AdmiredAndDesired = ({ data }: Props) => {
   const plot: DotPlot = [];
-  const title = data.dateExportTag;
+  const title: string = data.dateExportTag;
 
   data.choices.forEach((choice) => {
     const responses = choice.responses;
@@ -36,7 +37,12 @@ const AdmiredAndDesired = ({ data }: Props) => {
 
   plot.sort((a, b) => (a.x1 !== null && b.x1 !== null ? a.x1 - b.x1 : 0));
 
-  return DotPlotChartJson(title, plot);
+  return (
+    <div>
+      <DotPlotChartJson plotTitle={title} data={plot} />
+      <ChartCounter number={50} total={200} />
+    </div>
+  );
 };
 
 export default AdmiredAndDesired;
