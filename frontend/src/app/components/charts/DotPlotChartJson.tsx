@@ -1,6 +1,8 @@
+"use client";
 import dynamic from "next/dynamic";
 import { chartConfig } from "./chartConfig";
 import { DotPlot } from "@/app/types/plot";
+import { useChartTheme } from "./chartConfig";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), {
@@ -14,6 +16,9 @@ interface DotPlotChartJsonProps {
 }
 
 const DotPlotChartJson = ({ plotTitle, data }: DotPlotChartJsonProps) => {
+
+  //check darmode and set graph theme
+  const theme = useChartTheme();
 
   // calculate the height of the plot based on the number of choices
   const numberOfChoices = data.length;
@@ -29,12 +34,12 @@ const DotPlotChartJson = ({ plotTitle, data }: DotPlotChartJsonProps) => {
       text: [trace.x1 + " %", trace.x2 + " %"],
       textposition: ["left", "right"],
       marker: {
-        color: [chartConfig.dotMinColor, chartConfig.dotMaxColor],
+        color: [theme.dotMinColor, theme.dotMaxColor],
         symbol: "circle",
         size: chartConfig.markerSize,
       },
       line: {
-        color: chartConfig.thickLineColor,
+        color: theme.thickLineColor,
         width: chartConfig.thickLineWidth,
       },
     };
@@ -51,7 +56,7 @@ const DotPlotChartJson = ({ plotTitle, data }: DotPlotChartJsonProps) => {
       automaring: true,
       showline: false,
       gridwidth: chartConfig.dottedLineWidth,
-      gridcolor: chartConfig.dottedLineColor,
+      gridcolor: theme.dottedLineColor,
 
     },
     margin: {
@@ -65,12 +70,12 @@ const DotPlotChartJson = ({ plotTitle, data }: DotPlotChartJsonProps) => {
     },
 
     font: {
-      color: chartConfig.fontColor,
+      color: theme.fontColor,
       size: chartConfig.fontSize,
     },
     autosize: true,
-    paper_bgcolor: chartConfig.graphBackgroundColor,
-    plot_bgcolor: chartConfig.graphBackgroundColor,
+    paper_bgcolor: theme.graphBackgroundColor,
+    plot_bgcolor: theme.graphBackgroundColor,
   };
 
   const config = { responsive: true, displayModeBar: false };

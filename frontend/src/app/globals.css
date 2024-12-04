@@ -17,13 +17,13 @@
   --secondary-cool-blue:#EEF5F9;
   --secondary-collins-gray: #F2F2F2;
 
-  --background: var(--primary-white);
+  --background: var(--primary-nerdy-off-white);
   --foreground: var(--primary-colossus);
 }
 
 .dark {
   --background: var(--primary-colossus);
-  --foreground: var(--primary-white);
+  --foreground: var(--primary-nerdy-off-white);
 }
 
 
