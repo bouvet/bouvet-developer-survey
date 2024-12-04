@@ -4,19 +4,19 @@ import { barchartConfig } from "./barchartConfig";
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-interface chartProps {
+interface ChartProps {
   title: string;
   y: string[];
   x: number[];
 }
 
-export default function BarChart(props: chartProps) {
-  const chartData = [
+const BarChart = ({ title, x, y }: ChartProps) => {
+  const chartData: Partial<Plotly.Data>[] = [
     {
-      x: props.x,
-      y: props.y,
+      x,
+      y,
       type: "bar",
-      text: props.x.map((value) => value + " %"),
+      text: x.map((value) => value + " %"),
       marker: {
         color: barchartConfig.barColor,
       },
@@ -24,8 +24,8 @@ export default function BarChart(props: chartProps) {
     },
   ];
 
-  const layout = {
-    title: props.title,
+  const layout: Partial<Plotly.Layout> = {
+    title,
     xaxis: {
       range: [0, 100],
       visible: false,
@@ -35,9 +35,7 @@ export default function BarChart(props: chartProps) {
       t: 70,
       b: 70,
     },
-    legend: {
-      visible: false,
-    },
+    showlegend: false,
     font: {
       color: barchartConfig.fontColor,
       size: barchartConfig.fontSize,
@@ -46,11 +44,14 @@ export default function BarChart(props: chartProps) {
     plot_bgcolor: barchartConfig.graphBackgroundColor,
   };
 
-  const config = { responsive: true, displayModeBar: false };
+  const config: Partial<Plotly.Config> = {
+    responsive: true,
+    displayModeBar: false,
+  };
 
-  
   return (
-    // @ts-expect-error Disable type check for Plot
     <Plot className="w-full" data={chartData} layout={layout} config={config} />
   );
-}
+};
+
+export default BarChart;
