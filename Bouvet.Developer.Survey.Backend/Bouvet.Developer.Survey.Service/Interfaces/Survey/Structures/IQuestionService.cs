@@ -20,13 +20,6 @@ public interface IQuestionService
     /// <param name="questionId">The question id</param>
     /// <returns>Question dto</returns>
     Task<QuestionResponseDto> GetQuestionByIdAsync(Guid questionId);
-    
-    /// <summary>
-    /// Get question only responses and no details
-    /// </summary>
-    /// <param name="questionId">The question id</param>
-    /// <returns>Question only response dto</returns>
-    Task<QuestionOnlyResponseDto> QuestionOnlyResponses(Guid questionId);
 
     /// <summary>
     /// Get a list of questions by survey id

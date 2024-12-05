@@ -86,40 +86,57 @@ public class SurveyBlockServiceTests
     }
 
     [Fact]
-    public async Task Should_Throw_Errors()
+    public async Task CreateSurveyBlock_ThrowsNotFoundException_WhenSurveyDoesNotExist()
     {
-        var surveyBlockCreate = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.CreateSurveyBlock(new NewSurveyBlockDto
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.CreateSurveyBlock(new NewSurveyBlockDto
         {
             SurveyId = "123456",
             Type = "Test",
             Description = "Test",
             SurveyBlockId = "ga_567"
         }));
-        
-        Assert.Equal("Survey not found", surveyBlockCreate.Message);
-        
-        var surveyBlockGet = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.GetSurveyBlocks(Guid.NewGuid()));
-        
-        Assert.Equal("Survey not found", surveyBlockGet.Message);
-        
-        var surveyBlockGetById = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.GetSurveyBlock(Guid.NewGuid()));
-        
-        Assert.Equal("Survey block not found", surveyBlockGetById.Message);
-        
-        var surveyBlockUpdate = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.UpdateSurveyElement(Guid.NewGuid(), new NewSurveyBlockDto
+
+        Assert.Equal("Survey not found", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetSurveyBlocks_ThrowsNotFoundException_WhenSurveyDoesNotExist()
+    {
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.GetSurveyBlocks(Guid.NewGuid()));
+
+        Assert.Equal("Survey not found", exception.Message);
+    }
+
+    [Fact]
+    public async Task GetSurveyBlock_ThrowsNotFoundException_WhenSurveyBlockDoesNotExist()
+    {
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.GetSurveyBlock(Guid.NewGuid()));
+
+        Assert.Equal("Survey block not found", exception.Message);
+    }
+
+    [Fact]
+    public async Task UpdateSurveyElement_ThrowsNotFoundException_WhenSurveyBlockDoesNotExist()
+    {
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.UpdateSurveyElement(Guid.NewGuid(), new NewSurveyBlockDto
         {
             SurveyId = "123",
             Type = "Test",
             Description = "Test",
             SurveyBlockId = "ga_567"
         }));
-        
-        Assert.Equal("Survey block not found", surveyBlockUpdate.Message);
-        
-        var surveyBlockDelete = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.DeleteSurveyBlock(Guid.NewGuid()));
-        
-        Assert.Equal("Survey block not found", surveyBlockDelete.Message);
+
+        Assert.Equal("Survey block not found", exception.Message);
     }
+
+    [Fact]
+    public async Task DeleteSurveyBlock_ThrowsNotFoundException_WhenSurveyBlockDoesNotExist()
+    {
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _surveyBlockService.DeleteSurveyBlock(Guid.NewGuid()));
+
+        Assert.Equal("Survey block not found", exception.Message);
+    }
+
     
     [Fact]
     public async Task Should_Get_Survey_Block_By_Id()

@@ -86,7 +86,7 @@ public class AiAnalyseServiceTests
     }
 
     [Fact]
-    public async Task Create_Ai_Analyse()
+    public async Task Create_Ai_Analyse_And_Get_Ai_Analyse()
     {
         var question = await CreateInitialDataAsync();
         
@@ -103,7 +103,11 @@ public class AiAnalyseServiceTests
         
         Assert.NotNull(aiAnalyseFromDb);
         Assert.Equal("Test Ai Analyse", aiAnalyse.Text);
-        
+    }
+    
+    [Fact]
+    public async Task Create_Ai_Analyse_With_Wrong_QuestionId()
+    {
         var testErrorHandling = new NewAiAnalyseDto
         {
             QuestionId = new Guid(),
@@ -113,7 +117,11 @@ public class AiAnalyseServiceTests
         var error = await Assert.ThrowsAsync<NotFoundException>(() => _aiAnalyseService.CreateAiAnalyse(testErrorHandling));
         
         Assert.Equal("Question not found", error.Message);
-        
+    }
+
+    [Fact]
+    public async Task Get_Ai_Analyse_With_Wrong_Id()
+    {
         var testFromDbError = await _aiAnalyseService.GetAiAnalysesByQuestionId(new Guid());
         
         Assert.Null(testFromDbError);
@@ -137,7 +145,11 @@ public class AiAnalyseServiceTests
         
         Assert.NotNull(updatedAiAnalyse);
         Assert.Equal("Updated Ai Analyse", updatedAiAnalyse.Text);
-        
+    }
+
+    [Fact]
+    public async Task Update_Ai_Analyse_With_Wrong_Id()
+    {
         var testErrorHandling = new NewAiAnalyseDto
         {
             Text = "Updated Ai Analyse"

@@ -18,7 +18,7 @@ public class AiService : IAiService
     private readonly IQuestionService _questionService;
     private readonly IAiAnalyseService _aiAnalyseService;
     private readonly DeveloperSurveyContext _context;
-    
+    public bool IsTestMode { get; set; } = false;
     public AiService(IConfiguration configuration, IQuestionService questionService, IAiAnalyseService aiAnalyseService, 
         DeveloperSurveyContext context)
     {
@@ -69,12 +69,13 @@ public class AiService : IAiService
     
     private async Task<string> GetAiSummaryAsync(Guid questionId)
     {
+        
         AzureOpenAIClient azureClient = new(
             new Uri(_configuration["OpenAiUrl"]!),
             new ApiKeyCredential(_configuration["OpenAiSecretKey"]!));
         var chatClient = azureClient.GetChatClient("gpt-4o-mini");
         
-        var questionResponseDto = await _questionService.QuestionOnlyResponses(questionId);
+        var questionResponseDto = await _questionService.GetQuestionByIdAsync(questionId);
         
         var jsonString = JsonSerializer.Serialize(questionResponseDto, new JsonSerializerOptions
         {
@@ -87,5 +88,6 @@ public class AiService : IAiService
             new UserChatMessage(jsonString));
         
         return completion.Content[0].Text;
+    
     }
 }

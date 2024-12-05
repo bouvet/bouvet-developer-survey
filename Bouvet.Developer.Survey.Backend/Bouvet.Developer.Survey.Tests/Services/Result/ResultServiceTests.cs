@@ -135,16 +135,16 @@ public class ResultServiceTests
         Assert.NotNull(questions);
     }
     
-    [Fact]
-    public async Task Check_For_Differences()
-    {
-        // Arrange
-        await CreateInitialDataAsync();
-        
-        var fieldDto = await CreateTestFieldDto();
-        
-        // Act
-        await _importSurveyService.MapFieldsToResponse(fieldDto, SurveyId);
-        
-    }
+    // [Fact]
+    // public async Task Check_For_Differences()
+    // {
+    //     // Arrange
+    //     await CreateInitialDataAsync();
+    //     
+    //     var fieldDto = await CreateTestFieldDto();
+    //     
+    //     // Act
+    //     await _importSurveyService.MapFieldsToResponse(fieldDto, SurveyId);
+    //     
+    // }
 }

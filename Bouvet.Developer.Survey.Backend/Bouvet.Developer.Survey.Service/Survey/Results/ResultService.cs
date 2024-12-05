@@ -82,27 +82,18 @@ public class ResultService : IResultService
         {
             if (fieldInstance.Value == null || questionChoiceNumber == null) continue;
             
-            await CheckField(fieldInstance, question, survey, responseDtoS, fieldInstance, 
+            await CheckField(fieldInstance, question, responseDtoS, fieldInstance, 
                     questionChoiceNumber, choicesDictionary);
         }
     
         return responseDtoS;
     }
 
-    private async Task CheckField(FieldDto fieldInstance, QuestionDetailsDto questionDetails, 
-    Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtoS, FieldDto field,
+    private async Task CheckField(FieldDto fieldInstance, QuestionDetailsDto questionDetails, List<NewResponseDto> responseDtoS, FieldDto field,
     string questionChoiceNumber, Dictionary<string, Choice> choicesDictionary)
     {
         var choiceNumbers = questionChoiceNumber.Split(',').Select(n => n.Trim()).ToList();
-
-        // For non-multiple-choice questions, we expect only one value. If multiple, take the first one
-        // if (!questionDetails.IsMultipleChoice && choiceNumbers.Count > 1)
-        // {
-        //     // If there are multiple values, log a message and process only the first value.
-        //     Console.WriteLine($"Multiple values found for non-multiple-choice question {questionDetails.Id}. With values: {fieldInstance.Value}");
-        //     
-        // }
-
+        
         // Try to find the choice for the current choiceNumber
         if (!choicesDictionary.TryGetValue(choiceNumbers.First(), out var choice))
         {
@@ -186,27 +177,17 @@ public class ResultService : IResultService
     private void SetResponseFlag(List<NewResponseDto> responseDtos, FieldDto field, string fieldValue, 
         Guid choiceId, Guid answerId, bool hasWorkedWith, bool wantsToWorkWith)
     {
-        // Check if response already exists
-        var existingResponse = responseDtos.FirstOrDefault(r => r.FieldName == field.FieldName && r.FieldValue == fieldValue);
-    
-        // if (existingResponse != null)
-        // {
-        //     existingResponse.HasWorkedWith = hasWorkedWith;
-        //     existingResponse.WantsToWorkWith = wantsToWorkWith;
-        // }
-        // else
-        // {
-            responseDtos.Add(new NewResponseDto
-            {
-                ChoiceId = choiceId,
-                FieldName = field.FieldName,
-                FieldValue = fieldValue,
-                AnswerOptionId = answerId == Guid.Empty ? null : answerId,
-                Value = 1, // Always 1 for non-multiple-choice or when working with values 1 or 2
-                HasWorkedWith = hasWorkedWith,
-                WantsToWorkWith = wantsToWorkWith
-            });
-        // }
+        responseDtos.Add(new NewResponseDto
+        {
+            ChoiceId = choiceId,
+            FieldName = field.FieldName,
+            FieldValue = fieldValue,
+            AnswerOptionId = answerId == Guid.Empty ? null : answerId,
+            Value = 1, // Always 1 for non-multiple-choice or when working with values 1 or 2
+            HasWorkedWith = hasWorkedWith,
+            WantsToWorkWith = wantsToWorkWith
+        });
+        
     }
     
     public async Task<IEnumerable<ExportTagDto>> GetQuestions(string surveyId)

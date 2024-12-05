@@ -101,7 +101,7 @@ public class ChoiceServiceTest
     }
 
     [Fact]
-    public async Task TestErrorHandling()
+    public async Task CreateChoice_ThrowsNotFoundException_WhenQuestionDoesNotExist()
     {
         var createChoiceError = await Assert.ThrowsAsync<NotFoundException>(() => _choiceService.CreateChoice(new List<NewChoiceDto>
         {
@@ -116,28 +116,45 @@ public class ChoiceServiceTest
                 Text = "Choice 2",
             }
         }, new Guid()));
-        
+
         Assert.Equal("Question not found", createChoiceError.Message);
-        
+    }
+
+    [Fact]
+    public async Task GetChoice_ThrowsNotFoundException_WhenChoiceDoesNotExist()
+    {
         var getChoiceError = await Assert.ThrowsAsync<NotFoundException>(() => _choiceService.GetChoice(new Guid()));
-        
+
         Assert.Equal("Choice not found", getChoiceError.Message);
-        
+    }
+
+    [Fact]
+    public async Task GetChoices_ThrowsNotFoundException_WhenNoChoicesExist()
+    {
         var getChoicesError = await Assert.ThrowsAsync<NotFoundException>(() => _choiceService.GetChoices(new Guid()));
-        
+
         Assert.Equal("No choices found", getChoicesError.Message);
-        
+    }
+
+    [Fact]
+    public async Task UpdateChoice_ThrowsNotFoundException_WhenChoiceDoesNotExist()
+    {
         var updateChoiceError = await Assert.ThrowsAsync<NotFoundException>(() => _choiceService.UpdateChoice(new Guid(), new NewChoiceDto
         {
             Text = "Updated choice"
         }));
-        
+
         Assert.Equal("Choice not found", updateChoiceError.Message);
-        
+    }
+
+    [Fact]
+    public async Task DeleteChoice_ThrowsNotFoundException_WhenChoiceDoesNotExist()
+    {
         var deleteChoiceError = await Assert.ThrowsAsync<NotFoundException>(() => _choiceService.DeleteChoice(new Guid()));
-        
+
         Assert.Equal("Choice not found", deleteChoiceError.Message);
     }
+
 
     [Fact]
     public async Task Should_Create_Choice()

@@ -198,7 +198,7 @@ public class ResponseService : IResponseService
     {
         var response = await _context.Responses.FirstOrDefaultAsync(x => x.Id == responseId);
         
-        if (response == null) throw new NotFoundException("Response not found for deletion with id " + responseId);
+        if (response == null) throw new NotFoundException("Response not found");
         
         _context.Responses.RemoveRange(response);
         await _context.SaveChangesAsync();

@@ -225,23 +225,6 @@ public class QuestionService : IQuestionService
         };
         return dto;
     }
-    
-    public async Task<QuestionOnlyResponseDto> QuestionOnlyResponses(Guid questionId)
-    {
-        var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
-        
-        if (question == null) throw new NotFoundException("Question not found");
-        
-        var respondents = await _context.ResponseUsers
-            .Where(r => r.QuestionId == questionId)
-            .Select(r => r.UserId)
-            .Distinct()
-            .ToListAsync();
-        
-        var dto = QuestionOnlyResponseDto.CreateFromEntity(question, respondents.Count);
-        
-        return dto;
-    }
 
     public async Task<IEnumerable<QuestionDetailsDto>> GetQuestionsBySurveyBlockIdAsync(Guid surveyBlockId)
     {
