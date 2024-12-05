@@ -12,21 +12,13 @@ public class ResponsesConfiguration : IEntityTypeConfiguration<Response>
 
         builder.HasKey(r => r.Id);
 
-        builder.HasQueryFilter(r => r.DeletedAt == null);
-
         builder.HasOne(r => r.Choice)
             .WithMany(c => c.Responses)
-            .HasForeignKey(r => r.ChoiceId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey(r => r.ChoiceId);
 
-        builder.HasOne(r => r.AnswerOption)
-            .WithMany(a => a.Responses)
-            .HasForeignKey(r => r.AnswerOptionId)
-            .OnDelete(DeleteBehavior.NoAction);
-        
         builder.HasMany(r => r.ResponseUsers)
             .WithOne(rr => rr.Response)
             .HasForeignKey(rr => rr.ResponseId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

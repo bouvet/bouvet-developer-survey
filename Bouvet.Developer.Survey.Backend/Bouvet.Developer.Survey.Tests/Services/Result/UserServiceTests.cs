@@ -77,11 +77,34 @@ public class UserServiceTests
         // Assert
         Assert.NotNull(users);
         Assert.Equal(2, users.Count());
+    }
+
+    [Fact]
+    public async Task Create_User_Batch_With_Invalid_Survey()
+    {
+        // Arrange
+        var survey = await CreateTestSurvey();
         
-        //Check for error
+        var userBatchDto = new List<NewUserDto>
+        {
+            new()
+            {
+                SurveyId = survey.Id,
+                RespondId = "123"
+            },
+            new()
+            {
+                SurveyId = survey.Id,
+                RespondId = "456"
+            }
+        };
+        
+        //Act
         var testError = await Assert.ThrowsAsync<NotFoundException>(() => 
             _userService.CreateUserBatch(userBatchDto, Guid.NewGuid()));
         
+        
+        // Assert
         Assert.Equal("Survey not found", testError.Message);
     }
 

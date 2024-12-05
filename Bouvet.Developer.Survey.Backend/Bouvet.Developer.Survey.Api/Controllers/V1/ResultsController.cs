@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Bouvet.Developer.Survey.Api.Constants;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Ai;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;

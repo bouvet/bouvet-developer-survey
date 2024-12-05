@@ -22,7 +22,7 @@ public class Question : IEntitiesDateTimeOffsett
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+    public virtual AiAnalyse? AiAnalyse { get; set; }
     public virtual ICollection<Choice>? Choices { get; set; }
     public virtual ICollection<ResponseUser>? ResponseUsers { get; set; }
 }

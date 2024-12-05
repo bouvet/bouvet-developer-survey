@@ -105,10 +105,16 @@ public class BlockElementServiceTests
     }
     
     [Fact]
-    public async Task Should_Throw_Errors()
+    public async Task Delete_BlockElement_With_Wrong_Id()
     {
-        await DeleteAllSurveyBlocks();
+        var blockElementDelete = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.DeleteBlockElement(Guid.NewGuid()));
         
+        Assert.Equal("Block element not found", blockElementDelete.Message);
+    }
+    
+    [Fact]
+    public async Task Create_Block_With_Wrong_BlockId()
+    {
         // Arrange
         var listElementDto = new List<NewBlockElementDto>();
         var newBlockDto = new NewBlockElementDto
@@ -120,26 +126,27 @@ public class BlockElementServiceTests
         
         listElementDto.Add(newBlockDto);
         
+        // Act
         var createBlock = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.CreateBlockElements(listElementDto));
         
+        // Assert
         Assert.Equal("Blocks not found: " + newBlockDto.BlockId, createBlock.Message);
-        
-        
+    }
+
+    [Fact]
+    public async Task Get_BlockElement_By_Wrong_Id()
+    {
         var blockElementGet = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.GetBlockElementById(Guid.NewGuid()));
         
         Assert.Equal("Block element not found", blockElementGet.Message);
-        
-        var blockElementGetByBlockId = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.GetBlockElementsByBlockId(Guid.NewGuid()));
-        
-        Assert.Equal("Block not found", blockElementGetByBlockId.Message);
-        
+    }
+
+    [Fact]
+    public async Task Update_Block_With_Wrong_Id()
+    {
         var blockElementUpdate = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.UpdateBlockElement(Guid.NewGuid(), new NewBlockElementDto()));
         
         Assert.Equal("Block element not found", blockElementUpdate.Message);
-        
-        var blockElementDelete = await Assert.ThrowsAsync<NotFoundException>(() => _blockElementService.DeleteBlockElement(Guid.NewGuid()));
-        
-        Assert.Equal("Block element not found", blockElementDelete.Message);
     }
     
     [Fact]

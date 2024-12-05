@@ -25,15 +25,15 @@ public class ResultService : IResultService
         Domain.Entities.Survey.Survey survey)
     {
         var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
-        var answerOptions = await _context.AnswerOptions.Where(a => a.SurveyId == survey.Id).ToListAsync();
+        
         foreach (var group in groupedFields)
         {
             var summaryResponse = await SummarizeFields(
-                group.Select(g => g).ToList(), questions, answerOptions,survey);
-
+                group.Select(g => g).ToList(), questions,survey);
+            
             try
             {
-                await _responseService.CheckForDifferences(summaryResponse);
+                await _responseService.CreateResponse(summaryResponse);
             }
             catch (Exception e)
             {
@@ -44,7 +44,7 @@ public class ResultService : IResultService
     }
 
     private async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, 
-        IEnumerable<QuestionDetailsDto> questions,List<AnswerOption> answerOptionsList, Domain.Entities.Survey.Survey survey)
+        IEnumerable<QuestionDetailsDto> questions, Domain.Entities.Survey.Survey survey)
     {
         var responseDtoS = new List<NewResponseDto>();
         string? questionChoiceNumber;
@@ -52,7 +52,7 @@ public class ResultService : IResultService
 
         // Select the first field to extract the field name
         var field = fields.First();
-        
+    
         // Extract questionExportTag from fieldName
         if (field.FieldName != null && field.FieldName.Contains('_'))
         {
@@ -64,7 +64,7 @@ public class ResultService : IResultService
             questionExportTag = field.FieldName;
             questionChoiceNumber = field.Value;
         }
-        
+    
         var question = questions.FirstOrDefault(q => q.DateExportTag == questionExportTag);
 
         if (question == null)
@@ -72,78 +72,88 @@ public class ResultService : IResultService
             Console.WriteLine("Question not found for export tag: " + questionExportTag);
             return responseDtoS;
         }
-        
+    
         // Load all choices for the question at once
         var choicesDictionary = await _context.Choices
             .Where(c => c.QuestionId == question.Id)
             .ToDictionaryAsync(c => c.IndexId);
-        
+    
         foreach (var fieldInstance in fields)
         {
-            if(fieldInstance.Value == null || questionChoiceNumber == null) continue;
+            if (fieldInstance.Value == null || questionChoiceNumber == null) continue;
             
-            // Split the field values into individual parts (e.g., "1,2")
-            var fieldValues = fieldInstance.Value.Split(",").Select(v => v.Trim());
-
-            foreach (var fieldValue in fieldValues)
-            {
-                await CheckField(fieldValue, question, survey, responseDtoS,answerOptionsList, fieldInstance, 
+            await CheckField(fieldInstance, question, responseDtoS, fieldInstance, 
                     questionChoiceNumber, choicesDictionary);
-            }
         }
-        
+    
         return responseDtoS;
     }
 
-    private async Task CheckField(string fieldValue, QuestionDetailsDto questionDetails, 
-        Domain.Entities.Survey.Survey survey, List<NewResponseDto> responseDtoS,List<AnswerOption> answerOptionsList,
-        FieldDto field, string questionChoiceNumber, Dictionary<string, Choice> choicesDictionary)
+    private async Task CheckField(FieldDto fieldInstance, QuestionDetailsDto questionDetails, List<NewResponseDto> responseDtoS, FieldDto field,
+    string questionChoiceNumber, Dictionary<string, Choice> choicesDictionary)
     {
-        if (!choicesDictionary.TryGetValue(questionChoiceNumber, out var choice))
+        var choiceNumbers = questionChoiceNumber.Split(',').Select(n => n.Trim()).ToList();
+        
+        // Try to find the choice for the current choiceNumber
+        if (!choicesDictionary.TryGetValue(choiceNumbers.First(), out var choice))
         {
-            Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DateExportTag} and index: {questionChoiceNumber}");
-            return;
+            Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DateExportTag} and index: {choiceNumbers.First()}");
+            return;  // If choice not found, skip processing for this choiceNumber
         }
 
         var answerId = Guid.Empty;
 
+        // If it's a multiple-choice question, find the appropriate answer option
         if (questionDetails.IsMultipleChoice)
         {
-            var answerOption = answerOptionsList.FirstOrDefault(a => a.IndexId == fieldValue);
-
-            if (answerOption == null)
+            // Handle the case where both 1 and 2 are selected
+            if (fieldInstance.Value.Contains("1") && fieldInstance.Value.Contains("2"))
             {
-                Console.WriteLine($"Answer option not found for survey: {survey.Id} and index: {fieldValue}");
-                return;
+                // Set both HasWorkedWith and WantsToWorkWith to true if both 1 and 2 are selected
+                SetResponseFlag(responseDtoS, field, fieldInstance.Value, choice.Id, answerId, true, true);
             }
-                    
-            answerId = answerOption.Id;
-        }
-        
-        if (field.FieldName == null) return;
-        
-        if (questionDetails.IsMultipleChoice)
-        {
-            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldName == field.FieldName && r.FieldValue == fieldValue);
-            AddOrUpdateResponse(responseDtoS, existingResponse, choice.Id, field.FieldName, fieldValue, answerId);
+            else
+            {
+                // Otherwise, handle the individual flags
+                if (fieldInstance.Value == "1")
+                {
+                    // Set HasWorkedWith to true if the value is 1
+                    SetResponseFlag(responseDtoS, field, fieldInstance.Value, choice.Id, answerId, true, false);
+                }
+                else if (fieldInstance.Value == "2")
+                {
+                    // Set WantsToWorkWith to true if the value is 2
+                    SetResponseFlag(responseDtoS, field, fieldInstance.Value, choice.Id, answerId, false, true);
+                }
+            }
         }
         else
         {
             if (questionDetails.Choices == null) return;
 
-            var choiceOnIndex = questionDetails.Choices.FirstOrDefault(c => c.IndexId == fieldValue);
+            var fieldValues = fieldInstance.Value.Split(",").Select(v => v.Trim());
+            foreach (var fieldValue in fieldValues)
+            {
+                var choiceOnIndex = questionDetails.Choices.FirstOrDefault(c => c.IndexId == fieldValue);
 
-            if (choiceOnIndex == null) return;
+                if (choiceOnIndex == null)
+                {
+                    Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DateExportTag} and index: {fieldValue}");
+                    return;
+                }
 
-            var existingResponse = responseDtoS.FirstOrDefault(r => r.FieldName == field.FieldName && r.FieldValue == fieldValue);
+                var existingResponse =
+                    responseDtoS.FirstOrDefault(r => r.FieldName == field.FieldName && r.FieldValue == fieldValue);
 
-            AddOrUpdateResponse(responseDtoS, existingResponse, choiceOnIndex.Id, field.FieldName, fieldValue,
-                answerId);
+                // For non-multiple-choice questions, set the value to 1 by default (only for the first value)
+                CreateNonMultipleValueResponse(responseDtoS, existingResponse, field.FieldName, fieldValue, choiceOnIndex.Id,
+                    Guid.Empty);
+            }
         }
     }
     
-    private void AddOrUpdateResponse(List<NewResponseDto> responseDtos, NewResponseDto? existingResponse,
-        Guid choiceId, string fieldName, string fieldValue, Guid answerId)
+    private void CreateNonMultipleValueResponse(List<NewResponseDto> responseDtos, NewResponseDto? existingResponse, string fieldName, 
+        string fieldValue, Guid choiceId, Guid answerId)
     {
         if (existingResponse != null)
         {
@@ -157,9 +167,27 @@ public class ResultService : IResultService
                 FieldName = fieldName,
                 FieldValue = fieldValue,
                 AnswerOptionId = answerId == Guid.Empty ? null : answerId,
-                Value = 1
+                Value = 1, // Always 1 for non-multiple-choice or when working with values 1 or 2
+                HasWorkedWith = false,
+                WantsToWorkWith = false
             });
         }
+    }
+    
+    private void SetResponseFlag(List<NewResponseDto> responseDtos, FieldDto field, string fieldValue, 
+        Guid choiceId, Guid answerId, bool hasWorkedWith, bool wantsToWorkWith)
+    {
+        responseDtos.Add(new NewResponseDto
+        {
+            ChoiceId = choiceId,
+            FieldName = field.FieldName,
+            FieldValue = fieldValue,
+            AnswerOptionId = answerId == Guid.Empty ? null : answerId,
+            Value = 1, // Always 1 for non-multiple-choice or when working with values 1 or 2
+            HasWorkedWith = hasWorkedWith,
+            WantsToWorkWith = wantsToWorkWith
+        });
+        
     }
     
     public async Task<IEnumerable<ExportTagDto>> GetQuestions(string surveyId)

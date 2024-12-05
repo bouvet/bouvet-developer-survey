@@ -10,10 +10,10 @@ public class SurveyBuilderTest
     private readonly BlockElementBuilder _blockElementBuilder = new();
     private readonly QuestionBuilder _questionBuilder = new();
     private readonly ChoiceBuilder _choiceBuilder = new();
-    private readonly AnswerOptionsBuilder _answerOptionsBuilder = new();
     private readonly ResponseBuilder _responseBuilder = new();
     private readonly UserBuilder _userBuilder = new();
     private readonly ResponseUserBuilder _responseUserBuilder = new();
+    private readonly AiAnalyseBuilder _aiAnalyseBuilder = new();
 
     [Fact]
     public void SurveyBuilder_ShouldCreateSurvey()
@@ -87,18 +87,6 @@ public class SurveyBuilderTest
         Assert.Equal(_questionBuilder.Id, choice.QuestionId);
     }
     
-    [Fact]
-    public void Survey_CreateAnswerBuilder()
-    {
-        // Arrange
-        var answerOptions = _answerOptionsBuilder.Build();
-        
-        // Assert
-        Assert.NotNull(answerOptions);
-        Assert.Equal(_answerOptionsBuilder.Id, answerOptions.Id);
-        Assert.Equal(AnswerOptionsBuilder.Text, answerOptions.Text);
-        Assert.Equal(AnswerOptionsBuilder.IndexId, answerOptions.IndexId);
-    }
     
     [Fact]
     public void Survey_CreateResponseBuilder()
@@ -135,5 +123,17 @@ public class SurveyBuilderTest
         Assert.Equal(_userBuilder.Id, responseUser.UserId);
         Assert.Equal(_responseBuilder.Id, responseUser.ResponseId);
         Assert.Equal(_questionBuilder.Id, responseUser.QuestionId);
+    }
+    
+    [Fact]
+    public void Survey_CreateAiAnalyseBuilder()
+    {
+        // Arrange
+        var aiAnalyse = _aiAnalyseBuilder.Build();
+        
+        // Assert
+        Assert.NotNull(aiAnalyse);
+        Assert.Equal(_aiAnalyseBuilder.Id, aiAnalyse.Id);
+        Assert.Equal(AiAnalyseBuilder.Text, aiAnalyse.Text);
     }
 }

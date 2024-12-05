@@ -39,9 +39,8 @@ public class ResponseServiceTests
         _choiceService = new ChoiceService(context);
         _blockElementService = new BlockElementService(context);
         _surveyBlockService = new SurveyBlockService(context);
-        IAnswerOptionService answerOptionService = new AnswerOptionService(context);
         _surveyService = new SurveyService(context);
-        _questionService = new QuestionService(context, _choiceService, answerOptionService);
+        _questionService = new QuestionService(context, _choiceService);
     }
     
     private async Task CreateInitialDataAsync()
@@ -127,7 +126,11 @@ public class ResponseServiceTests
         var response = await CreateTestResponse();
         
         Assert.NotNull(response);
-        
+    }
+
+    [Fact]
+    public async Task TestCreateResponseWithWrongChoiceId()
+    {
         var responseDtoList = new List<NewResponseDto>
         {
             new()
@@ -162,7 +165,11 @@ public class ResponseServiceTests
         var getResponses = await _responseService.GetResponsesByChoiceId(response.First().ChoiceId);
         
         Assert.NotNull(getResponses);
-        
+    }
+
+    [Fact]
+    public async Task Should_GetResponses_With_Wrong_Choice_Id()
+    {
         var testError = await Assert.ThrowsAsync<NotFoundException>(() => _responseService.GetResponsesByChoiceId(Guid.NewGuid()));
         
         Assert.Equal("No responses found", testError.Message);

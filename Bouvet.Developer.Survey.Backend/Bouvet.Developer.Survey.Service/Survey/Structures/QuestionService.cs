@@ -3,7 +3,6 @@ using Bouvet.Developer.Survey.Domain.Exceptions;
 using Bouvet.Developer.Survey.Infrastructure.Data;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structures;
 using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
-using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +13,11 @@ public class QuestionService : IQuestionService
 {
     private readonly DeveloperSurveyContext _context;
     private readonly IChoiceService _choiceService;
-    private readonly IAnswerOptionService _answerOptionService;
     
-    public QuestionService(DeveloperSurveyContext context, IChoiceService choiceService, IAnswerOptionService answerOptionService)
+    public QuestionService(DeveloperSurveyContext context, IChoiceService choiceService)
     {
         _context = context;
         _choiceService = choiceService;
-        _answerOptionService = answerOptionService;
     }
 
     public async Task CheckForDifference(SurveyQuestionsDto surveyQuestionsDto, Domain.Entities.Survey.Survey survey)
@@ -34,7 +31,10 @@ public class QuestionService : IQuestionService
         foreach (var surveyElement in surveyQuestionsDto.SurveyElements)
         {
             var question = allQuestionToSurvey.FirstOrDefault(q => q.QuestionId == surveyElement.PrimaryAttribute);
-
+            
+            // Not adding questions with DataExportTag "Arbeidsrolle" or "Enhet" to the survey because of confidentiality
+            if(surveyElement.Payload is { DataExportTag: "Arbeidsrolle" } or { DataExportTag: "Enhet" } ) continue;
+            
             //Add new questions to survey
             if (question == null)
             {
@@ -96,7 +96,6 @@ public class QuestionService : IQuestionService
             if (question != null && surveyElement.Payload != null)
             {
                 await _choiceService.CheckForDifferences(question.Id, surveyElement.Payload);
-                await _answerOptionService.AddAnswerFromDto(survey.Id, surveyElement.Payload);
             }
         }
         
@@ -138,14 +137,92 @@ public class QuestionService : IQuestionService
         
         if (question == null) throw new NotFoundException("Question not found");
         
-        var respondents = await _context.ResponseUsers
-            .Where(r => r.QuestionId == questionId)
-            .Select(r => r.UserId)
-            .Distinct()
+        var choiceDtoS = await CreateChoicesAsync(questionId, question);
+        
+        var dto = QuestionResponseDto.CreateFromEntity(question, choiceDtoS);
+        
+        return dto;
+    }
+    
+    private async Task<ICollection<GetChoiceDto>> CreateChoicesAsync(Guid questionId, Question question)
+    {
+        var choices = await _context.Choices
+            .Where(c => c.QuestionId == questionId)
+            .ToListAsync();
+
+        var choiceList = new List<GetChoiceDto>();
+        foreach (var choice in choices)
+        {
+            var responseDtoS = await CreateResponsesAsync(choice.Id, question);
+            var choiceDto = GetChoiceDto.CreateFromEntity(choice, responseDtoS);
+            
+            choiceList.Add(choiceDto);
+        }
+        
+        return choiceList;
+    }
+    
+    private async Task<GetStatsDto> CreateResponsesAsync(Guid choiceId, Question question)
+    {
+        var responses = await _context.Responses
+            .Where(r => r.ChoiceId == choiceId)
             .ToListAsync();
         
-        var dto = QuestionResponseDto.CreateFromEntity(question, respondents.Count);
+        var numberOfRespondents = await _context.ResponseUsers
+            .Where(r => r.QuestionId == question.Id)
+            .Select(r => r.UserId)
+            .Distinct()
+            .CountAsync();
         
+
+        if (responses.Count == 0)
+        {
+            return new GetStatsDto
+            {
+                TotalPercentage = 0,
+                AdmiredPercentage = 0,
+                DesiredPercentage = 0,
+            };
+        }
+        
+        var totalAdmired = responses.Count(r => r.HasWorkedWith && r.WantsToWorkWith);
+        var totalDesired = responses.Count(r => r.WantsToWorkWith && !r.HasWorkedWith);
+        var admiredRespondents = responses.Count(r => r.HasWorkedWith);
+        
+        var totalColumns = responses.Count;
+        
+        var admiredPercentage = admiredRespondents > 0
+            ? (int)Math.Ceiling(totalAdmired / (float)admiredRespondents * 100)
+            : 0;
+        
+        var desiredPercentage = totalColumns > 0
+            ? (int)Math.Ceiling(totalDesired / (float)totalColumns * 100)
+            : 0;
+        
+        // Adjust totalPercentage calculation based on IsMultipleChoice flag
+        var totalPercentage = 0;
+        if (question.IsMultipleChoice)
+        {
+            // If it's multiple choice, calculate percentage based on admiredRespondents and numberOfRespondents
+            totalPercentage = admiredRespondents > 0
+                ? (int)Math.Ceiling(admiredRespondents / (float)numberOfRespondents * 100)
+                : 0;
+        }
+        else
+        {
+            // If it's not multiple choice, calculate percentage based on the response values
+            var totalValue = responses.Sum(r => r.Value); // Sum of values for non-multiple-choice
+            totalPercentage = totalValue > 0
+                ? (int)Math.Ceiling((totalValue / (float)numberOfRespondents) * 100) // Normalize the value to a percentage
+                : 0;
+        }
+        
+        var dto = new GetStatsDto 
+        {
+            TotalPercentage = totalPercentage,
+            AdmiredPercentage = admiredPercentage,
+            DesiredPercentage = desiredPercentage,
+        };
         return dto;
     }
 
