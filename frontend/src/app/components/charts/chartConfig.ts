@@ -25,7 +25,7 @@ export const darkTheme = {
   thickLineColor: "#ccc",
   graphBackgroundColor: "#1A1B26",
   fontColor: "#E4E4E4",
-  barColor: "#11133c",
+  barColor: "#61DAFB",
 };
 
 export const useChartTheme = () => {
