@@ -1,6 +1,6 @@
 import React from "react";
 import { Answer } from "@/app/types/survey";
-import BarChart from "../charts/barchart/BarChart";
+import BarChart from "../charts/BarChart";
 import ChartCounter from "../charts/ChartCounter";
 
 interface Props {

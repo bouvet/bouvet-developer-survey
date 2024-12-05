@@ -1,6 +1,6 @@
 import { DotPlot } from "@/app/types/plot";
 import { Answer } from "@/app/types/survey";
-import DotPlotChartJson from "../charts/DotPlotChartJson";
+import DotPlotChart from "../charts/DotPlotChart";
 import ChartCounter from "../charts/ChartCounter";
 
 interface Props {
@@ -39,7 +39,7 @@ const AdmiredAndDesired = ({ data }: Props) => {
 
   return (
     <div>
-      <DotPlotChartJson plotTitle={title} data={plot} />
+      <DotPlotChart plotTitle={title} data={plot} />
       <ChartCounter number={50} total={200} />
     </div>
   );

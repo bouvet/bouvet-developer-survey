@@ -1,5 +1,5 @@
 import React from "react";
-import BarChart from "../charts/barchart/BarChart";
+import BarChart from "../charts/BarChart";
 import { useSurveyResult } from "@/app/hooks/useSurveyResult";
 
 interface Props {

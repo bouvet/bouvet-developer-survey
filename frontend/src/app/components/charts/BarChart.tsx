@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { barchartConfig } from "./barchartConfig";
+import { chartConfig, useChartTheme } from "./chartConfig";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
@@ -11,6 +11,10 @@ interface ChartProps {
 }
 
 const BarChart = ({ title, x, y }: ChartProps) => {
+
+  //check darmode and set graph theme
+  const theme = useChartTheme();
+
   const chartData: Partial<Plotly.Data>[] = [
     {
       x,
@@ -18,7 +22,7 @@ const BarChart = ({ title, x, y }: ChartProps) => {
       type: "bar",
       text: x.map((value) => value + " %"),
       marker: {
-        color: barchartConfig.barColor,
+        color: theme.barColor,
       },
       orientation: "h",
     },
@@ -37,11 +41,11 @@ const BarChart = ({ title, x, y }: ChartProps) => {
     },
     showlegend: false,
     font: {
-      color: barchartConfig.fontColor,
-      size: barchartConfig.fontSize,
+      color: theme.fontColor,
+      size: chartConfig.fontSize,
     },
-    paper_bgcolor: barchartConfig.graphBackgroundColor,
-    plot_bgcolor: barchartConfig.graphBackgroundColor,
+    paper_bgcolor: theme.graphBackgroundColor,
+    plot_bgcolor: theme.graphBackgroundColor,
   };
 
   const config: Partial<Plotly.Config> = {
