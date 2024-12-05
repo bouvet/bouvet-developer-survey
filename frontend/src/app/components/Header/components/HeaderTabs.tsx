@@ -16,7 +16,7 @@ export default function HeaderTabs() {
           hover:underline 
           decoration-2
           underline-offset-4
-          ${activeTab === item.id ? 'text-[#11133C] underline' : 'text-gray-600'}
+          ${activeTab === item.id ? 'underline' : ''}
         `}
       >
         {item.label}
