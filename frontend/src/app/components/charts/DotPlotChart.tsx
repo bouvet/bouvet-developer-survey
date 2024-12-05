@@ -10,11 +10,11 @@ const Plot = dynamic(() => import("react-plotly.js"), {
 });
 
 interface DotPlotChartJsonProps {
-  plotTitle: string;
+  title?: string;
   data: DotPlot;
 }
 
-const DotPlotChart = ({ plotTitle, data }: DotPlotChartJsonProps) => {
+const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
 
   //check darmode and set graph theme
   const theme = useChartTheme();
@@ -45,7 +45,7 @@ const DotPlotChart = ({ plotTitle, data }: DotPlotChartJsonProps) => {
   });
 
   const layout = {
-    title: plotTitle +  ": Ønsket og Beundret",
+    title,
     xaxis: {
       showgrid: false,
       visible: false,
@@ -62,7 +62,7 @@ const DotPlotChart = ({ plotTitle, data }: DotPlotChartJsonProps) => {
       l: 100,
       r: 40,
       b: 50,
-      t: 40,
+      t: 0,
     },
     legend: {
       visible: false,

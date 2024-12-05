@@ -9,7 +9,6 @@ interface Props {
 
 const AdmiredAndDesired = ({ data }: Props) => {
   const plot: DotPlot = [];
-  const title: string = data.dateExportTag;
 
   data.choices.forEach((choice) => {
     const responses = choice.responses;
@@ -39,7 +38,7 @@ const AdmiredAndDesired = ({ data }: Props) => {
 
   return (
     <div>
-      <DotPlotChart plotTitle={title} data={plot} />
+      <DotPlotChart data={plot} />
       <ChartCounter number={50} total={200} />
     </div>
   );

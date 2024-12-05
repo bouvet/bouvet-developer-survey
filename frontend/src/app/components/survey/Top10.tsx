@@ -34,11 +34,10 @@ const Top10: React.FC<Props> = ({ data }) => {
   const chartData = {
     y: top10.map((choice) => choice.text),
     x: top10.map((choice) => choice.percentage),
-    title: `${data.dateExportTag}: Top 10`,
   };
 
   return (
-      <div>
+      <div className='h-min-[500px]'>
         <BarChart {...chartData} />
         <ChartCounter number={50} total={200} />
       </div>

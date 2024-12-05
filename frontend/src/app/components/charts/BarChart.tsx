@@ -5,7 +5,7 @@ import { chartConfig, useChartTheme } from "./chartConfig";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 interface ChartProps {
-  title: string;
+  title?: string;
   y: string[];
   x: number[];
 }
@@ -36,7 +36,7 @@ const BarChart = ({ title, x, y }: ChartProps) => {
     },
     margin: {
       l: 140,
-      t: 70,
+      t: title?.length ? 40 : 0,
       b: 70,
     },
     showlegend: false,

@@ -13,8 +13,8 @@ export const lightTheme = {
   dotMaxColor: "#1D43C6",
   dottedLineColor: "#ddd",
   thickLineColor: "#ccc",
-  graphBackgroundColor: "#fff",
-  fontColor: "#555",
+  graphBackgroundColor: 'transparent',
+  fontColor: "#fff",
   barColor: "#11133c",
 };
 
@@ -23,7 +23,7 @@ export const darkTheme = {
   dotMaxColor: "#1D43C6",
   dottedLineColor: "#ddd",
   thickLineColor: "#ccc",
-  graphBackgroundColor: "#1A1B26",
+  graphBackgroundColor: 'transparent',
   fontColor: "#E4E4E4",
   barColor: "#61DAFB",
 };
