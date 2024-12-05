@@ -179,9 +179,9 @@ public class QuestionService : IQuestionService
         {
             return new GetStatsDto
             {
-                Percentage = 0,
-                Admired = 0,
-                Desired = 0,
+                TotalPercentage = 0,
+                AdmiredPercentage = 0,
+                DesiredPercentage = 0,
             };
         }
         
@@ -219,9 +219,9 @@ public class QuestionService : IQuestionService
         
         var dto = new GetStatsDto 
         {
-            Percentage = totalPercentage,
-            Admired = admiredPercentage,
-            Desired = desiredPercentage,
+            TotalPercentage = totalPercentage,
+            AdmiredPercentage = admiredPercentage,
+            DesiredPercentage = desiredPercentage,
         };
         return dto;
     }

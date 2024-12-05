@@ -17,12 +17,12 @@ public class ResponseUserConfiguration : IEntityTypeConfiguration<ResponseUser>
         builder.HasOne(rr => rr.Response)
             .WithMany(r => r.ResponseUsers)
             .HasForeignKey(rr => rr.ResponseId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(rr => rr.User)
             .WithMany(u => u.ResponseUsers)
             .HasForeignKey(rr => rr.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(rr => rr.Question)
             .WithMany(q => q.ResponseUsers)

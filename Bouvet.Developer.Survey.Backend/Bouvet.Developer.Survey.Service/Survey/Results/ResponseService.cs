@@ -116,6 +116,18 @@ public class ResponseService : IResponseService
         var allResponses = await _context.Responses
             .Where(r => choiceIds.Contains(r.ChoiceId))
             .ToListAsync();
+
+        foreach (var response in allResponses)
+        {
+            var responseUser = await _context.ResponseUsers
+                .FirstOrDefaultAsync(x => x.ResponseId == response.Id);
+
+            if (responseUser != null)
+            {
+                _context.ResponseUsers.Remove(responseUser);
+                await _context.SaveChangesAsync();
+            }
+        }
         
         //Delete existing responses
         if (allResponses.Count > 0)
