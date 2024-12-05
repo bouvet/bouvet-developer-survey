@@ -4,6 +4,7 @@ using Bouvet.Developer.Survey.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bouvet.Developer.Survey.Infrastructure.Migrations
 {
     [DbContext(typeof(DeveloperSurveyContext))]
-    partial class DeveloperSurveyContextModelSnapshot : ModelSnapshot
+    [Migration("20241204135612_RefactorResponseTable")]
+    partial class RefactorResponseTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -348,7 +351,9 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
                 {
                     b.HasOne("Bouvet.Developer.Survey.Domain.Entities.Survey.Choice", "Choice")
                         .WithMany("Responses")
-                        .HasForeignKey("ChoiceId");
+                        .HasForeignKey("ChoiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Choice");
                 });

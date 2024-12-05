@@ -21,6 +21,5 @@ public class Survey : IEntitiesDateTimeOffsett, ILastSyncedOffset
     public DateTimeOffset? LastSyncedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
     public virtual ICollection<SurveyBlock>? SurveyBlocks { get; set; }
-    public virtual ICollection<AnswerOption>? AnswerOptions { get; set; }
     public virtual ICollection<User>? Users { get; set; }
 }

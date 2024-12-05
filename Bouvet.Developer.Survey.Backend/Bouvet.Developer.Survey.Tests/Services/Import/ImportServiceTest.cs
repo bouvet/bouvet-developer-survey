@@ -32,8 +32,7 @@ public class ImportServiceTest
         // Injecting the in-memory context into the service
         _surveyService = new SurveyService(context);
         IChoiceService choiceService = new ChoiceService(context);
-        IAnswerOptionService answerOptionService = new AnswerOptionService(context);
-        IQuestionService questionService = new QuestionService(context, choiceService, answerOptionService);
+        IQuestionService questionService = new QuestionService(context, choiceService);
         ISurveyBlockService surveyBlockService = new SurveyBlockService(context);
         IBlockElementService blockElementService = new BlockElementService(context);
         IResultService resultService = new ResultService(context, questionService, new ResponseService(context));

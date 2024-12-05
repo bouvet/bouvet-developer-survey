@@ -1,7 +1,8 @@
 namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
 
-public class GetResponseDto
+public class GetStatsDto
 {
-    public int Admired { get; set; }
-    public int Desired { get; set; }
+    public int? Percentage { get; set; }
+    public int? Admired { get; set; }
+    public int? Desired { get; set; }
 }

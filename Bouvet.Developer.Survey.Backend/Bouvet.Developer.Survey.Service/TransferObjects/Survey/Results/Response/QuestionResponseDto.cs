@@ -16,7 +16,7 @@ public class QuestionResponseDto
     public DateTimeOffset? UpdatedAt { get; set; }
     public virtual ICollection<GetChoiceDto>? Choices { get; set; }
     
-    public static QuestionResponseDto CreateFromEntity(Question question,int questionRespondents)
+    public static QuestionResponseDto CreateFromEntity(Question question, ICollection<GetChoiceDto> getChoiceDto)
     {
         return new QuestionResponseDto
         {
@@ -28,10 +28,7 @@ public class QuestionResponseDto
             IsMultipleChoice = question.IsMultipleChoice,
             CreatedAt = question.CreatedAt,
             UpdatedAt = question.UpdatedAt,
-            Choices = question.Choices?
-                .OrderBy(c => c.IndexId)
-                .Select(choice => GetChoiceDto.CreateFromEntity(choice, questionRespondents))
-                .ToList()
+            Choices = getChoiceDto
         };
     }
 }

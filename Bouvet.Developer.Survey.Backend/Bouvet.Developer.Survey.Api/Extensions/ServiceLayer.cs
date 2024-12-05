@@ -23,7 +23,6 @@ public static class ServiceLayer
         services.AddTransient<IQuestionService, QuestionService>();
         services.AddTransient<IChoiceService, ChoiceService>();
         services.AddTransient<IBlockElementService, BlockElementService>();
-        services.AddTransient<IAnswerOptionService, AnswerOptionService>();
         services.AddTransient<IResponseService, ResponseService>();
         services.AddTransient<IResultService, ResultService>();
         services.AddTransient<IUserService, UserService>();

@@ -18,11 +18,6 @@ public class SurveyConfiguration : IEntityTypeConfiguration<Domain.Entities.Surv
             .HasForeignKey(b => b.SurveyGuid)
             .OnDelete(DeleteBehavior.NoAction);
         
-        builder.HasMany(s => s.AnswerOptions)
-            .WithOne(a => a.Survey)
-            .HasForeignKey(a => a.SurveyId)
-            .OnDelete(DeleteBehavior.NoAction);
-        
         builder.HasMany(s => s.Users)
             .WithOne(u => u.Survey)
             .HasForeignKey(u => u.SurveyId)

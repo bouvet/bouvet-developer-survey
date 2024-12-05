@@ -9,10 +9,10 @@ public class GetChoiceDto
     public string IndexId { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public virtual ICollection<GetResponseDto>? Responses { get; set; }
+    public virtual GetStatsDto? Statistics { get; set; }
     
     
-    public static GetChoiceDto CreateFromEntity(Choice choice, int respondents)
+    public static GetChoiceDto CreateFromEntity(Choice choice,GetStatsDto? response)
     {
         return new GetChoiceDto
         {
@@ -21,9 +21,7 @@ public class GetChoiceDto
             IndexId = choice.IndexId,
             CreatedAt = choice.CreatedAt,
             UpdatedAt = choice.UpdatedAt,
-            Responses = choice.Responses?
-                .Select(response => GetResponseDto.CreateFromEntity(response, respondents))
-                .ToList()
+            Statistics = response
         };
     }
 }

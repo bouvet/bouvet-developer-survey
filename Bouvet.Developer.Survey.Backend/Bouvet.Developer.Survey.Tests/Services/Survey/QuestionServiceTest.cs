@@ -14,7 +14,6 @@ public class QuestionServiceTest
     private readonly IChoiceService _choiceService;
     private readonly IBlockElementService _blockElementService;
     private readonly ISurveyBlockService _surveyBlockService;
-    private readonly IAnswerOptionService _answerOptionService;
     private readonly ISurveyService _surveyService;
     
     private const string SurveyId = "g_tag";
@@ -35,9 +34,8 @@ public class QuestionServiceTest
         _choiceService = new ChoiceService(context);
         _blockElementService = new BlockElementService(context);
         _surveyBlockService = new SurveyBlockService(context);
-        _answerOptionService = new AnswerOptionService(context);
         _surveyService = new SurveyService(context);
-        _questionService = new QuestionService(context, _choiceService, _answerOptionService);
+        _questionService = new QuestionService(context, _choiceService);
     }
     
     private async Task CreateInitialDataAsync()

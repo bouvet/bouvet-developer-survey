@@ -18,10 +18,10 @@ public class ChoiceConfiguration : IEntityTypeConfiguration<Choice>
             .WithMany(q => q.Choices)
             .HasForeignKey(c => c.QuestionId)
             .OnDelete(DeleteBehavior.NoAction);
-        
+
         builder.HasMany(c => c.Responses)
             .WithOne(r => r.Choice)
             .HasForeignKey(r => r.ChoiceId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .IsRequired(false);
     }
 }

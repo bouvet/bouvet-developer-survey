@@ -42,15 +42,14 @@ public class ResultServiceTests
         var context = new DeveloperSurveyContext(options);
 
         // Injecting the in-memory context into the service
-        _questionService = new QuestionService(context, new ChoiceService(context), new AnswerOptionService(context));
+        _questionService = new QuestionService(context, new ChoiceService(context));
         _responseService = new ResponseService(context);
         _surveyService = new SurveyService(context);
         _surveyBlockService = new SurveyBlockService(context);
         _blockElementService = new BlockElementService(context);
         _resultService = new ResultService(context, _questionService, _responseService);
         IChoiceService choiceService = new ChoiceService(context);
-        IAnswerOptionService answerOptionService = new AnswerOptionService(context);
-        IQuestionService questionService = new QuestionService(context, choiceService, answerOptionService);
+        IQuestionService questionService = new QuestionService(context, choiceService);
         IAiService aiService = new AiService(_configuration, questionService, new AiAnalyseService(context), context);
         _importSurveyService = new ImportSurveyService(_surveyService,context,_questionService,_surveyBlockService,
             _blockElementService,_resultService, new CsvToJsonService(), new UserService(context), aiService);

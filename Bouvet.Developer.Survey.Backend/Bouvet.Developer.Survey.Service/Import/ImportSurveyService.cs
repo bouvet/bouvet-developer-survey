@@ -112,7 +112,6 @@ public class ImportSurveyService : IImportSurveyService
                             Value = record[tag].ToString()
                         })
                 )
-                .Distinct()
                 .ToList();
             
             await MapFieldsToResponse(filteredFields, survey.SurveyId);

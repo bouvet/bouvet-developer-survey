@@ -39,9 +39,8 @@ public class ResponseServiceTests
         _choiceService = new ChoiceService(context);
         _blockElementService = new BlockElementService(context);
         _surveyBlockService = new SurveyBlockService(context);
-        IAnswerOptionService answerOptionService = new AnswerOptionService(context);
         _surveyService = new SurveyService(context);
-        _questionService = new QuestionService(context, _choiceService, answerOptionService);
+        _questionService = new QuestionService(context, _choiceService);
     }
     
     private async Task CreateInitialDataAsync()
