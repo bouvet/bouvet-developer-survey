@@ -9,6 +9,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      minHeight: {
+        'bar-chart': '500px', 
+      }
     },
   },
   plugins: [],

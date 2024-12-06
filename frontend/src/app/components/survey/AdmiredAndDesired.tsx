@@ -37,7 +37,7 @@ const AdmiredAndDesired = ({ data }: Props) => {
   plot.sort((a, b) => (a.x1 !== null && b.x1 !== null ? a.x1 - b.x1 : 0));
 
   return (
-    <div>
+    <div className='relative'>
       <DotPlotChart data={plot} />
       <ChartCounter number={50} total={200} />
     </div>

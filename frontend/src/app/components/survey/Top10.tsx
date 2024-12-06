@@ -37,7 +37,7 @@ const Top10: React.FC<Props> = ({ data }) => {
   };
 
   return (
-      <div className='h-min-[500px]'>
+      <div className='min-h-bar-chart relative'>
         <BarChart {...chartData} />
         <ChartCounter number={50} total={200} />
       </div>

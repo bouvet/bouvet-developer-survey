@@ -33,7 +33,7 @@ const SummaryAnswers = ({ questionId }: Props) => {
   const chartData = { y, x, title };
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-bar-chart">
       <h3 className="text-2xl font-bold mb-5 text-center"></h3>
       <BarChart {...chartData} />
     </div>

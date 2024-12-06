@@ -4,7 +4,11 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      minHeight: {
+        'bar-chart': '500px', 
+      }
+    },
   },
   darkMode: 'selector',
   plugins: [],
