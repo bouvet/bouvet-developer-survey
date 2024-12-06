@@ -14,7 +14,8 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 
 [ApiController]
 [ApiVersion("1.0")]
-[Authorize(Roles = RoleConstants.ReadRole)]
+// If you want to restrict access to a specific role, uncomment the following line and replace "YourRoleName" with the role name
+// [Authorize(Roles = RoleConstants.ReadRole)]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ResultsController : ControllerBase
 {
