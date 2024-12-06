@@ -20,29 +20,6 @@ public class ResponseService : IResponseService
     {
         var choiceIds = newResponseDtos.Select(x => x.ChoiceId).ToList();
         
-        var allResponses = await _context.Responses
-            .Where(r => choiceIds.Contains(r.ChoiceId))
-            .ToListAsync();
-
-        foreach (var response in allResponses)
-        {
-            var responseUser = await _context.ResponseUsers
-                .FirstOrDefaultAsync(x => x.ResponseId == response.Id);
-
-            if (responseUser != null)
-            {
-                _context.ResponseUsers.Remove(responseUser);
-                await _context.SaveChangesAsync();
-            }
-        }
-        
-        //Delete existing responses
-        if (allResponses.Count > 0)
-        {
-            Console.WriteLine($"Deleting {allResponses.Count} existing responses");
-            _context.Responses.RemoveRange(allResponses);
-            await _context.SaveChangesAsync();
-        }
         
         // Fetch all required choices and answer options in one query
         var choices = await _context.Choices
