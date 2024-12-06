@@ -130,7 +130,9 @@ public class ImportSurveyService : IImportSurveyService
         
         var respondents = fieldDto.Select(f => f.ResponseId).Distinct().ToList();
         
-        await CheckForUsers(respondents, survey.Id);
+        //Check if the users already exist in the database
+        var users = await _userService.GetUsersBySurveyId(survey.Id);
+        await CheckForUsers(respondents, users, survey.Id);
         
         await _resultService.CheckForDifferences(fieldDto, questions, survey);
         
@@ -145,11 +147,13 @@ public class ImportSurveyService : IImportSurveyService
         var responseUsers = new List<NewResponseUserDto>();
         
         var users = await _context.Users.ToListAsync();
-        
+        var allResponses = await _context.Responses.ToListAsync();
+        var responseUsersList = await _context.ResponseUsers.ToListAsync();
+        var allQuestions = await _context.Questions.ToListAsync();
         foreach (var field in fieldDto)
         {
-            var response = await _context.Responses.FirstOrDefaultAsync(r => r.FieldName == field.FieldName);
             
+            var response = allResponses.FirstOrDefault(r => r.FieldName == field.FieldName);
             if (response == null) continue;
             
             var user = users.FirstOrDefault(u => u.RespondId == field.ResponseId);
@@ -157,16 +161,16 @@ public class ImportSurveyService : IImportSurveyService
             if (user == null) throw new NotFoundException("User not found");
             
             //Check if the response is already connected to the user
-            var responseUser = await _context.ResponseUsers
-                .FirstOrDefaultAsync(ru => ru.ResponseId == response.Id && ru.UserId == user.Id);
+            
+            var responseUser = responseUsersList.FirstOrDefault(ru => ru.ResponseId == response.Id && ru.UserId == user.Id);
             
             if (responseUser != null) continue;
             
             var choice = await _context.Choices.FirstOrDefaultAsync(c => c.Id == response.ChoiceId);
             
             if (choice == null) throw new NotFoundException("Choice not found");
-            
-            var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == choice.QuestionId);
+
+            var question = allQuestions.FirstOrDefault(q => q.Id == choice.QuestionId);
             
             if (question == null) throw new NotFoundException("Question not found");
             
@@ -183,9 +187,9 @@ public class ImportSurveyService : IImportSurveyService
         await _userService.ConnectResponseToUser(responseUsers);
     }
     
-    private async Task CheckForUsers(List<string?> respondents, Guid surveyId)
+    private async Task CheckForUsers(List<string?> respondents, IEnumerable<UserDto> users, Guid surveyId)
     {
-        var users = await _userService.GetUsersBySurveyId(surveyId);
+        // var users = await _userService.GetUsersBySurveyId(surveyId);
         
         var existingUsers = users.Select(u => u.RespondId).ToList();
         

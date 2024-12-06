@@ -10,46 +10,17 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 
 [ApiController]
 [ApiVersion("1.0")]
-[Authorize(Roles = RoleConstants.ReadRole)]
+// If you want to restrict access to a specific role, uncomment the following line and replace "YourRoleName" with the role name
+// [Authorize(Roles = RoleConstants.ReadRole)]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ImportsController : ControllerBase
 {
     private readonly IImportSurveyService _importSurveyService;
-    private readonly ICsvToJsonService _csvToJsonService;
     
-    public ImportsController(IImportSurveyService importSurveyService, ICsvToJsonService csvToJsonService)
+    public ImportsController(IImportSurveyService importSurveyService)
     {
         _importSurveyService = importSurveyService;
-        _csvToJsonService = csvToJsonService;
     }
-    
-    [HttpPost("csvToJson")]
-    public async Task<IActionResult> CsvToJson(IFormFile file)
-    {
-        if (file.Length == 0)
-        {
-            return BadRequest("No file uploaded.");
-        }
-
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-        stream.Position = 0;
-        try
-        {
-            var json = await _csvToJsonService.ConvertCsvToJson(stream);
-
-            // Convert the JSON string to a byte array
-            var fileBytes = System.Text.Encoding.UTF8.GetBytes(json);
-        
-            // Return the JSON as a file download
-            return File(fileBytes, "application/json", "result.json");
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
     
     /// <summary>
     /// Import a survey structure from json

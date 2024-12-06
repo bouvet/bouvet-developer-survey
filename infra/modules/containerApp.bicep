@@ -36,6 +36,12 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         external: true
         targetPort: targetPort
         allowInsecure: false
+        customDomains: [
+          {
+             name: 'bds-api-test.com'
+            //  certificateId: '/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/certificates/{certificate-name}'
+          }
+        ]
       }
       secrets: [
         {

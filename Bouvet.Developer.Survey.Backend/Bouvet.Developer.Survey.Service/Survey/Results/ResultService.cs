@@ -26,10 +26,13 @@ public class ResultService : IResultService
     {
         var groupedFields = fieldDto.GroupBy(f => f.FieldName).ToList();
         
+        // Clean up existing responses for the choiceIds
+        await CleanUp(questions);
+        
         foreach (var group in groupedFields)
         {
             var summaryResponse = await SummarizeFields(
-                group.Select(g => g).ToList(), questions,survey);
+                group.Select(g => g).ToList(), questions);
             
             try
             {
@@ -43,8 +46,47 @@ public class ResultService : IResultService
         }
     }
 
+    private async Task CleanUp(List<QuestionDetailsDto> questions)
+    {
+        foreach (var question in questions)
+        {
+            var choices = await _context.Choices
+                .Where(c => c.QuestionId == question.Id)
+                .ToListAsync();
+            
+            var choiceIds = choices.Select(c => c.Id).ToList();
+            
+            // Fetch all existing responses matching the choiceIds
+            var allResponses = await _context.Responses
+                .Where(r => choiceIds.Contains(r.ChoiceId))
+                .ToListAsync();
+        
+            // Fetch all associated ResponseUsers in a single query
+            var responseIds = allResponses.Select(r => r.Id).ToList();
+            var responseUsers = await _context.ResponseUsers
+                .Where(ru => responseIds.Contains(ru.ResponseId))
+                .ToListAsync();
+        
+            // Remove all ResponseUsers in bulk
+            if (responseUsers.Count != 0)
+            {
+                _context.ResponseUsers.RemoveRange(responseUsers);
+            }
+        
+            // Remove all Responses in bulk
+            if (allResponses.Any())
+            {
+                Console.WriteLine($"Deleting {allResponses.Count} existing responses");
+                _context.Responses.RemoveRange(allResponses);
+            }
+
+            // Save changes once
+            await _context.SaveChangesAsync();
+        }
+    }
+
     private async Task<List<NewResponseDto>> SummarizeFields(List<FieldDto> fields, 
-        IEnumerable<QuestionDetailsDto> questions, Domain.Entities.Survey.Survey survey)
+        IEnumerable<QuestionDetailsDto> questions)
     {
         var responseDtoS = new List<NewResponseDto>();
         string? questionChoiceNumber;

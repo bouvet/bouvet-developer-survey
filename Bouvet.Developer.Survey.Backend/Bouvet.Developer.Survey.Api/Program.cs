@@ -33,22 +33,16 @@ if (!string.IsNullOrEmpty(endpoint))
     }, optional: true);
 }
 
-// Add services to the container.
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
-builder.Services.AddAuthorization(options =>
-{
-    options.DefaultPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    
-    // options.AddPolicy("Read", policy =>
-    // {
-    //     policy.RequireAuthenticatedUser();
-    //     policy.RequireRole("YourRoleName"); // Replace with the role name
-    // });
-});
+// Authentication and Authorization with Azure AD. Comment out if authentication is needed
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+//
+// builder.Services.AddAuthorization(options =>
+// {
+//     options.DefaultPolicy = new AuthorizationPolicyBuilder()
+//         .RequireAuthenticatedUser()
+//         .Build();
+// });
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(builder =>
@@ -105,12 +99,13 @@ catch (Exception ex)
     logger.LogError(ex, "An error occurred creating the DB.");
 }
 
-if (app.Environment.IsDevelopment())
-{
+//If comment out the below code, the swagger will not be available in production environment
+// if (app.Environment.IsDevelopment())
+// {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+// }
 
 app.UseCors();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -118,7 +113,10 @@ app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers().RequireAuthorization();
+// If you want to require authorization for all controllers, uncomment the following line
+// app.MapControllers().RequireAuthorization();
+
+app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.Run();
