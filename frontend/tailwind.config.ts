@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
-  darkMode: 'selector',
+  darkMode: "selector",
   theme: {
     extend: {
       colors: {
@@ -10,8 +10,8 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       minHeight: {
-        'bar-chart': '500px', 
-      }
+        "bar-chart": "500px",
+      },
     },
   },
   plugins: [],
