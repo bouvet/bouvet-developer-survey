@@ -13,17 +13,17 @@ export default function Header() {
     <header className="shadow-md bg-inherit fixed w-full z-50">
       <nav
         aria-label="Global"
-        className="mx-auto flex justify-between max-w-7xl p-6 lg:px-8"
+        className="mx-auto flex max-w-8xl p-6 lg:px-app-padding-x items-center"
       >
         <HeaderTitle />
         <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
         <HeaderTabs />
+        <DarkModeToggle />
       </nav>
       <HeaderMobileMenu
         mobileMenuOpen={mobileMenuOpen}
         onClick={() => setMobileMenuOpen(false)}
       />
-      <DarkModeToggle />
     </header>
   );
 }

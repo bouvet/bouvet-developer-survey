@@ -12,6 +12,12 @@ const config: Config = {
       minHeight: {
         "bar-chart": "500px",
       },
+      maxWidth: {
+        "8xl": '2000px',
+      },
+      padding: {
+        'app-padding-x': 'var(--app-padding)'
+      }
     },
   },
   plugins: [],

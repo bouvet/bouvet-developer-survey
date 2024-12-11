@@ -8,7 +8,7 @@ const Survey = () => {
 
   if (isLoading) {
     return (
-      <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+      <section className="mx-auto flex flex-col max-w-8xl lg:px-8 pt-10">
         <div>Henter undersøkelsen...</div>
       </section>
     );
@@ -16,7 +16,7 @@ const Survey = () => {
 
   if (error) {
     return (
-      <section className="mx-auto flex flex-col max-w-7xl lg:px-8 pt-10">
+      <section className="mx-auto flex flex-col max-w-8xl lg:px-8 pt-10">
         <div>Error: {error.message}</div>
       </section>
     );

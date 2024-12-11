@@ -17,10 +17,12 @@ const DarkModeToggle = () => {
   }, [isDarkMode]);
 
   return (
-    <Button onClick={() => setIsDarkMode(!isDarkMode)} className='flex items-center w-32 text-nowrap ml-auto absolute right-8 top-8'>
+    <div className='flex-1 min-w-32'>
+    <Button onClick={() => setIsDarkMode(!isDarkMode)} className='flex items-center w-32 text-nowrap'>
       {isDarkMode ? "Light mode" : "Dark mode"}
       {isDarkMode ? <SunIcon /> : <MoonIcon />}
     </Button>
+    </div>
   );
 };
 

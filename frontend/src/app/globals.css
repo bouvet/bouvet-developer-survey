@@ -50,6 +50,6 @@ body {
 
   /* Survey section */
   .survey-section {
-    @apply pl-5 pr-5 mx-auto flex flex-col max-w-7xl lg:px-8 pt-40;
+    @apply px-5 mx-auto flex flex-col max-w-8xl lg:px-app-padding-x pt-40;
   }
 }
