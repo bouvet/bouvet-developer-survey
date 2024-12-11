@@ -16,7 +16,7 @@ const config: Config = {
         "8xl": '2000px',
       },
       padding: {
-        'app-padding-x': 'var(--app-padding)'
+        'app-padding-x': '48px'
       }
     },
   },
