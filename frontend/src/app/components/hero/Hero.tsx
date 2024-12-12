@@ -2,7 +2,7 @@ const Survey = () => {
   return (
     <section id="intro" className="survey-section">
       {/* TODO: Get text dynamically from Survey API? */}
-      <h2 className="text-3xl font-bold mb-5">Introduksjon</h2>
+      <h2 className="section-title">Introduksjon</h2>
       <p className="pb-5">
         I Bouvet har vi mange leveranser og prosjekter. Selv om de fleste av
         disse benytter teknologier som er godt etablerte og ofte gjenbrukes, ser

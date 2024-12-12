@@ -52,4 +52,7 @@ body {
   .survey-section {
     @apply px-5 mx-auto flex flex-col max-w-8xl lg:px-app-padding-x pt-40;
   }
+  .section-title {
+    @apply w-full text-5xl font-bold mb-5;
+  }
 }

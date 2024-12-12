@@ -1,6 +1,6 @@
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
-import SummaryAnswers from "./SummaryAnswers";
 import { ReactNode } from "react";
+import SurveyBlockRenderer from '../SurveyBlock/SurveyBlockRenderer';
 
 const Summary = () => {
   const { data, error, isLoading } = useSurveyStructure();
@@ -13,7 +13,7 @@ const Summary = () => {
         blockElement.questions.forEach((question) => {
           if (!question.isMultipleChoice) {
             acc.push(
-              <SummaryAnswers key={question.id} questionId={question.id} />
+              <SurveyBlockRenderer key={question.id} questionId={question.id} />
             );
           }
         });
@@ -23,11 +23,9 @@ const Summary = () => {
     []
   );
   return (
-    <section id="about" className="survey-section">
-      <h2 className="w-full text-3xl font-bold mb-5">Generelt om deltakerne</h2>
-      <div className="grid lg:grid-cols-2 grid-cols-1 grid-rows-3 gap-4 w-full h-full ">
-        {answers}
-      </div>
+    <section id="about" className="survey-section gap-12">
+      <h2 className="section-title">Generelt om deltakerne</h2>
+      {answers}
     </section>
   );
 };

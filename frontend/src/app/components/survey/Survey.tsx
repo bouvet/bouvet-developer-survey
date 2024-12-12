@@ -1,6 +1,7 @@
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
-import SurveyAnswers from "./SurveyAnswers";
 import { Question, SurveyBlock, BlockElement } from "@/app/types/survey";
+import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
+import { ReactNode } from "react";
 
 const Survey = () => {
   // Get survey structure data
@@ -31,18 +32,27 @@ const Survey = () => {
     );
   }
 
+  [];
   return (
-    <article>
+    <section className="survey-section gap-12">
+      <h2 className="section-title">Generelt om deltakerne</h2>
       {!isLoading &&
         !error &&
         data.surveyBlocks.map((block: SurveyBlock) =>
           block.blockElements.map((element: BlockElement) => {
-            return element.questions.map((question: Question) => (
-              <SurveyAnswers key={question.id} questionId={question.id} />
-            ));
+            return element.questions.reduce((acc: JSX.Element[], question) => {
+              if (!question.isMultipleChoice) return acc;
+              acc.push(
+                <SurveyBlockRenderer
+                  key={question.id}
+                  questionId={question.id}
+                />
+              );
+              return acc;
+            }, []);
           })
         )}
-    </article>
+    </section>
   );
 };
 
