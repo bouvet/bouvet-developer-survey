@@ -27,9 +27,7 @@ const AnswerContainer = ({ tabs, children }: Props) => {
           ))}
         </div>
       )}
-      <div className="w-full h-full p-4" >
         {Array.isArray(children) ? children[activeTab] : children}
-      </div>
     </div>
   );
 };

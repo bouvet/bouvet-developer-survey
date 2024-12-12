@@ -13,12 +13,12 @@
   --contrast-network-green: #79FE9D;
   --secondary-cloak-blue: #0617BF;
   --secondary-blue: #1D43C6;
-  --secondary-worp-blue:#C3D5E1;
-  --secondary-cool-blue:#EEF5F9;
+  --secondary-worp-blue: #C3D5E1;
+  --secondary-cool-blue: #EEF5F9;
   --secondary-collins-gray: #F2F2F2;
   --darkmode-black: #1A1B26;
   --darkmode-white: #E4E4E4;
-  
+
 
   --background: var(--primary-nerdy-off-white);
   --foreground: var(--primary-colossus);
@@ -52,7 +52,12 @@ body {
   .survey-section {
     @apply px-5 mx-auto flex flex-col max-w-8xl lg:px-app-padding-x pt-40;
   }
+
   .section-title {
     @apply w-full text-5xl font-bold mb-5;
+  }
+
+  .chart-container {
+    @apply w-full relative py-4 px-8;
   }
 }

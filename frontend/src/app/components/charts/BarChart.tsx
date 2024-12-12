@@ -1,11 +1,12 @@
 import dynamic from "next/dynamic";
 import { chartConfig, useChartTheme } from "./chartConfig";
 import { BarChartData } from "@/app/hooks/useGetBarChartData";
+import ChartCounter from "./ChartCounter";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-const BarChart = ({ title, x, y }: BarChartData) => {
+const BarChart = ({ x, y }: BarChartData) => {
   //check darmode and set graph theme
   const theme = useChartTheme();
   const chartData: Partial<Plotly.Data>[] = [
@@ -24,7 +25,6 @@ const BarChart = ({ title, x, y }: BarChartData) => {
   ];
 
   const layout: Partial<Plotly.Layout> = {
-    title,
     xaxis: {
       range: [0, 100],
       visible: false,
@@ -34,7 +34,7 @@ const BarChart = ({ title, x, y }: BarChartData) => {
     margin: {
       l: 0,
       r: 0,
-      t: title?.length ? 40 : 0,
+      t: 0,
       b: 0,
     },
     yaxis: {
@@ -53,12 +53,19 @@ const BarChart = ({ title, x, y }: BarChartData) => {
     responsive: true,
     displayModeBar: false,
     fillFrame: false,
-    autosizable: true
+    autosizable: true,
   };
 
-
   return (
-    <Plot className="w-full h-full" data={chartData} layout={layout} config={config} />
+    <div className="chart-container">
+      <Plot
+        className="w-full h-full"
+        data={chartData}
+        layout={layout}
+        config={config}
+      />
+      <ChartCounter number={50} total={200} />
+    </div>
   );
 };
 

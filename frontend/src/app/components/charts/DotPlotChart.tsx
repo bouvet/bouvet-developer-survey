@@ -2,6 +2,7 @@
 import dynamic from "next/dynamic";
 import { chartConfig, useChartTheme } from "./chartConfig";
 import { DotPlot } from "@/app/types/plot";
+import ChartCounter from "./ChartCounter";
 
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), {
@@ -15,7 +16,6 @@ interface DotPlotChartJsonProps {
 }
 
 const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
-
   //check darmode and set graph theme
   const theme = useChartTheme();
 
@@ -49,14 +49,13 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
     xaxis: {
       showgrid: false,
       visible: false,
-      range: [-5, 100] //range is set from -5 to achieve padding between y values and chart.
+      range: [-5, 100], //range is set from -5 to achieve padding between y values and chart.
     },
     yaxis: {
       automaring: true,
       showline: false,
       gridwidth: chartConfig.dottedLineWidth,
       gridcolor: theme.dottedLineColor,
-
     },
     margin: {
       l: 100,
@@ -80,8 +79,16 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
   const config = { responsive: true, displayModeBar: false };
 
   return (
-    // @ts-expect-error Disable type check for Plot
-    <Plot data={traces} layout={layout} config={config} useResizeHandler={true} style={{ width: '100%', height: plotHeight }} />  
+    <div className="chart-container">
+      <Plot // @ts-expect-error Disable type check for Plot
+        data={traces} // @ts-expect-error Disable type check for Plot
+        layout={layout}
+        config={config}
+        useResizeHandler={true}
+        style={{ width: "100%", height: plotHeight }}
+      />
+      <ChartCounter number={50} total={200} />
+    </div>
   );
 };
 

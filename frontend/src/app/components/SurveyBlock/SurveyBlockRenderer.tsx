@@ -1,14 +1,15 @@
 import { useSurveyResult } from "@/app/hooks/useSurveyResult";
-import AdmiredAndDesired from "../survey/AdmiredAndDesired";
 import AnswerContainer from "./AnswerContainer";
 import QuestionContainer from "./QuestionContainer";
 import BarChart from "../charts/BarChart";
 import useGetBarChartData from "@/app/hooks/useGetBarChartData";
-import ChartCounter from "../charts/ChartCounter";
+import useGetDotPlotData from "@/app/hooks/useGetDotPlotData";
+import DotPlotChart from "../charts/DotPlotChart";
 
 const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
   const { data, error, isLoading } = useSurveyResult(questionId);
   const barChartData = useGetBarChartData(data);
+  const dotPlot = useGetDotPlotData(data);
   const tabs = data?.isMultipleChoice ? ["Top 10", "Ønsket og beundret"] : [];
 
   if (isLoading) return <div>Henter resultater...</div>;
@@ -17,11 +18,8 @@ const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
     <section className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6">
       <QuestionContainer data={data} />
       <AnswerContainer tabs={tabs}>
-        <div className='relative'>
-          <BarChart {...barChartData} />
-          <ChartCounter number={50} total={200} />
-        </div>
-        {data.isMultipleChoice && <AdmiredAndDesired data={data} />}
+        <BarChart {...barChartData} />
+        {data.isMultipleChoice && <DotPlotChart data={dotPlot} />}
       </AnswerContainer>
     </section>
   );

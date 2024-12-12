@@ -1,14 +1,9 @@
-import { DotPlot } from "@/app/types/plot";
-import { Answer } from "@/app/types/survey";
-import DotPlotChart from "../charts/DotPlotChart";
-import ChartCounter from "../charts/ChartCounter";
+import { DotPlot } from "../types/plot";
+import { Answer } from "../types/survey";
 
-interface Props {
-  data: Answer;
-}
-
-const AdmiredAndDesired = ({ data }: Props) => {
+const useGetDotPlotData = (data: Answer): DotPlot => {
   const plot: DotPlot = [];
+  if (!data) return plot;
 
   data.choices.forEach((choice) => {
     const responses = choice.responses;
@@ -35,13 +30,7 @@ const AdmiredAndDesired = ({ data }: Props) => {
   });
 
   plot.sort((a, b) => (a.x1 !== null && b.x1 !== null ? a.x1 - b.x1 : 0));
-
-  return (
-    <div className='relative'>
-      <DotPlotChart data={plot} />
-      <ChartCounter number={50} total={200} />
-    </div>
-  );
+  return plot;
 };
 
-export default AdmiredAndDesired;
+export default useGetDotPlotData;
