@@ -1,7 +1,6 @@
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
-import { Question, SurveyBlock, BlockElement } from "@/app/types/survey";
+import { SurveyBlock, BlockElement } from "@/app/types/survey";
 import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
-import { ReactNode } from "react";
 
 const Survey = () => {
   // Get survey structure data

@@ -8,11 +8,11 @@ import ChartCounter from "../charts/ChartCounter";
 
 const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
   const { data, error, isLoading } = useSurveyResult(questionId);
+  const barChartData = useGetBarChartData(data);
+  const tabs = data?.isMultipleChoice ? ["Top 10", "Ønsket og beundret"] : [];
+
   if (isLoading) return <div>Henter resultater...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  const barChartData = useGetBarChartData(data);
-  const tabs = data.isMultipleChoice ? ["Top 10", "Ønsket og beundret"] : [];
-
   return (
     <section className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6">
       <QuestionContainer data={data} />

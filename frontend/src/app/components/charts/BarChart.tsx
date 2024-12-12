@@ -8,7 +8,6 @@ const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 const BarChart = ({ title, x, y }: BarChartData) => {
   //check darmode and set graph theme
   const theme = useChartTheme();
-  const root = <div id="chartDiv" className="w-full h-full"></div>;
   const chartData: Partial<Plotly.Data>[] = [
     {
       x,
