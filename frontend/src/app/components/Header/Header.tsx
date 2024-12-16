@@ -4,7 +4,7 @@ import HeaderTitle from "./components/HeaderTitle";
 import HeaderTabs from "./components/HeaderTabs";
 import HeaderMobileMenu from "./components/HeaderMobileMenu";
 import HeaderMobileMenuButton from "./components/HeaderMobileMenuButton";
-import DarkModeToggle from "./DarkModeToggle";
+import UserMenu from './UserMenu';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,7 +18,7 @@ export default function Header() {
         <HeaderTitle />
         <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
         <HeaderTabs />
-        <DarkModeToggle />
+        <UserMenu />
       </nav>
       <HeaderMobileMenu
         mobileMenuOpen={mobileMenuOpen}

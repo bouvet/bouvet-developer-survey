@@ -5,7 +5,7 @@ interface Props {
 }
 const QuestionContainer = ({ data }: Props) => {
   return (
-    <div className="bg-white dark:text-white dark:bg-slate-800 rounded-xl w-full p-8 lg:max-w-[480px]">
+    <div className="bg-white dark:text-white dark:bg-slate-800 rounded-xl w-full p-8 lg:max-w-[480px] shadow-md">
       <div className='sticky top-32 flex flex-col gap-4'>
         <h3 className="text-4xl font-bold mb-5">{data.dateExportTag}</h3>
         <span>

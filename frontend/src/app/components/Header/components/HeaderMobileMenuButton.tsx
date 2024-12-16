@@ -8,7 +8,7 @@ export default function HeaderMobileMenuButton({
 }) {
   // Render
   return (
-    <div className="flex justify-end w-full lg:hidden ">
+    <div className="flex justify-end pr-6 w-full lg:hidden ">
       <button
         type="button"
         onClick={() => onClick(true)}
