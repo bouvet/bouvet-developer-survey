@@ -24,7 +24,7 @@
   --foreground: var(--primary-colossus);
 }
 
-.dark {
+[data-mode='dark'] {
   --background: var(--darkmode-black);
   --foreground: var(--darkmode-white);
 }

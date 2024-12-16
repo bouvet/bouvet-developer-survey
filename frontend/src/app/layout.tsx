@@ -1,31 +1,32 @@
-import { Metadata } from 'next'
+import { Metadata } from "next";
 import { Header } from "@/app/components/Header";
 import Footer from "@/app/components/Footer/Footer";
 
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
-  title: 'Bouvet Developer Survey',
+  title: "Bouvet Developer Survey",
   icons: {
-    icon: [
-      { url: '/favicon.ico', type: 'image/x-icon' },
-    ],
-    shortcut: ['/favicon.ico']
-  }
-}
+    icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
+    shortcut: ["/favicon.ico"],
+  },
+};
 
 export default function RootLayout({
-  children
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="no">
+    <html lang="no" suppressHydrationWarning>
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <ThemeProvider attribute="data-mode">
+          <Header />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

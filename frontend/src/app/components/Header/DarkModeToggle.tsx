@@ -1,28 +1,41 @@
 "use client";
-import { useEffect } from "react";
-import { useLocalStorage } from "usehooks-ts";
+
 import { Button } from "@headlessui/react";
-import { MoonIcon, SunIcon } from '@heroicons/react/16/solid';
+import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const DarkModeToggle = () => {
-  const [isDarkMode, setIsDarkMode] = useLocalStorage("isDarkMode", false, {
-    initializeWithValue: false,
-  });
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-    if (isDarkMode) {
-      return document.body.classList.add("dark");
-    }
-    document.body.classList.remove("dark");
-  }, [isDarkMode]);
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; 
+  }
+
+  const isDarkMode = theme === "dark";
 
   return (
-    <div className='flex-1 min-w-32'>
-    <Button onClick={() => setIsDarkMode(!isDarkMode)} className='flex items-center w-32 text-nowrap'>
-      {isDarkMode ? "Light mode" : "Dark mode"}
-      {isDarkMode ? <SunIcon /> : <MoonIcon />}
+    <Button
+      className="flex px-4 gap-3"
+      onClick={() => setTheme(isDarkMode ? "light" : "dark")}
+    >
+      {isDarkMode ? (
+        <>
+          <SunIcon className="size-6" />
+          Light mode
+        </>
+      ) : (
+        <>
+          <MoonIcon className="size-6" />
+          Dark mode
+        </>
+      )}
     </Button>
-    </div>
   );
 };
 

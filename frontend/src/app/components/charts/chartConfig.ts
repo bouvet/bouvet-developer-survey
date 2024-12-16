@@ -1,4 +1,4 @@
-import { useDarkMode } from "@/app/hooks/useDarkMode";
+import { useTheme } from 'next-themes';
 
 export const chartConfig = {
   dottedLineWidth: 1,
@@ -29,6 +29,6 @@ export const darkTheme = {
 };
 
 export const useChartTheme = () => {
-  const isDark = useDarkMode();
-  return isDark ? darkTheme : lightTheme;
+  const {theme} = useTheme();
+  return theme === 'dark' ? darkTheme : lightTheme;
 };
