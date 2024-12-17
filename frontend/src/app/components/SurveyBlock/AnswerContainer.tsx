@@ -8,7 +8,7 @@ const AnswerContainer = ({ tabs, children }: Props) => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <div className={`bg-[#3b3f45] rounded-2xl w-full shadow-md`}>
+    <div className={`bg-[#3b3f45] rounded-2xl flex-[5] shadow-md`}>
       {!!tabs?.length && (
         <div className="flex bg-[#2f3237] p-4 rounded-2xl rounded-b-none gap-8 justify-center">
           {tabs.map((tab, index) => (

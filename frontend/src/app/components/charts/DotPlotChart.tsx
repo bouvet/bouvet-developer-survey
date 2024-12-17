@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { chartConfig, useChartTheme } from "./chartConfig";
+import { chartConfig, getGridShapes, useChartTheme } from "./chartConfig";
 import { DotPlot } from "@/app/types/plot";
 import ChartCounter from "./ChartCounter";
 
@@ -22,6 +22,7 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
   // calculate the height of the plot based on the number of choices
   const numberOfChoices = data.length;
   const plotHeight = numberOfChoices * chartConfig.yItemHeight;
+  const shapes = getGridShapes(data);
 
   const traces = data.map((trace) => {
     return {
@@ -44,29 +45,27 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
     };
   });
 
-  const layout = {
+  const layout: Partial<Plotly.Layout> = {
     title,
     xaxis: {
       showgrid: false,
       visible: false,
-      range: [-5, 100], //range is set from -5 to achieve padding between y values and chart.
+      range: [-15, 100],
+      domain: [0, 1],
+      fixedrange: true,
+      automargin: true,
     },
     yaxis: {
-      automaring: true,
-      showline: false,
-      gridwidth: chartConfig.dottedLineWidth,
-      gridcolor: theme.dottedLineColor,
+      automargin: false,
+      showgrid: false,
     },
     margin: {
-      l: 100,
-      r: 40,
-      b: 50,
+      l: 2,
+      r: 0,
+      b: 0,
       t: 0,
     },
-    legend: {
-      visible: false,
-    },
-
+    showlegend: false,
     font: {
       color: theme.fontColor,
       size: chartConfig.fontSize,
@@ -74,14 +73,18 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
     autosize: true,
     paper_bgcolor: theme.graphBackgroundColor,
     plot_bgcolor: theme.graphBackgroundColor,
+    shapes,
   };
 
-  const config = { responsive: true, displayModeBar: false };
+  const config: Partial<Plotly.Config> = {
+    responsive: true,
+    displayModeBar: false,
+  };
 
   return (
-    <div className="chart-container">
+    <div className="chart-container dotplot">
       <Plot // @ts-expect-error Disable type check for Plot
-        data={traces} // @ts-expect-error Disable type check for Plot
+        data={traces}
         layout={layout}
         config={config}
         useResizeHandler={true}

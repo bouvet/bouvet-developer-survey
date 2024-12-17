@@ -4,31 +4,29 @@
 
 :root {
   /* Bouvet colors */
-  --primary-colossus: #11133C;
-  --primary-nerdy-off-white: #F9EAD4;
+  --primary-colossus: #11133c;
+  --primary-nerdy-off-white: #f9ead4;
   --primary-black: #030504;
-  --primary-white: #FFFFFF;
-  --contrast-boris-orange: #F9A86F;
-  --contrast-hal-red: #EB1D4B;
-  --contrast-network-green: #79FE9D;
-  --secondary-cloak-blue: #0617BF;
-  --secondary-blue: #1D43C6;
-  --secondary-worp-blue: #C3D5E1;
-  --secondary-cool-blue: #EEF5F9;
-  --secondary-collins-gray: #F2F2F2;
-  --darkmode-black: #1A1B26;
-  --darkmode-white: #E4E4E4;
-
+  --primary-white: #ffffff;
+  --contrast-boris-orange: #f9a86f;
+  --contrast-hal-red: #eb1d4b;
+  --contrast-network-green: #79fe9d;
+  --secondary-cloak-blue: #0617bf;
+  --secondary-blue: #1d43c6;
+  --secondary-worp-blue: #c3d5e1;
+  --secondary-cool-blue: #eef5f9;
+  --secondary-collins-gray: #f2f2f2;
+  --darkmode-black: #1a1b26;
+  --darkmode-white: #e4e4e4;
 
   --background: var(--primary-nerdy-off-white);
   --foreground: var(--primary-colossus);
 }
 
-[data-mode='dark'] {
+[data-mode="dark"] {
   --background: var(--darkmode-black);
   --foreground: var(--darkmode-white);
 }
-
 
 html {
   scroll-behavior: smooth;
@@ -47,7 +45,6 @@ body {
 }
 
 @layer components {
-
   /* Survey section */
   .survey-section {
     @apply px-5 mx-auto flex flex-col max-w-8xl lg:px-app-padding-x pt-40;
@@ -58,6 +55,10 @@ body {
   }
 
   .chart-container {
-    @apply w-full relative py-4 px-8;
+    @apply w-full relative h-full px-8;
   }
+}
+
+.chart-container.dotplot .ytick text {
+  text-anchor: start;
 }

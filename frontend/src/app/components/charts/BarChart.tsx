@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { chartConfig, useChartTheme } from "./chartConfig";
+import { chartConfig, getGridShapes, useChartTheme } from "./chartConfig";
 import { BarChartData } from "@/app/hooks/useGetBarChartData";
 import ChartCounter from "./ChartCounter";
 
@@ -7,8 +7,12 @@ import ChartCounter from "./ChartCounter";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 const BarChart = ({ x, y }: BarChartData) => {
-  //check darmode and set graph theme
+  // check dark mode and set graph theme
   const theme = useChartTheme();
+  const numberOfChoices = y.length;
+  const plotHeight = numberOfChoices * 30;
+  const shapes = getGridShapes(y);
+
   const chartData: Partial<Plotly.Data>[] = [
     {
       x,
@@ -25,20 +29,25 @@ const BarChart = ({ x, y }: BarChartData) => {
   ];
 
   const layout: Partial<Plotly.Layout> = {
+    bargap: 0.4,
     xaxis: {
+      autorange: false,
       range: [0, 100],
+      domain: [0.3, 1],
       visible: false,
-      automargin: true,
+      fixedrange: true,
     },
-    autosize: false,
+    autosize: true,
     margin: {
       l: 0,
       r: 0,
       t: 0,
       b: 0,
+      pad: 7,
     },
     yaxis: {
       automargin: true,
+      visible: true,
     },
     showlegend: false,
     font: {
@@ -47,6 +56,7 @@ const BarChart = ({ x, y }: BarChartData) => {
     },
     paper_bgcolor: theme.graphBackgroundColor,
     plot_bgcolor: theme.graphBackgroundColor,
+    shapes,
   };
 
   const config: Partial<Plotly.Config> = {
@@ -57,12 +67,12 @@ const BarChart = ({ x, y }: BarChartData) => {
   };
 
   return (
-    <div className="chart-container">
+    <div className="chart-container py-6">
       <Plot
-        className="w-full h-full"
         data={chartData}
         layout={layout}
         config={config}
+        style={{ width: "100%", height: plotHeight }}
       />
       <ChartCounter number={50} total={200} />
     </div>

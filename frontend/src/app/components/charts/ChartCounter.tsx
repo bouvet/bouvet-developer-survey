@@ -9,7 +9,7 @@ const ChartCounter = ({ number, total }: ChartCounterProps) => {
   const percentage = total > 0 ? ((number / total) * 100).toFixed(0) : "0";
 
   return (
-    <div className=" absolute right-8 bottom-4 flex flex-row items-center space-x-1 text-white">
+    <div className=" absolute right-8 bottom-20 flex flex-row items-center space-x-1 text-white">
       <div>Antall svar:</div>
       <div className="font-bold">{number.toString()}</div>
       <div className="font-bold">({percentage}%)</div>
