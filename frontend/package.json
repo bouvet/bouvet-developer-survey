@@ -24,7 +24,8 @@
     "react-i18next": "^15.0.2",
     "react-plotly.js": "^2.6.0",
     "swr": "^2.2.5",
-    "usehooks-ts": "^3.1.0"
+    "usehooks-ts": "^3.1.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
