@@ -1,12 +1,18 @@
 "use client";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import HeaderTitle from "./components/HeaderTitle";
 import HeaderTabs from "./components/HeaderTabs";
 import HeaderMobileMenu from "./components/HeaderMobileMenu";
 import HeaderMobileMenuButton from "./components/HeaderMobileMenuButton";
-import UserMenu from './UserMenu';
+import UserMenu from "./UserMenu";
 
-export default function Header() {
+export type HeaderProps = {
+  /**
+   * Simple variant will only have the bouvet logo and user menu
+   */
+  simple?: boolean;
+};
+export default function Header({ simple }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -16,8 +22,12 @@ export default function Header() {
         className="mx-auto flex max-w-8xl p-6 lg:px-app-padding-x items-center"
       >
         <HeaderTitle />
-        <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
-        <HeaderTabs />
+        {!simple && (
+          <Fragment>
+            <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
+            <HeaderTabs />
+          </Fragment>
+        )}
         <UserMenu />
       </nav>
       <HeaderMobileMenu

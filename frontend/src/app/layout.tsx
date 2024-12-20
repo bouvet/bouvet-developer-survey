@@ -21,11 +21,7 @@ export default function RootLayout({
   return (
     <html lang="no" suppressHydrationWarning>
       <body>
-        <ThemeProvider attribute="data-mode">
-          <Header />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        <ThemeProvider attribute="data-mode">{children}</ThemeProvider>
       </body>
     </html>
   );
