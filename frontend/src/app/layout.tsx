@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { Header } from "@/app/components/Header";
-import Footer from "@/app/components/Footer/Footer";
 
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
