@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { Header } from "@/app/components/Header";
-import Footer from "@/app/components/Footer/Footer";
 
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
@@ -21,11 +19,7 @@ export default function RootLayout({
   return (
     <html lang="no" suppressHydrationWarning>
       <body>
-        <ThemeProvider attribute="data-mode">
-          <Header />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        <ThemeProvider attribute="data-mode">{children}</ThemeProvider>
       </body>
     </html>
   );

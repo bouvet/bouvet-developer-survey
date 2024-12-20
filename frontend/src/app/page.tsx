@@ -1,15 +1,21 @@
-"use client";
-
-import Survey from "@/app/components/survey/Survey";
-import Hero from "@/app/components/hero/Hero";
-import Summary from "@/app/components/summary/Summary";
+import Link from "next/link";
+import { Fragment } from "react";
+import { Header } from "./components/Header";
 
 export default function HomePage() {
   return (
-    <main>
-      <Hero />
-      <Summary />
-      <Survey />
-    </main>
+    <Fragment>
+      <Header simple />
+      <main>
+        <section className="survey-section">
+          <div className="flex items-center">
+            <div>
+              <h3 className="mt-10 font-bold text-left">Velg år</h3>
+              <Link href="/2024" className="underline">2024</Link>
+            </div>
+          </div>
+        </section>
+      </main>
+    </Fragment>
   );
 }
