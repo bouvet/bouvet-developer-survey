@@ -4,8 +4,8 @@ import SurveyBlockRenderer from '../SurveyBlock/SurveyBlockRenderer';
 
 const Summary = () => {
   const { data, error, isLoading } = useSurveyStructure();
-  if (isLoading) return <div>Henter resultater...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <div className='survey-section'>Henter resultater...</div>;
+  if (error) return <div className='survey-section'>Error: {error.message}</div>;
 
   const answers = data?.surveyBlocks?.reduce(
     (acc: ReactNode[], surveyBlock) => {
