@@ -33,7 +33,7 @@ const Survey = () => {
 
   return (
     <section className="survey-section gap-12">
-      <h2 className="section-title">Generelt om deltakerne</h2>
+      <h2 className="section-title">Teknologi</h2>
       {!isLoading &&
         !error &&
         data.surveyBlocks.map((block: SurveyBlock) =>
