@@ -4,10 +4,14 @@ on:
       - main
     paths:
       - 'infra/**'
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch: # Allow manual trigger
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
 
 name: Deploy Azure resources
-
 
 jobs:
   deploy-azure-resources-test:
