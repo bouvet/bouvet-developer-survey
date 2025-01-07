@@ -1,17 +1,22 @@
-on: 
+on:
   push:
     branches:
       - main
     paths:
       - 'infra/**'
+  workflow_dispatch: # Allow manual trigger
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
 
-name: Deploy to Azure Resource Group
-
+name: Deploy Azure resources
 
 jobs:
-  deploy-azure-resources-qa:
+  deploy-azure-resources-test:
     runs-on: ubuntu-latest
-    name: Deploy Azure Resources QA
+    name: Deploy Azure resources TEST
     steps:
 
     - name: Checkout code
@@ -30,13 +35,13 @@ jobs:
         template: infra/main-test.bicep
         parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}"
         failOnStdErr: false
-  
+
   deploy-azure-resources-prod:
     runs-on: ubuntu-latest
-    name: Deploy Azure Resources Prod
-    needs: deploy-azure-resources-qa
+    name: Deploy Azure resources Prod
+    needs: deploy-azure-resources-test
     environment: Production
-      
+
     steps:
 
     - name: Checkout code
@@ -47,11 +52,11 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy Azure Resources prod
+    - name: Deploy Azure resources prod
       uses: azure/arm-deploy@v2
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: infra/main-prod.bicep
         parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD }}"
-        failOnStdErr: false      
+        failOnStdErr: false
