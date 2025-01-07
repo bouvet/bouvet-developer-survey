@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
-  darkMode: ['selector', '[data-mode="dark"]'],
+  darkMode: ["selector", '[data-mode="dark"]'],
   theme: {
     extend: {
       colors: {
@@ -13,11 +13,14 @@ const config: Config = {
         "bar-chart": "500px",
       },
       maxWidth: {
-        "8xl": '2000px',
+        "8xl": "2000px",
       },
       padding: {
-        'app-padding-x': '48px'
-      }
+        "app-padding-x": "48px",
+      },
+      fontFamily: {
+        sans: "var(--font-inter)",
+      },
     },
   },
   plugins: [],
