@@ -8,7 +8,7 @@ export default function HeaderTabs() {
   return (
     <div className="hidden lg:flex w-full justify-center items-center space-x-6 font-bold text-sm">
       {menuItems.map((item) => (
-        <HeaderTab item={item} isActive={activeId === item.id} />
+        <HeaderTab key={item.id} item={item} isActive={activeId === item.id} />
       ))}
     </div>
   );

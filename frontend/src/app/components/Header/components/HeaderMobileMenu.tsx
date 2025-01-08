@@ -1,9 +1,8 @@
 "use client";
+import { useActiveSectionId } from "@/app/hooks/useActiveSectionId";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { menuItems } from "./menuItems";
-import { useState } from 'react';
-import { useActiveSectionId } from "@/app/hooks/useActiveSectionId";
 
 export default function MobileMenu({
   mobileMenuOpen,

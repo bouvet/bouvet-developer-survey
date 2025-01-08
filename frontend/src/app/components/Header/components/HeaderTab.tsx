@@ -8,7 +8,6 @@ export type HeaderTabProps = {
 export const HeaderTab = ({ item, isActive }: HeaderTabProps) => {
   return (
     <Link
-      key={item.id}
       href={`#${item.id}`}
       className={`
     hover:underline 
