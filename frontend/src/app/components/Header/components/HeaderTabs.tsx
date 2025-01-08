@@ -1,26 +1,14 @@
 "use client";
+import { useActiveSectionId } from "@/app/hooks/useActiveSectionId";
+import { HeaderTab } from "./HeaderTab";
 import { menuItems } from "./menuItems";
-import { useState } from 'react';
 
 export default function HeaderTabs() {
-  const [activeTab, setActiveTab] = useState('intro');
-
+  const activeId = useActiveSectionId();
   return (
     <div className="hidden lg:flex w-full justify-center items-center space-x-6 font-bold text-sm">
       {menuItems.map((item) => (
-        <a
-        key={item.id}
-        href={`#${item.id}`}
-        onClick={() => setActiveTab(item.id)}
-        className={`
-          hover:underline 
-          decoration-2
-          underline-offset-4
-          ${activeTab === item.id ? 'underline' : ''}
-        `}
-      >
-        {item.label}
-      </a>
+        <HeaderTab key={item.id} item={item} isActive={activeId === item.id} />
       ))}
     </div>
   );

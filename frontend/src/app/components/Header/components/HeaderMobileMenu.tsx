@@ -1,8 +1,8 @@
 "use client";
+import { useActiveSectionId } from "@/app/hooks/useActiveSectionId";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { menuItems } from "./menuItems";
-import { useState } from 'react';
 
 export default function MobileMenu({
   mobileMenuOpen,
@@ -11,7 +11,7 @@ export default function MobileMenu({
   mobileMenuOpen: boolean;
   onClick: (bool: unknown) => void;
 }) {
-  const [activeTab, setActiveTab] = useState('intro');
+  const activeId = useActiveSectionId();
 
   return (
     <Dialog
@@ -20,7 +20,7 @@ export default function MobileMenu({
       className="lg:hidden"
     >
       <div className="fixed inset-0 z-10 bg-black/30" aria-hidden="true" />
-      <DialogPanel className="fixed inset-x-0 top-0 z-20 w-full bg-white dark:bg-slate-800">
+      <DialogPanel className="fixed inset-x-0 top-10 z-20 w-full bg-white dark:bg-slate-800">
         <div className="px-6 py-4 flex items-center justify-between border-b border-gray-200">
           <button
             type="button"
@@ -38,17 +38,16 @@ export default function MobileMenu({
                 key={item.id}
                 href={`#${item.id}`}
                 onClick={() => {
-                  setActiveTab(item.id);
                   onClick(false);
                 }}
                 className={`
                   block px-3 py-1 text-sm font-bold
                   hover:underline decoration-2 underline-offset-
-                  ${activeTab === item.id 
+                  ${activeId === item.id 
                     ? 'text-[#11133C] underline' 
                     : 'text-gray-600'
                   }
-                  dark:${activeTab === item.id 
+                  dark:${activeId === item.id 
                     ? 'text-[#11133C] underline' 
                     : 'text-white'
                   }
