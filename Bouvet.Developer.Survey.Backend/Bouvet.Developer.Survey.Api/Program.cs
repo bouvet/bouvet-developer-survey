@@ -17,6 +17,7 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
 var endpoint = builder.Configuration["AppConfig"];
+
 if (!string.IsNullOrEmpty(endpoint))
 {
     builder.Configuration.AddAzureAppConfiguration(builder =>
@@ -33,16 +34,17 @@ if (!string.IsNullOrEmpty(endpoint))
     }, optional: true);
 }
 
+// TODO: Add Audience and Authority
 // Authentication and Authorization with Azure AD. Comment out if authentication is needed
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-//
-// builder.Services.AddAuthorization(options =>
-// {
-//     options.DefaultPolicy = new AuthorizationPolicyBuilder()
-//         .RequireAuthenticatedUser()
-//         .Build();
-// });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(builder =>
@@ -99,13 +101,12 @@ catch (Exception ex)
     logger.LogError(ex, "An error occurred creating the DB.");
 }
 
-//If comment out the below code, the swagger will not be available in production environment
-// if (app.Environment.IsDevelopment())
-// {
+if (app.Environment.IsDevelopment())
+{
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
-// }
+}
 
 app.UseCors();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -113,7 +114,7 @@ app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// If you want to require authorization for all controllers, uncomment the following line
+// Require auth on all controllers
 // app.MapControllers().RequireAuthorization();
 
 app.MapControllers();

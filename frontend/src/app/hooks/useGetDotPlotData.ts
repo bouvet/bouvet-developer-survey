@@ -10,7 +10,7 @@ const useGetDotPlotData = (data: Answer): DotPlot => {
     if (responses.length < 2) return;
 
     let [x1Percent, x2Percent] = responses.map((item) => item.percentage);
-    let [x1Label, x2Label] = responses.map((item) => item.answerOption.text);
+    let [x1Label, x2Label] = responses.map((item) => item.text);
 
     if (x2Label.includes("Ønsker")) {
       [x1Percent, x2Percent] = [x2Percent, x1Percent];

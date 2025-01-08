@@ -13,7 +13,7 @@ public class QuestionService : IQuestionService
 {
     private readonly DeveloperSurveyContext _context;
     private readonly IChoiceService _choiceService;
-    
+
     public QuestionService(DeveloperSurveyContext context, IChoiceService choiceService)
     {
         _context = context;
@@ -25,16 +25,16 @@ public class QuestionService : IQuestionService
         var allQuestionToSurvey = await _context.Questions
             .Where(q => q.SurveyId == survey.SurveyId)
             .ToListAsync();
-        
+
         if(surveyQuestionsDto.SurveyElements == null) return;
 
         foreach (var surveyElement in surveyQuestionsDto.SurveyElements)
         {
             var question = allQuestionToSurvey.FirstOrDefault(q => q.QuestionId == surveyElement.PrimaryAttribute);
-            
+
             // Not adding questions with DataExportTag "Arbeidsrolle" or "Enhet" to the survey because of confidentiality
             if(surveyElement.Payload is { DataExportTag: "Arbeidsrolle" } or { DataExportTag: "Enhet" } ) continue;
-            
+
             //Add new questions to survey
             if (question == null)
             {
@@ -56,7 +56,7 @@ public class QuestionService : IQuestionService
                         Text = c.Value.Display
                     }).ToList()
                 };
-                
+
                 await CreateQuestionAsync(newQuestion);
             }
             // Check for differences in existing questions
@@ -78,10 +78,10 @@ public class QuestionService : IQuestionService
                         Text = c.Value.Display
                     }).ToList()
                 };
-                
+
                 await UpdateQuestionAsync(question.Id, updateQuestion);
             }
-            
+
             //Delete questions that are not in the survey
             foreach (var questionToBeDeleted in allQuestionToSurvey)
             {
@@ -91,22 +91,22 @@ public class QuestionService : IQuestionService
                     await DeleteQuestionAsync(questionToBeDeleted.Id);
                 }
             }
-            
+
             //Check for differences in choices
             if (question != null && surveyElement.Payload != null)
             {
                 await _choiceService.CheckForDifferences(question.Id, surveyElement.Payload);
             }
         }
-        
+
     }
 
     public async Task<QuestionDetailsDto> CreateQuestionAsync(NewQuestionDto newQuestionDto)
     {
         var blockElement = await _context.BlockElements.FirstOrDefaultAsync(be => be.QuestionId == newQuestionDto.BlockElementId);
-        
+
         if (blockElement == null) throw new NotFoundException("Block element not found");
-        
+
         var question = new Question
         {
             Id = Guid.NewGuid(),
@@ -119,31 +119,31 @@ public class QuestionService : IQuestionService
             QuestionDescription = newQuestionDto.QuestionDescription,
             CreatedAt = DateTimeOffset.Now
         };
-        
+
         await _context.Questions.AddAsync(question);
         await _context.SaveChangesAsync();
-        
+
         if(newQuestionDto.Choices != null)
             await _choiceService.CreateChoice(newQuestionDto.Choices, question.Id);
-        
+
         var dto = QuestionDetailsDto.CreateFromEntity(question);
-        
+
         return dto;
     }
 
     public async Task<QuestionResponseDto> GetQuestionByIdAsync(Guid questionId)
     {
         var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
-        
+
         if (question == null) throw new NotFoundException("Question not found");
-        
+
         var choiceDtoS = await CreateChoicesAsync(questionId, question);
-        
+
         var dto = QuestionResponseDto.CreateFromEntity(question, choiceDtoS);
-        
+
         return dto;
     }
-    
+
     private async Task<ICollection<GetChoiceDto>> CreateChoicesAsync(Guid questionId, Question question)
     {
         var choices = await _context.Choices
@@ -151,56 +151,49 @@ public class QuestionService : IQuestionService
             .ToListAsync();
 
         var choiceList = new List<GetChoiceDto>();
+
         foreach (var choice in choices)
         {
-            var responseDtoS = await CreateResponsesAsync(choice.Id, question);
-            var choiceDto = GetChoiceDto.CreateFromEntity(choice, responseDtoS);
-            
+            var tbd = await CreateChoiceStatsAsync(choice.Id, question);
+            var choiceDto = GetChoiceDto.CreateFromEntity(choice, tbd);
+
             choiceList.Add(choiceDto);
         }
-        
+
         return choiceList;
     }
-    
-    private async Task<GetStatsDto> CreateResponsesAsync(Guid choiceId, Question question)
+
+    private async Task<TbdDto> CreateChoiceStatsAsync(Guid choiceId, Question question)
     {
+		// This is the responses for a specific choice
+		// So all the responses are the same
         var responses = await _context.Responses
             .Where(r => r.ChoiceId == choiceId)
             .ToListAsync();
-        
+
         var numberOfRespondents = await _context.ResponseUsers
             .Where(r => r.QuestionId == question.Id)
             .Select(r => r.UserId)
             .Distinct()
             .CountAsync();
-        
 
-        if (responses.Count == 0)
-        {
-            return new GetStatsDto
-            {
-                TotalPercentage = 0,
-                AdmiredPercentage = 0,
-                DesiredPercentage = 0,
-            };
-        }
-        
         var totalAdmired = responses.Count(r => r.HasWorkedWith && r.WantsToWorkWith);
         var totalDesired = responses.Count(r => r.WantsToWorkWith && !r.HasWorkedWith);
         var admiredRespondents = responses.Count(r => r.HasWorkedWith);
-        
+
         var totalColumns = responses.Count;
-        
+
         var admiredPercentage = admiredRespondents > 0
             ? (int)Math.Ceiling(totalAdmired / (float)admiredRespondents * 100)
             : 0;
-        
+
         var desiredPercentage = totalColumns > 0
             ? (int)Math.Ceiling(totalDesired / (float)totalColumns * 100)
             : 0;
-        
+
         // Adjust totalPercentage calculation based on IsMultipleChoice flag
         var totalPercentage = 0;
+
         if (question.IsMultipleChoice)
         {
             // If it's multiple choice, calculate percentage based on admiredRespondents and numberOfRespondents
@@ -215,63 +208,106 @@ public class QuestionService : IQuestionService
             totalPercentage = totalValue > 0
                 ? (int)Math.Ceiling((totalValue / (float)numberOfRespondents) * 100) // Normalize the value to a percentage
                 : 0;
-        }
-        
-        var dto = new GetStatsDto 
-        {
-            TotalPercentage = totalPercentage,
-            AdmiredPercentage = admiredPercentage,
-            DesiredPercentage = desiredPercentage,
-        };
-        return dto;
-    }
+		}
+
+		// Add multiple choide responses array
+		var questionResponses = new List<GetResponseDto>();
+
+		if (question.IsMultipleChoice && responses.Count(r => r.HasWorkedWith) > 0)
+		{
+			questionResponses.Add(new GetResponseDto
+				{
+					Index = 0,
+					Text = "Jobbet med SISTE året",
+					Percentage = totalPercentage,
+				}
+			);
+		}
+
+		if (question.IsMultipleChoice && responses.Count(r => r.WantsToWorkWith) > 0)
+		{
+			questionResponses.Add(new GetResponseDto
+				{
+					Index = 1,
+					Text = "Ønsker å jobbe med NESTE året",
+					Percentage = (int)Math.Ceiling((totalAdmired + totalDesired)/ (float)numberOfRespondents * 100),
+				}
+			);
+		}
+
+		var choiceText = await _context.Choices
+			.Where(c => c.Id == choiceId)
+			.Select(c => c.Text)
+			.FirstOrDefaultAsync();
+
+		if (!question.IsMultipleChoice)
+		{
+			questionResponses.Add(new GetResponseDto
+				{
+					Index = 0,
+					Text = choiceText,
+					Percentage = totalPercentage
+				}
+			);
+		}
+
+
+		return new TbdDto{
+			Stats = new GetStatsDto{
+				TotalPercentage = totalPercentage,
+				AdmiredPercentage = admiredPercentage,
+				DesiredPercentage = desiredPercentage,
+			},
+			Responses = questionResponses
+		};
+	}
 
     public async Task<IEnumerable<QuestionDetailsDto>> GetQuestionsBySurveyBlockIdAsync(Guid surveyBlockId)
     {
         var questions = await _context.Questions
             .Where(q => q.BlockElementId == surveyBlockId)
             .ToListAsync();
-        
+
         if(questions.Count == 0) throw new NotFoundException("No questions found");
-        
+
         var dtoS = questions.Select(QuestionDetailsDto.CreateFromEntity).ToList();
-        
+
         return dtoS;
     }
-    
+
     public async Task<List<QuestionDetailsDto>> GetQuestionsBySurveyIdAsync(string surveyId)
     {
         var questions = await _context.Questions
             .Where(q => q.SurveyId == surveyId)
             .ToListAsync();
-        
+
         if(questions.Count == 0) throw new NotFoundException("No questions found");
-        
+
         var dtoS = questions.Select(QuestionDetailsDto.CreateFromEntity).ToList();
-        
+
         return dtoS;
     }
 
     public async Task<QuestionDetailsDto> UpdateQuestionAsync(Guid questionId, NewQuestionDto updateQuestionDto)
     {
         var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
-        
+
         if (question == null) throw new NotFoundException("Question not found");
 
         var change = false;
-        
+
         if (question.DateExportTag != updateQuestionDto.DateExportTag)
         {
             question.DateExportTag = updateQuestionDto.DateExportTag;
             change = true;
         }
-       
+
         if (question.QuestionText != updateQuestionDto.QuestionText)
         {
             question.QuestionText = updateQuestionDto.QuestionText;
             change = true;
         }
-        
+
         if (question.QuestionDescription != updateQuestionDto.QuestionDescription)
         {
             question.QuestionDescription = updateQuestionDto.QuestionDescription;
@@ -283,20 +319,20 @@ public class QuestionService : IQuestionService
             question.UpdatedAt = DateTimeOffset.Now;
             await _context.SaveChangesAsync();
         }
-        
+
         var dto = QuestionDetailsDto.CreateFromEntity(question);
-        
+
         return dto;
     }
 
     public async Task DeleteQuestionAsync(Guid questionId)
     {
         var questionToBeDeleted = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
-        
+
         if (questionToBeDeleted == null) throw new NotFoundException("Question not found");
-        
+
         questionToBeDeleted.DeletedAt = DateTimeOffset.Now;
-        
+
         await _context.SaveChangesAsync();
     }
 }
