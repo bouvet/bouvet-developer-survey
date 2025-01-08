@@ -8,7 +8,7 @@ const Survey = () => {
 
   if (isLoading) {
     return (
-      <section className="survey-section">
+      <section id="technology" className="survey-section">
         <div>Henter undersøkelsen...</div>
       </section>
     );
@@ -16,7 +16,7 @@ const Survey = () => {
 
   if (error) {
     return (
-      <section className="survey-section">
+      <section id="technology" className="survey-section">
         <div>Error: {error.message}</div>
       </section>
     );
@@ -25,14 +25,14 @@ const Survey = () => {
   // Check for required data structure
   if (!data?.surveyBlocks || !Array.isArray(data.surveyBlocks)) {
     return (
-      <section className="survey-section">
+      <section id="technology" className="survey-section">
         <div>Undersøkelsen mangler eller har feil format</div>
       </section>
     );
   }
 
   return (
-    <section className="survey-section gap-12">
+    <section id="technology" className="survey-section gap-12">
       <h2 className="section-title">Teknologi</h2>
       {!isLoading &&
         !error &&
