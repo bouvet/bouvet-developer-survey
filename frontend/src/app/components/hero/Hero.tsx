@@ -1,6 +1,6 @@
 const Survey = () => {
   return (
-    <section id="intro" className="survey-section">
+    <section id="introduction" className="survey-section">
       {/* TODO: Get text dynamically from Survey API? */}
       <h2 className="section-title">Introduksjon</h2>
       <p className="pb-5">
