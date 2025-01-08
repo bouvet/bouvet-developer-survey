@@ -82,7 +82,7 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
   };
 
   return (
-    <div className="chart-container dotplot">
+    <div className="chart-container dotplot pb-4">
       <Plot // @ts-expect-error Disable type check for Plot
         data={traces}
         layout={layout}
@@ -90,7 +90,9 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
         useResizeHandler={true}
         style={{ width: "100%", height: plotHeight }}
       />
-      <ChartCounter number={50} total={200} />
+      <div className="mt-auto mb-2 ml-auto">
+        <ChartCounter number={50} total={200} />
+      </div>
     </div>
   );
 };
