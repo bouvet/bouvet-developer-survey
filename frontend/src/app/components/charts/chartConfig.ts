@@ -16,7 +16,7 @@ export const lightTheme = {
   thickLineColor: "#ccc",
   graphBackgroundColor: "transparent",
   fontColor: "#fff",
-  barColor: "#11133c",
+  barColor: "#f9a86f",
 };
 
 export const darkTheme = {
