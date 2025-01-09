@@ -16,7 +16,7 @@ interface DotPlotChartJsonProps {
 }
 
 const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
-  //check darmode and set graph theme
+  //check darkmode and set graph theme
   const theme = useChartTheme();
 
   // calculate the height of the plot based on the number of choices
@@ -95,6 +95,20 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
 
   return (
     <div className="chart-container dotplot">
+      <div className="flex flex-1 justify-center text-white space-x-4">
+        <div className="flex space-x-1 items-baseline">
+          <span
+            className={`block rounded-full bg-[#1D43C6] w-3 h-3 z-10`}
+          ></span>
+          <p>Ønsket</p>
+        </div>
+        <div className="flex space-x-1 items-baseline">
+          <span
+            className={`block rounded-full bg-[#F9A86F] w-3 h-3 z-10`}
+          ></span>
+          <p>Beundret</p>
+        </div>
+      </div>
       <Plot // @ts-expect-error Disable type check for Plot
         data={traces}
         layout={layout}
