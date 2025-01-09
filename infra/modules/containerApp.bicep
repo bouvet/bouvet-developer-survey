@@ -1,4 +1,5 @@
-
+@description('The name of the secret in the Key Vault.')
+param connectionStringSecretName string = 'ConnectionString'
 
 @description('The location to deploy resource')
 param location string
@@ -66,6 +67,12 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
             cpu: json('0.5')
             memory: '1Gi'
           }
+          env: [
+            {
+              name: connectionStringSecretName
+              value: '@{listSecretValue(keyVault.id, connectionStringSecretName)}'
+            }
+          ]
         }
       ]
       scale: {
