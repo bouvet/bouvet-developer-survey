@@ -1,10 +1,11 @@
 services:
   bds-fe:
+    container_name: bds-fe
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: "http://localhost:5000/api"  # Pass build argument
+    environment:
+      - NEXT_PUBLIC_API_URL=http://bds-api:5001/api
     ports:
       - "3000:3000"  # Expose port 3000 for the frontend
     networks:
@@ -13,11 +14,14 @@ services:
       - bds-api  # Ensure bds-api starts before frontend
 
   bds-api:
+    container_name: bds-api
     build:
       context: ./Bouvet.Developer.Survey.Backend
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
-      - "5000:5000"  # Expose port 5000 for the backend
+      - "5001:5001"  # Expose port 5000 for the backend
     networks:
       - bds-network
 
