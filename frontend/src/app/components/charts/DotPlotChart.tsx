@@ -94,8 +94,7 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="chart-container dotplot">
+    <div className="chart-container dotplot pb-4">
       <div className="flex flex-1 justify-center text-white space-x-4">
         <div className="flex space-x-1 items-baseline">
           <span
@@ -110,9 +109,6 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
           <p>Beundret</p>
         </div>
       </div>
-=======
-    <div className="chart-container dotplot pb-4">
->>>>>>> 98bc988 (fix: unify chart counter position for all charts)
       <Plot // @ts-expect-error Disable type check for Plot
         data={traces}
         layout={layout}
