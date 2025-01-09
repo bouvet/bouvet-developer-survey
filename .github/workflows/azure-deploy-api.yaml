@@ -4,8 +4,14 @@ on:
     branches:
       - 'main'
     paths:
-      - 'Bouvet.Developer.Survey.Backend/**'  
-      
+      - 'Bouvet.Developer.Survey.Backend/**'
+  workflow_dispatch: # Allow manual trigger
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
+
 env:
   DOTNET_VERSION: "8.0"
   IMAGE_TAG: ${{ github.sha }}
@@ -25,15 +31,15 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+
       - name: Dotnet restore
         working-directory: ./Bouvet.Developer.Survey.Backend
         run: dotnet restore Bouvet.Developer.Survey.Backend.generated.sln
-      
+
       - name: Build with dotnet
         working-directory: ./Bouvet.Developer.Survey.Backend
         run: dotnet build Bouvet.Developer.Survey.Backend.generated.sln --configuration Release --no-restore
-                    
+
       - name: Publish
         working-directory: ./Bouvet.Developer.Survey.Backend
         run: dotnet publish Bouvet.Developer.Survey.Backend.generated.sln --configuration Release --no-build
@@ -70,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy/Quality Assurance
     needs: test
-    
+
     defaults:
       run:
         working-directory: ./Bouvet.Developer.Survey.Backend
@@ -121,15 +127,15 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
           template: infra/container-qa.bicep
           parameters: acrServer=${{ env.LOGIN_SERVER }} acrUsername=${{ env.LOGIN_NAME }} acrPassword=${{ env.PASSWORD }} containerImage=${{ env.IMAGE_TAG }}
-          failOnStdErr: false      
-  
+          failOnStdErr: false
+
   deploy-to-prod:
     runs-on: ubuntu-latest
     name: Deploy/Production
     needs: [test, deploy-to-qa]
     environment: Production
     if: startsWith(github.ref, 'refs/tags/')
-    
+
     defaults:
       run:
         working-directory: ./Bouvet.Developer.Survey.Backend
@@ -181,7 +187,3 @@ jobs:
           template: infra/container-prod.bicep
           parameters: acrServer=${{ env.LOGIN_SERVER }} acrUsername=${{ env.LOGIN_NAME }} acrPassword=${{ env.PASSWORD }} containerImage=${{ env.IMAGE_TAG }}
           failOnStdErr: false
-   
- 
-          
-
