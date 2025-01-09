@@ -11,7 +11,7 @@ public class GetChoiceDto
     public DateTimeOffset? UpdatedAt { get; set; }
 	public IEnumerable<GetResponseDto> Responses { get; set; } = null!;
 
-    public static GetChoiceDto CreateFromEntity(Choice choice, TbdDto? tbd)
+    public static GetChoiceDto CreateFromEntity(Choice choice, AnswerDto? tbd)
     {
         return new GetChoiceDto
         {

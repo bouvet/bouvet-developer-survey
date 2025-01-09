@@ -163,7 +163,7 @@ public class QuestionService : IQuestionService
         return choiceList;
     }
 
-    private async Task<TbdDto> CreateChoiceStatsAsync(Guid choiceId, Question question)
+    private async Task<AnswerDto> CreateChoiceStatsAsync(Guid choiceId, Question question)
     {
 		// This is the responses for a specific choice
 		// So all the responses are the same
@@ -252,7 +252,7 @@ public class QuestionService : IQuestionService
 		}
 
 
-		return new TbdDto{
+		return new AnswerDto{
 			Stats = new GetStatsDto{
 				TotalPercentage = totalPercentage,
 				AdmiredPercentage = admiredPercentage,
