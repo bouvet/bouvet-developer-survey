@@ -17,11 +17,11 @@ const AnswerContainer = ({ tabs, children }: Props) => {
               <button
                 key={index}
                 className={`flex-1 text-center font-bold text-sm  max-w-40 h-8
-                        ${
-                          activeTab === index
-                            ? "text-black bg-slate-50"
-                            : "text-white hover:text-blue-400 "
-                        }`}
+                  ${
+                    activeTab === index
+                      ? "text-black bg-slate-50"
+                      : "text-white hover:text-blue-400 "
+                  }`}
                 onClick={() => setActiveTab(index)}
               >
                 {tab}
@@ -29,9 +29,9 @@ const AnswerContainer = ({ tabs, children }: Props) => {
             ))}
           </div>
         )}
-      </div>
-      <div className="flex-1">
-        {Array.isArray(children) ? children[activeTab] : children}
+        <div className="flex-1">
+          {Array.isArray(children) ? children[activeTab] : children}
+        </div>
       </div>
     </div>
   );
