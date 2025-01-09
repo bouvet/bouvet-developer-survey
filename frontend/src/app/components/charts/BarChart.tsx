@@ -68,13 +68,17 @@ const BarChart = ({ x, y }: BarChartData) => {
 
   return (
     <div className="chart-container py-6">
-      <Plot
-        data={chartData}
-        layout={layout}
-        config={config}
-        style={{ width: "100%", height: plotHeight }}
-      />
-      <ChartCounter number={50} total={200} />
+      <div className="flex-1">
+        <Plot
+          data={chartData}
+          layout={layout}
+          config={config}
+          style={{ width: "100%", height: plotHeight }}
+        />
+      </div>
+      <div className="mt-auto ml-auto">
+        <ChartCounter number={50} total={200} />
+      </div>
     </div>
   );
 };
