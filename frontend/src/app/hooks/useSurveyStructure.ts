@@ -5,7 +5,7 @@ import { environment } from "../lib/env";
 
 export const useSurveyStructure = (): { data: Survey, error: {message: string}, isLoading: boolean} => {
     const { data, error, isLoading } = useSWR(
-        `${environment.surveyStructureEndpoint}/d01e692d-0374-4629-a3a9-52a16aa0acf1`,
+        `${environment.apiUrl}/v1/results/getQuestionById/d01e692d-0374-4629-a3a9-52a16aa0acf1`,
         fetcher
     )
     return { 
@@ -14,7 +14,3 @@ export const useSurveyStructure = (): { data: Survey, error: {message: string}, 
         isLoading
     }
 };
-
-
-
-
