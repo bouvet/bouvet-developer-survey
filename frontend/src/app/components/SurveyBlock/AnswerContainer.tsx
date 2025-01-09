@@ -29,9 +29,9 @@ const AnswerContainer = ({ tabs, children }: Props) => {
             ))}
           </div>
         )}
-      </div>
-      <div className="flex-1">
-        {Array.isArray(children) ? children[activeTab] : children}
+        <div className="flex-1">
+          {Array.isArray(children) ? children[activeTab] : children}
+        </div>
       </div>
     </div>
   );
