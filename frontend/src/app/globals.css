@@ -55,7 +55,7 @@ body {
   }
 
   .chart-container {
-    @apply w-full relative h-full px-8;
+    @apply w-full relative h-full px-4 md:px-8;
   }
 }
 
