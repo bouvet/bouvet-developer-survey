@@ -1,5 +1,7 @@
 # Stage 1: Use a slim and secure base image for build steps.
 FROM node:22-bookworm-slim AS base
+# Declare the build argument for NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_API_URL
 
 # Stage 2: Install dependencies only when needed
 FROM base AS deps
@@ -18,7 +20,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 ENV NEXT_TELEMETRY_DISABLED 1
 COPY . .
-RUN npm build
+# Set the build-time environment variable (use the build ARG to pass the value)
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+RUN npm run build
 
 
 # Stage 4: Run application
