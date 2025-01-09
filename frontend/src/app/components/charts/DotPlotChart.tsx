@@ -25,16 +25,28 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
   const shapes = getGridShapes(data);
 
   const traces = data.map((trace) => {
+    if (trace.x1 === null || trace.x2 === null) return null;
+    // If the first value is greater than the second, swap the values
+    const isX1Greater = trace.x1 > trace.x2;
+
+    const xValues = isX1Greater ? [trace.x2, trace.x1] : [trace.x1, trace.x2];
+    const text = isX1Greater
+      ? [`${trace.x2} %`, `${trace.x1} %`]
+      : [`${trace.x1} %`, `${trace.x2} %`];
+    const markerColor = isX1Greater
+      ? [theme.dotMinColor, theme.dotMaxColor]
+      : [theme.dotMaxColor, theme.dotMinColor];
+
     return {
-      x: [trace.x1, trace.x2],
+      x: xValues,
       y: [trace.yLabel, trace.yLabel], // create an array with the same y label for each value
       mode: "lines+markers+text",
       name: trace.yLabel,
       type: "scatter",
-      text: [trace.x1 + " %", trace.x2 + " %"],
+      text: text,
       textposition: ["left", "right"],
       marker: {
-        color: [theme.dotMinColor, theme.dotMaxColor],
+        color: markerColor,
         symbol: "circle",
         size: chartConfig.markerSize,
       },
