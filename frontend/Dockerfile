@@ -1,35 +1,50 @@
-# Stage 1: Build the application
-FROM node:18-alpine AS builder
+# Stage 1: Use a slim and secure base image for build steps.
+FROM node:22-bookworm-slim AS base
 
-# Set the working directory
+# Stage 2: Install dependencies only when needed
+FROM base AS deps
+# Set current working directory
 WORKDIR /app
-
-# Copy package.json and package-lock.json
+# Copy files that contains dependencies
 COPY package.json package-lock.json ./
-
-# Install dependencies
+# Install only production dependencies
 RUN npm install
 
-# Copy the rest of the application files
-COPY . .
-
-# Build the application
-RUN npm run build
-
-# Stage 2: Run the application
-FROM node:18-alpine
-
-# Set the working directory
+# Stage 3: Build application
+FROM base AS builder
+# Set current working directory
 WORKDIR /app
+# Copy files from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+ENV NEXT_TELEMETRY_DISABLED 1
+COPY . .
+RUN npm build
 
-# Copy the built application from the builder stage
-COPY --from=builder /app ./
 
-# Install only production dependencies
-RUN npm install --only=production
-
+# Stage 4: Run application
+# Use a distroless and production secure image for production
+FROM gcr.io/distroless/nodejs22-debian12
+# Set current working directory
+WORKDIR /app
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+COPY --from=builder /app/public ./public
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+USER nextjs
 # Expose the port the app runs on
 EXPOSE 3000
-
-# Start the application
-CMD ["npm", "start"]
+ENV NODE_ENV production
+ENV PORT 3000
+# server.js is created by next build from the standalone output
+# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+CMD ["node", "server.js"]
