@@ -55,11 +55,7 @@ body {
   }
 
   .chart-container {
-<<<<<<< HEAD
-    @apply w-full relative h-full px-4 md:px-8;
-=======
     @apply w-full h-full relative px-8 flex flex-col justify-between;
->>>>>>> 98bc988 (fix: unify chart counter position for all charts)
   }
 }
 
