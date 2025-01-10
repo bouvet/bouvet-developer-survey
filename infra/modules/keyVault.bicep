@@ -7,7 +7,6 @@ param location string
 @description('The SKU name of the Key Vault.')
 param skuName string = 'standard'
 
-
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: resourceName
   location: location
@@ -19,6 +18,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     }
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
+    enableRbacAuthorization: true
     accessPolicies:[]
   }
 }

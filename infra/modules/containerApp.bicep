@@ -1,11 +1,11 @@
-@description('The name of the secret in the Key Vault.')
-param connectionStringSecretName string = 'ConnectionString'
-
 @description('The location to deploy resource')
 param location string
 
 @description('The name of the Container App Environment')
 param containerAppName string
+
+@description('Key Vault module name')
+param keyVaultName string = 'bds-test-kv'
 
 @description('The ID of the Container App Environment')
 param containerAppEnvironmentId string
@@ -16,7 +16,6 @@ param acrLoginServer string
 @description('The name of the ACR username.')
 param acrUsername string
 
-@secure()
 @description('The name of the ACR password.')
 param acrPassword string
 
@@ -26,9 +25,16 @@ param containerImage string
 @description('The target port for the container app.')
 param targetPort int
 
+resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
+  name: keyVaultName
+}
+
 resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   name: containerAppName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     managedEnvironmentId: containerAppEnvironmentId
     configuration: {
@@ -37,21 +43,21 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         external: true
         targetPort: targetPort
         allowInsecure: false
-        // customDomains: [
-          // {
-             // name: 'bds-api-test.com'
-            //  certificateId: '/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/certificates/{certificate-name}'
-          // }
-        // ]
       }
       secrets: [
         {
           name: 'container-registry-password'
           value: acrPassword
         }
+        {
+          name: 'sql-server-connection-string-kv'
+          keyVaultUrl: 'https://${keyVault.name}.vault.azure.net/secrets/ConnectionString'
+          identity: 'system'
+        }
       ]
       registries: [
         {
+          //TODO: use managed identity instead
           server: acrLoginServer
           passwordSecretRef: 'container-registry-password'
           username: acrUsername
@@ -69,8 +75,8 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
           }
           env: [
             {
-              name: connectionStringSecretName
-              value: '@{listSecretValue(keyVault.id, connectionStringSecretName)}'
+              name: 'kek'
+              secretRef: 'keke'
             }
           ]
         }
@@ -80,6 +86,21 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         maxReplicas: 2
       }
     }
+  }
+}
+
+var keyVaultSecretUserRoleId = subscriptionResourceId(
+  'Microsoft.Authorization/roleDefinitions',
+  '4633458b-17de-408a-b874-0445c86b69e6'
+)
+
+resource keyVaultSecretUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(containerApp.id, keyVaultSecretUserRoleId)
+  scope: keyVault
+  properties: {
+    principalId: containerApp.identity.principalId
+    roleDefinitionId: keyVaultSecretUserRoleId
+    principalType: 'ServicePrincipal'
   }
 }
 
