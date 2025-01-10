@@ -2,7 +2,7 @@
 param location string = 'norwayeast'
 
 @description('The name of the container app.')
-param containerName string = 'bds-prod-container-frontend'
+param containerName string = 'bds-prod-container'
 
 @description('The name of the container app.')
 param containerAppName string = 'bds-prod-frontend'
