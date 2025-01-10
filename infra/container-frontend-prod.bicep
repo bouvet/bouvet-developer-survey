@@ -5,7 +5,7 @@ param location string = 'norwayeast'
 param containerName string = 'bds-prod-container-frontend'
 
 @description('The name of the container app.')
-param containerAppName string = 'bds-prod-containerapp-frontend'
+param containerAppName string = 'bds-prod-frontend'
 
 @description('The name of the Log Analytics workspace.')
 param logAnalyticsWorkspaceName string = 'bds-prod-loganalytics-frontend'
