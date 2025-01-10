@@ -35,7 +35,7 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", Helvetica, sans-serif;
 }
 
 @layer utilities {
@@ -55,7 +55,7 @@ body {
   }
 
   .chart-container {
-    @apply w-full relative h-full px-8;
+    @apply w-full h-full relative px-8 flex flex-col justify-between;
   }
 }
 

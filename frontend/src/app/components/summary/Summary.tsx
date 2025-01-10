@@ -1,11 +1,21 @@
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import { ReactNode } from "react";
-import SurveyBlockRenderer from '../SurveyBlock/SurveyBlockRenderer';
+import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
 
 const Summary = () => {
   const { data, error, isLoading } = useSurveyStructure();
-  if (isLoading) return <div className='survey-section'>Henter resultater...</div>;
-  if (error) return <div className='survey-section'>Error: {error.message}</div>;
+  if (isLoading)
+    return (
+      <section id="about_participants" className="survey-section">
+        Henter resultater...
+      </section>
+    );
+  if (error)
+    return (
+      <section id="about_participants" className="survey-section">
+        Error: {error.message}
+      </section>
+    );
 
   const answers = data?.surveyBlocks?.reduce(
     (acc: ReactNode[], surveyBlock) => {
@@ -23,7 +33,7 @@ const Summary = () => {
     []
   );
   return (
-    <section id="about" className="survey-section gap-12">
+    <section id="about_participants" className="survey-section gap-12">
       <h2 className="section-title">Generelt om deltakerne</h2>
       {answers}
     </section>

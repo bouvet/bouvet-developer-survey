@@ -57,6 +57,9 @@ const config: Config = {
       padding: {
         "app-padding-x": "48px",
       },
+      fontFamily: {
+        sans: "var(--font-inter)",
+      },
     },
   },
   plugins: [],

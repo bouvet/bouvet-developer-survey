@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 
@@ -11,6 +12,13 @@ export const metadata: Metadata = {
   },
 };
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "700"],
+  variable: "--font-inter",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -18,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="no" suppressHydrationWarning>
-      <body>
+      <body className={inter.className}>
         <ThemeProvider attribute="data-mode">{children}</ThemeProvider>
       </body>
     </html>
