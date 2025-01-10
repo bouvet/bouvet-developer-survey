@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { YearButton } from "./YearButton";
-import Circle from "./Circle";
+import { Circle } from "./Circle";
 import { useRouter } from "next/navigation";
 
 export const YearPickerCircle = () => {

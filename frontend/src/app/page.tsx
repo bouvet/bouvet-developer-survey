@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Header } from "./components/Header";
 import { YearPickerCircle } from "./components/landing/YearPickerCircle";
-import Wave from "./components/landing/Wave";
+import { Wave } from "./components/landing/Wave";
 
 export default function HomePage() {
   return (

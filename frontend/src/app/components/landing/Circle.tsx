@@ -1,4 +1,4 @@
-const Circle = ({
+export const Circle = ({
   width = "342",
   height = "358",
   fill = "var(--contrast-network-green)",
@@ -18,5 +18,3 @@ const Circle = ({
     </svg>
   );
 };
-
-export default Circle;

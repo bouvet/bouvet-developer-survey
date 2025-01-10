@@ -2,7 +2,7 @@
 
 import { Variants, motion } from "framer-motion";
 
-const Wave = () => {
+export const Wave = () => {
   const foreground = "var(--foreground)";
 
   const waveVariants: Variants = {
@@ -37,5 +37,3 @@ const Wave = () => {
     </svg>
   );
 };
-
-export default Wave;
