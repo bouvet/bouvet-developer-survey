@@ -62,7 +62,7 @@ public class ImportsController : ControllerBase
     /// <response code="200">Success</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
-    [HttpPost("import")]
+    [HttpPost("Results")]
     public async Task<IActionResult> ImportCsv(IFormFile file, Guid surveyGuid)
     {
         if (file.Length == 0)
