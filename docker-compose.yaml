@@ -7,11 +7,11 @@ services:
       args:
         - NEXT_PUBLIC_API_URL=http://localhost:5001/api
     ports:
-      - "3000:3000"  # Expose port 3000 for the frontend
+      - "3000:3000"
     networks:
       - bds-network
     depends_on:
-      - bds-api  # Ensure bds-api starts before frontend
+      - bds-api
 
   bds-api:
     container_name: bds-api
@@ -22,11 +22,12 @@ services:
       context: ./Bouvet.Developer.Survey.Backend
       dockerfile: Dockerfile
     ports:
-      - "5001:5001"  # Expose port 5000 for the backend
+      - "5001:5001"
     networks:
       - bds-network
     depends_on:
-      - bds-db
+      bds-db:
+        condition: service_healthy
 
   bds-db:
     image: mcr.microsoft.com/azure-sql-edge:1.0.0
@@ -37,11 +38,13 @@ services:
       - MSSQL_PID=Developer
     ports:
       - "1433:1433"
-    # restart: unless-stopped
+    restart: unless-stopped
     networks:
       - bds-network
     volumes:
       - bds-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "sleep", "5"]
 
 volumes:
   bds-data:
