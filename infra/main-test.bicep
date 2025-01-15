@@ -2,7 +2,7 @@
 param acrName string = 'bouvetSurveyContainerRegistry'
 
 @description('Key Vault module name')
-param keyVaultName string = 'bds-test-kv'
+param keyVaultName string = 'bds-test-keyvault'
 
 @description('The location for the registry.')
 param location string = 'norwayeast'
@@ -23,7 +23,6 @@ param sqlServerPassword string
 // @description('The name of the app insights.')
 // param appInsightsName string = 'bds-test-appinsights'
 
-
 // @description('The name of the ACR login server.')
 // param acrLoginServer string
 
@@ -34,11 +33,14 @@ param sqlServerPassword string
 // param openAiLocation string = 'swedencentral'
 
 // @description('The deployment name of the AI Services.')
-// param aiServiceName string = 'bds-test-openai'
+// param aiServiceName string = 'bds-est-openai'
 
 // @description('The deployment name of the AI Services.')
 // param deploymentName string = 'gpt-4o-mini'
 
+// TODO: documentation.
+// The resources are split up infor multiple files.
+// container-
 
 module containerRegistry 'modules/containerRegistry.bicep' = {
   name: acrName
@@ -75,8 +77,6 @@ module sqlServer 'modules/sqlServer.bicep' = {
 //   }
 // }
 
-
-
 // module openAi 'modules/openAiService.bicep' = {
 //   name: aiServiceName
 //   params: {
@@ -84,4 +84,4 @@ module sqlServer 'modules/sqlServer.bicep' = {
 //     location: openAiLocation
 //     deploymentName: deploymentName
 //   }
-// } 
+// }
