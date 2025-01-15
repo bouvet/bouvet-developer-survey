@@ -9,7 +9,7 @@ export const useSurveyStructure = (): {
   isLoading: boolean;
 } => {
   const { data, error, isLoading } = useSWR(
-    `${environment.apiUrl}/v1/results/d01e692d-0374-4629-a3a9-52a16aa0acf1`,
+    `${environment.apiUrl}/v1/results/surveys/year/2024`,
     fetcher
   );
   return {
