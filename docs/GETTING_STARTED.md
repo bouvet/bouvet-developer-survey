@@ -57,7 +57,13 @@ Open API specification of the backend API.
 If this request gave a 200, the survey data should be imported into,
 the database. Now we need to import user responses.
 
+- Click on `/api/v1/Resulst/Survey`.
+- Press "Try it out"
+- Press "Execute".
+- Copy the id (GUID) from the response.
+
 - Click on `/api/v1/Imports/Results`.
+- Paste the id from the previous step into field.
 - Press "Try it out"
 - Input a CSV file. Ask a fellow developer if you don't have it.
 - Press "Execute".
