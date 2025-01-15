@@ -23,6 +23,7 @@ public class SurveyService : ISurveyService
         {
             Id = Guid.NewGuid(),
             Name = newSurveyDto.Name,
+			Year = newSurveyDto.Year,
             SurveyId = newSurveyDto.SurveyId,
             SurveyLanguage = newSurveyDto.Language,
             CreatedAt = DateTimeOffset.Now
@@ -48,6 +49,18 @@ public class SurveyService : ISurveyService
     public async Task<SurveyDto> GetSurveyAsync(Guid surveyId)
     {
         var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Id == surveyId);
+
+        if (survey == null) throw new NotFoundException("Survey not found");
+
+
+        var surveyDto = SurveyDto.CreateFromEntity(survey);
+
+        return surveyDto;
+    }
+
+    public async Task<SurveyDto> GetSurveyByYearAsync(int year)
+    {
+        var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.Year == year);
 
         if (survey == null) throw new NotFoundException("Survey not found");
 
