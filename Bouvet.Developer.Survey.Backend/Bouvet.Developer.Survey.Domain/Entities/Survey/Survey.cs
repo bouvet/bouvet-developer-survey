@@ -7,15 +7,17 @@ namespace Bouvet.Developer.Survey.Domain.Entities.Survey;
 public class Survey : IEntitiesDateTimeOffsett, ILastSyncedOffset
 {
     public Guid Id { get; set; }
-    
+
     [MaxLength(250)]
     public string SurveyId { get; set; } = null!;
-    
+
     [MaxLength(250)]
     public string Name { get; set; } = null!;
-    
+
     [MaxLength(100)]
     public string? SurveyLanguage { get; set; }
+
+    public int? Year { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }

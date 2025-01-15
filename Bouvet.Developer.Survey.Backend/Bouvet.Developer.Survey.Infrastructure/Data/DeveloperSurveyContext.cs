@@ -10,7 +10,7 @@ public class DeveloperSurveyContext : DbContext, IDeveloperSurveyContext
     public DeveloperSurveyContext(DbContextOptions<DeveloperSurveyContext> options) : base(options)
     {
     }
-    
+
     public DbSet<Domain.Entities.Survey.Survey> Surveys => Set<Domain.Entities.Survey.Survey>();
     public DbSet<SurveyBlock> SurveyBlocks => Set<SurveyBlock>();
     public DbSet<Question> Questions => Set<Question>();
@@ -23,7 +23,7 @@ public class DeveloperSurveyContext : DbContext, IDeveloperSurveyContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DeveloperSurveyContext).Assembly, type => 
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DeveloperSurveyContext).Assembly, type =>
             type.Namespace != null && type.Namespace.Contains("Bouvet.Developer.Survey.Infrastructure.Configurations"));
     }
 }
