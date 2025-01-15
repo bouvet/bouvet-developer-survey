@@ -4,8 +4,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    environment:
-      - NEXT_PUBLIC_API_URL=http://bds-api:5001/api
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:5001/api
     ports:
       - "3000:3000"  # Expose port 3000 for the frontend
     networks:
@@ -15,15 +15,37 @@ services:
 
   bds-api:
     container_name: bds-api
+    environment:
+      - ConnectionString=${DB_CONNECTION_STRING}
+      - DOTNET_ENVIRONMENT=Development
     build:
       context: ./Bouvet.Developer.Survey.Backend
       dockerfile: Dockerfile
-    env_file:
-      - .env
     ports:
       - "5001:5001"  # Expose port 5000 for the backend
     networks:
       - bds-network
+    depends_on:
+      - bds-db
+
+  bds-db:
+    image: mcr.microsoft.com/azure-sql-edge:1.0.0
+    container_name: bds-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    # restart: unless-stopped
+    networks:
+      - bds-network
+    volumes:
+      - bds-data:/var/opt/mssql
+
+volumes:
+  bds-data:
+    driver: local
 
 networks:
   bds-network:
