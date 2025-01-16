@@ -1,5 +1,3 @@
-
-
 @description('The location to deploy resource')
 param location string
 
