@@ -31,17 +31,10 @@ module containerRegistry 'modules/containerRegistry.bicep' = {
   }
 }
 
-module managedIdentity 'modules/managedIdentity.bicep' = {
-  name: managedIdentityName
-  params: {
-    resourceName:  managedIdentityName
-    location: location
-  }
-}
-
 module keyVault 'modules/keyVault.bicep' = {
   name: keyVaultName
   params: {
+    managedIdentityName: managedIdentityName
     resourceName: keyVaultName
     location: location
   }
