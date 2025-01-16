@@ -43,7 +43,7 @@ docker compose down
 ```
 __Import data__
 
-We need to import data into the database.
+Import survey and survey responses into the database.
 
 Go to `http://localhost:5001/index.html`. This is the GUI for the
 Open API specification of the backend API.
