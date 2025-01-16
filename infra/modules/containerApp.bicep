@@ -83,7 +83,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
           }
           env: [
             {
-              name: 'CONNECTION_STRING'
+              name: 'ConnectionString'
               secretRef: 'sql-server-connection-string'
             }
           ]
