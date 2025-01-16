@@ -50,7 +50,7 @@ jobs:
       run: |
         # Fetch the backend FQDN dynamically using Azure CLI
         BACKEND_FQDN=$(az containerapp show --name bds-test-containerapp-api --resource-group ${{ secrets.AZURE_RG_TEST }} --query "properties.configuration.ingress.fqdn" -o tsv)
-        BACKEND_URL="${BACKEND_FQDN}/api"
+        BACKEND_URL="https://${BACKEND_FQDN}/api"
         echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
         echo "Retrieved backend FQDN: $BACKEND_FQDN"
 
