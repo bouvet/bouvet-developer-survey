@@ -1,11 +1,11 @@
 @description('The location for the registry.')
 param location string = 'norwayeast'
 
-@description('The name of the container app.')
-param containerName string = 'bds-prod-container'
+@description('The name of the container app environment.')
+param containerName string = 'bds-prod-containerenv-frontend'
 
 @description('The name of the container app.')
-param containerAppName string = 'bds-prod-frontend'
+param containerAppName string = 'bds-prod-containerapp-frontend'
 
 @description('The name of the Log Analytics workspace.')
 param logAnalyticsWorkspaceName string = 'bds-prod-loganalytics-frontend'

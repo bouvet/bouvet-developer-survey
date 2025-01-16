@@ -30,14 +30,14 @@ public class SurveyServiceTests
         // Injecting the in-memory context into the service
         _surveyService = new SurveyService(_context);
     }
-    
+
     private async Task DeleteAllSurveys()
     {
         var surveys = await _context.Surveys.ToListAsync();
         _context.Surveys.RemoveRange(surveys);
         await _context.SaveChangesAsync();
     }
-    
+
     private async Task<SurveyDto> CreateTestSurvey()
     {
         var newSurveyDto = new NewSurveyDto
@@ -49,33 +49,33 @@ public class SurveyServiceTests
 
         return await _surveyService.CreateSurveyAsync(newSurveyDto);
     }
-    
+
     [Fact]
     public async Task Should_Get_All_Surveys()
     {
         await DeleteAllSurveys();
-        
+
         // Arrange
         await CreateTestSurvey();
         await CreateTestSurvey();
-        
+
         // Act
         var surveys = await _surveyService.GetSurveysAsync();
-        
+
         // Assert
         Assert.NotNull(surveys);
-        
+
     }
-    
+
     [Fact]
     public async Task Should_Get_Survey_By_Id()
     {
         // Arrange
         var testSurvey = await CreateTestSurvey();
-        
+
         // Act
         var survey = await _surveyService.GetSurveyAsync(testSurvey.Id);
-        
+
         // Assert
         Assert.NotNull(survey);
     }
@@ -85,53 +85,53 @@ public class SurveyServiceTests
     {
         // Arrange
         var testSurvey = await CreateTestSurvey();
-        
+
         var updatedSurveyDto = new NewSurveyDto
         {
             Name = "Updated survey",
             SurveyId = "updated",
             Language = "Language"
         };
-        
+
         // Act
         var updatedSurvey = await _surveyService.UpdateSurveyAsync(testSurvey.Id, updatedSurveyDto);
-        
+
         // Assert
         Assert.NotNull(updatedSurvey);
         Assert.Equal(updatedSurveyDto.Name, updatedSurvey.Name);
     }
-    
+
     [Fact]
     public async Task Should_ThrowError_When_Updating_NonExistingSurvey()
     {
         // Act
-        var updatedSurvey = await Assert.ThrowsAsync<NotFoundException>(() => 
+        var updatedSurvey = await Assert.ThrowsAsync<NotFoundException>(() =>
             _surveyService.UpdateSurveyAsync(Guid.NewGuid(), new NewSurveyDto()));
-        
+
         // Assert
         Assert.Equal("Survey not found", updatedSurvey.Message);
     }
-    
+
     [Fact]
     public async Task Should_Delete_Survey_And_ThrowError_When_Getting_DeletedSurvey()
     {
         // Arrange
         var testSurvey = await CreateTestSurvey();
-        
+
         // Act
         await _surveyService.DeleteSurveyAsync(testSurvey.Id);
-        
+
         // Assert
         var survey = await Assert.ThrowsAsync<NotFoundException>(() => _surveyService.GetSurveyAsync(testSurvey.Id));
         Assert.Equal("Survey not found", survey.Message);
     }
-    
+
     [Fact]
     public async Task Should_ThrowError_When_Deleting_NonExistingSurvey()
     {
         // Act
         var deletedSurvey = await Assert.ThrowsAsync<NotFoundException>(() => _surveyService.DeleteSurveyAsync(Guid.NewGuid()));
-        
+
         // Assert
         Assert.Equal("Survey not found", deletedSurvey.Message);
     }

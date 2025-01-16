@@ -16,22 +16,23 @@ namespace Bouvet.Developer.Survey.Api.Controllers.V1;
 public class ImportsController : ControllerBase
 {
     private readonly IImportSurveyService _importSurveyService;
-    
+
     public ImportsController(IImportSurveyService importSurveyService)
     {
         _importSurveyService = importSurveyService;
     }
-    
+
     /// <summary>
     /// Import a survey structure from json
     /// </summary>
     /// <param name="file">The file to upload</param>
+    /// <param name="year">The survey year</param>
     /// <response code="200">Success</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
     [HttpPost("ImportSurvey")]
     [SwaggerResponse(200, "Survey created")]
-    public async Task<IActionResult> ImportSurvey(IFormFile? file)
+    public async Task<IActionResult> ImportSurvey(IFormFile? file, int year)
     {
         if (file == null || file.Length == 0)
         {
@@ -44,7 +45,7 @@ public class ImportsController : ControllerBase
 
             await file.CopyToAsync(stream);
             stream.Position = 0;
-            await _importSurveyService.UploadSurvey(stream);
+            await _importSurveyService.UploadSurvey(stream, year);
             return Ok();
         }
         catch (Exception e)
@@ -52,7 +53,7 @@ public class ImportsController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    
+
     /// <summary>
     /// Import survey results from csv
     /// </summary>
@@ -61,7 +62,7 @@ public class ImportsController : ControllerBase
     /// <response code="200">Success</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
-    [HttpPost("import")]
+    [HttpPost("Results")]
     public async Task<IActionResult> ImportCsv(IFormFile file, Guid surveyGuid)
     {
         if (file.Length == 0)

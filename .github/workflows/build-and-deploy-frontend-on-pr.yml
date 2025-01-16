@@ -1,15 +1,15 @@
 name: Build and deploy frontend on Push/PR
 on:
   push:
-    branches: 
+    branches:
       - main
     paths:
       - 'frontend/**'
       - '.github/workflows/build-and-deploy-frontend-on-pr.yml'
-      - 'infra/container-qa-frontend.bicep'
+      - 'infra/container-frontend-test.bicep'
       - 'infra/modules/containerAppFrontend.bicep'
   pull_request:
-    branches: 
+    branches:
       - main
     paths:
       - 'frontend/**'
@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: 'Azure login'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
-        
+
     - name: Enable ACR Admin Account
       run: |
         az acr update -n bouvetSurveyContainerRegistry --admin-enabled true
@@ -44,7 +44,7 @@ jobs:
         echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
-        
+
     - name: Build and Push Frontend Image to ACR
       uses: azure/docker-login@v1
       with:
@@ -52,7 +52,7 @@ jobs:
         username: ${{ env.LOGIN_NAME }}
         password: ${{ env.PASSWORD }}
     - run: |
-        docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+        docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL_TEST }}
         docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
@@ -63,9 +63,9 @@ jobs:
         resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
         template: ./infra/container-qa-frontend.bicep
         parameters: >
-          location=norwayeast 
-          acrServer=${{ env.LOGIN_SERVER }} 
-          acrUsername=${{ env.LOGIN_NAME }} 
+          location=norwayeast
+          acrServer=${{ env.LOGIN_SERVER }}
+          acrUsername=${{ env.LOGIN_NAME }}
           acrPassword=${{ env.PASSWORD }}
           containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
 

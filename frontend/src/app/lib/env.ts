@@ -1,21 +1,14 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  surveyStructureEndpoint: z
+  apiUrl: z
     .string({
       required_error:
-        "NEXT_PUBLIC_SURVEY_STRUCTURE_ENDPOINT is required in your env.local file",
+        "NEXT_PUBLIC_API_URL is required your .env.local file",
     })
-    .url("NEXT_PUBLIC_SURVEY_STRUCTURE_ENDPOINT must be an URL"),
-  surveyAnswersEndpoint: z
-    .string({
-      required_error:
-        "NEXT_PUBLIC_SURVEY_ANSWERS_ENDPOINT is required in your env.local file",
-    })
-    .url("NEXT_PUBLIC_SURVEY_ANSWERS_ENDPOINT must be an URL"),
+    .url("NEXT_PUBLIC_API_URL must be an URL"),
 });
 
 export const environment = envSchema.parse({
-  surveyStructureEndpoint: process.env.NEXT_PUBLIC_SURVEY_STRUCTURE_ENDPOINT,
-  surveyAnswersEndpoint: process.env.NEXT_PUBLIC_SURVEY_ANSWERS_ENDPOINT,
+  apiUrl: process.env.NEXT_PUBLIC_API_URL,
 });

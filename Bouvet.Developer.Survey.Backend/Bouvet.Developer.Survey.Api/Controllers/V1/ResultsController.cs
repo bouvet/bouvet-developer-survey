@@ -22,14 +22,14 @@ public class ResultsController : ControllerBase
     private readonly ISurveyService _surveyService;
     private readonly IQuestionService _questionService;
     private readonly IUserService _userService;
-    
+
     public ResultsController(ISurveyService surveyService, IQuestionService questionService, IUserService userService)
     {
         _surveyService = surveyService;
         _questionService = questionService;
         _userService = userService;
     }
-    
+
     /// <summary>
     /// Get all surveys
     /// </summary>
@@ -37,14 +37,14 @@ public class ResultsController : ControllerBase
     /// <response code="200">Returns a list of all surveys</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
-    [HttpGet]
+    [HttpGet("Surveys")]
     [SwaggerResponse(200, "Returns a list of all surveys", typeof(IEnumerable<SurveysDto>))]
     public async Task<IActionResult> GetSurveys()
     {
         var surveys = await _surveyService.GetSurveysAsync();
         return Ok(surveys);
     }
-    
+
     /// <summary>
     /// Get a survey by id
     /// </summary>
@@ -52,14 +52,30 @@ public class ResultsController : ControllerBase
     /// <response code="200">Returns a surveys</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
-    [HttpGet("{surveyId:guid}")]
+    [HttpGet("Surveys/{surveyId:guid}")]
     [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
     public async Task<IActionResult> GetSurvey(Guid surveyId)
     {
         var survey = await _surveyService.GetSurveyAsync(surveyId);
         return Ok(survey);
     }
-    
+
+
+    /// <summary>
+    /// Get a survey by year
+    /// </summary>
+    /// <returns>First survey for that year survey</returns>
+    /// <response code="200">Returns a surveys</response>
+    /// <response code="401">If user is not authorized</response>
+    /// <response code="403">User not authorized to view</response>
+    [HttpGet("Surveys/Year/{year:int}")]
+    [SwaggerResponse(200, "Returns a survey", typeof(SurveyDto))]
+    public async Task<IActionResult> GetSurveyByYear(int year)
+    {
+        var survey = await _surveyService.GetSurveyByYearAsync(year);
+        return Ok(survey);
+    }
+
     /// <summary>
     ///  Get survey question by id and their responses
     /// </summary>
@@ -68,14 +84,14 @@ public class ResultsController : ControllerBase
     /// <response code="200">Returns a question and their responses</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
-    [HttpGet("GetQuestionById/{questionId:guid}")]
+    [HttpGet("Questions/{questionId:guid}")]
     [SwaggerResponse(200, "Returns a question and their responses", typeof(QuestionResponseDto))]
     public async Task<IActionResult> GetQuestionById(Guid questionId)
     {
         var question = await _questionService.GetQuestionByIdAsync(questionId);
         return Ok(question);
     }
-    
+
     /// <summary>
     /// Get all response to a user to a survey
     /// </summary>
@@ -84,7 +100,7 @@ public class ResultsController : ControllerBase
     /// <response code="200">Returns a user response</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
-    [HttpGet("GetUserResponse/{userId:guid}")]
+    [HttpGet("UserResponses/{userId:guid}")]
     [SwaggerResponse(200, "Returns a user response", typeof(UserResponseDto))]
     public async Task<IActionResult> GetUserResponse(Guid userId)
     {

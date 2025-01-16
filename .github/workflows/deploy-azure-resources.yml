@@ -1,3 +1,4 @@
+name: Deploy Azure resources
 on:
   push:
     branches:
@@ -10,8 +11,6 @@ on:
         description: 'Branch to deploy'
         required: true
         default: 'main'
-
-name: Deploy Azure resources
 
 jobs:
   deploy-azure-resources-test:

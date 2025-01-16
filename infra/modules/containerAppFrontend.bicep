@@ -42,7 +42,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
           name: 'container-registry-password'
           value: acrPassword
         }
-      ]      
+      ]
       registries: [
         {
           server: acrLoginServer

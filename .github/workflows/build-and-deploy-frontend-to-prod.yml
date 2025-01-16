@@ -1,7 +1,7 @@
 name: Build and deploy frontend to production
 on:
   workflow_dispatch:    # manual trigger
-    branches: 
+    branches:
       - main
     paths:
       - 'frontend/**'
@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: 'Azure login'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS_TEST }} # same as prod
-        
+
     - name: Enable ACR Admin Account
       run: |
         az acr update -n bouvetSurveyContainerRegistryProd --admin-enabled true
@@ -36,7 +36,7 @@ jobs:
         echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
-        
+
     - name: Build and Push Frontend Image to ACR
       uses: azure/docker-login@v1
       with:
@@ -55,9 +55,9 @@ jobs:
         resourceGroupName: ${{ secrets.AZURE_RG_PROD }}
         template: ./infra/container-frontend-prod.bicep
         parameters: >
-          location=norwayeast 
-          acrServer=${{ env.LOGIN_SERVER }} 
-          acrUsername=${{ env.LOGIN_NAME }} 
+          location=norwayeast
+          acrServer=${{ env.LOGIN_SERVER }}
+          acrUsername=${{ env.LOGIN_NAME }}
           acrPassword=${{ env.PASSWORD }}
           containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
 

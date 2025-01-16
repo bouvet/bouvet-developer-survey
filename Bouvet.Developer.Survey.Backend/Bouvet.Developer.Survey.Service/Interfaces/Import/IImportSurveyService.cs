@@ -9,23 +9,25 @@ public interface IImportSurveyService
     /// Upload a survey from a stream of JSON
     /// </summary>
     /// <param name="stream">The stream to upload</param>
+    /// <param name="year">Survey year</param>
     /// <returns>The survey dto</returns>
-    Task<SurveyBlocksDto> UploadSurvey(Stream stream);
-    
+    Task<SurveyBlocksDto> UploadSurvey(Stream stream, int year);
+
     /// <summary>
     /// Find survey blocks
     /// </summary>
     /// <param name="surveyDto">The survey dto</param>
+    /// <param name="year">Survey year</param>
     /// <returns>The survey dto</returns>
-    Task<SurveyBlocksDto> FindSurveyBlocks(SurveyBlocksDto surveyDto);
-    
+    Task<SurveyBlocksDto> FindSurveyBlocks(SurveyBlocksDto surveyDto, int year);
+
     /// <summary>
     /// Find survey questions
     /// </summary>
     /// <param name="surveyQuestionsDto">The survey questions dto</param>
     /// <returns>Task</returns>
     Task FindSurveyQuestions(SurveyQuestionsDto surveyQuestionsDto);
-    
+
     /// <summary>
     /// Get questions from a stream of CSV
     /// </summary>
@@ -33,7 +35,7 @@ public interface IImportSurveyService
     /// <param name="surveyId">The survey id</param>
     /// <returns>Task</returns>
     Task GetQuestionsFromStream(Stream csvStream, Guid surveyId);
-    
+
     /// <summary>
     /// Map fields to response
     /// </summary>

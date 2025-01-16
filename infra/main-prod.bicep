@@ -1,6 +1,9 @@
 @description('The name of the Azure Container Registry.')
 param acrName string = 'bouvetSurveyContainerRegistryProd'
 
+@description('Name of managed identity resource')
+param managedIdentityName string = 'bds-prod-managedidentity'
+
 @description('Key Vault module name')
 param keyVaultName string = 'bds-prod-keyvault'
 
@@ -20,21 +23,18 @@ param sqlServerUsername string = 'bdsadmin'
 @description('The administrator password used for the sql server instance created.')
 param sqlServerPassword string
 
-// @description('OpenAi location for the AI Services.')
-// param openAiLocation string = 'swedencentral'
-
-// @description('The deployment name of the AI Services.')
-// param aiServiceName string = 'bds-prod-ai'
-
-// @description('The deployment name of the AI Services.')
-// param deploymentName string = 'gpt-4o-mini'
-
-
-
 module containerRegistry 'modules/containerRegistry.bicep' = {
   name: acrName
   params: {
     acrName: acrName
+    location: location
+  }
+}
+
+module managedIdentity 'modules/managedIdentity.bicep' = {
+  name: managedIdentityName
+  params: {
+    resourceName:  managedIdentityName
     location: location
   }
 }
@@ -57,12 +57,3 @@ module sqlServer 'modules/sqlServer.bicep' = {
     administratorLoginPassword: sqlServerPassword
   }
 }
-
-// module openAi 'modules/openAiService.bicep' = {
-//   name: aiServiceName
-//   params: {
-//     aiServicesName: aiServiceName
-//     location: openAiLocation
-//     deploymentName: deploymentName
-//   }
-// } 

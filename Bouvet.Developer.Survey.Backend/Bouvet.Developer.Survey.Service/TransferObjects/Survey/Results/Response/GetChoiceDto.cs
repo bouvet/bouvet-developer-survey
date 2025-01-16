@@ -9,10 +9,9 @@ public class GetChoiceDto
     public string IndexId { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public virtual GetStatsDto? Statistics { get; set; }
-    
-    
-    public static GetChoiceDto CreateFromEntity(Choice choice,GetStatsDto? response)
+	public IEnumerable<GetResponseDto> Responses { get; set; } = null!;
+
+    public static GetChoiceDto CreateFromEntity(Choice choice, AnswerDto? tbd)
     {
         return new GetChoiceDto
         {
@@ -21,7 +20,8 @@ public class GetChoiceDto
             IndexId = choice.IndexId,
             CreatedAt = choice.CreatedAt,
             UpdatedAt = choice.UpdatedAt,
-            Statistics = response
+			// value or empty list
+			Responses = tbd?.Responses ?? new List<GetResponseDto>()
         };
     }
 }

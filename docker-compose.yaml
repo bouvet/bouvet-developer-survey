@@ -1,0 +1,55 @@
+services:
+  bds-fe:
+    container_name: bds-fe
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:5001/api
+    ports:
+      - "3000:3000"
+    networks:
+      - bds-network
+    depends_on:
+      - bds-api
+
+  bds-api:
+    container_name: bds-api
+    environment:
+      - ConnectionString=${DB_CONNECTION_STRING}
+      - DOTNET_ENVIRONMENT=Development
+    build:
+      context: ./Bouvet.Developer.Survey.Backend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+      - bds-network
+    depends_on:
+      bds-db:
+        condition: service_healthy
+
+  bds-db:
+    image: mcr.microsoft.com/azure-sql-edge:1.0.0
+    container_name: bds-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    restart: unless-stopped
+    networks:
+      - bds-network
+    volumes:
+      - bds-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "sleep", "5"]
+
+volumes:
+  bds-data:
+    driver: local
+
+networks:
+  bds-network:
+    driver: bridge

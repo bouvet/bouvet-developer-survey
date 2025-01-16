@@ -48,38 +48,38 @@ public class ImportServiceTest
     {
         // Arrange
         var surveyBlocksDto = await TestData();
-        
+
         // Act
-        var result = await _importSurvey.FindSurveyBlocks(surveyBlocksDto);
+        var result = await _importSurvey.FindSurveyBlocks(surveyBlocksDto, 2024);
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal(surveyBlocksDto.SurveyEntry.SurveyId, result.SurveyEntry.SurveyId);
         Assert.Equal(surveyBlocksDto.SurveyEntry.SurveyName, result.SurveyEntry.SurveyName);
         Assert.Equal(surveyBlocksDto.SurveyEntry.SurveyLanguage, result.SurveyEntry.SurveyLanguage);
-        
+
         // Act
         var surveys = await _surveyService.GetSurveysAsync();
-        
+
         // Assert
         Assert.NotNull(surveys);
-        
+
         var surveyQuestionsDto = await TestSurveyQuestions();
         await _importSurvey.FindSurveyQuestions(surveyQuestionsDto);
-        
+
         //Test for survey exist
         var changeDto = await TestDataChangeName();
-        var test = await _importSurvey.FindSurveyBlocks(changeDto);
-        
+        var test = await _importSurvey.FindSurveyBlocks(changeDto, 2024);
+
         Assert.NotNull(test);
         Assert.Equal(changeDto.SurveyEntry.SurveyId, test.SurveyEntry.SurveyId);
         Assert.Equal(changeDto.SurveyEntry.SurveyName, test.SurveyEntry.SurveyName);
         Assert.Equal(changeDto.SurveyEntry.SurveyLanguage, test.SurveyEntry.SurveyLanguage);
-        
+
         //Test for survey questions change
         var surveyQuestionsDtoChange = await TestSurveyQuestionsChange();
         await _importSurvey.FindSurveyQuestions(surveyQuestionsDtoChange);
-        
+
     }
 
     private async Task<SurveyBlocksDto> TestDataChangeName()
@@ -94,10 +94,10 @@ public class ImportServiceTest
             },
             SurveyElements = [await TestSurveyBlocksChange()]
         };
-            
+
         return newSurveyBlocksDto;
     }
-    
+
     private async Task<SurveyBlocksDto> TestData()
     {
         var newSurveyBlocksDto = new SurveyBlocksDto
@@ -110,10 +110,10 @@ public class ImportServiceTest
             },
             SurveyElements = [await TestSurveyBlocks()]
         };
-            
+
         return newSurveyBlocksDto;
     }
-    
+
     private async Task<SurveyElementBlockDto> TestSurveyBlocks()
     {
        var test = new SurveyElementBlockDto
@@ -126,7 +126,7 @@ public class ImportServiceTest
                        Description = "What is your name?",
                        Id = "QID1",
                        BlockElements = new List<SurveyBlockElementDto>
-                       { 
+                       {
                            new SurveyBlockElementDto
                             {
                                  Type = "TEXT",
@@ -145,7 +145,7 @@ public class ImportServiceTest
                         Description = "How old are you?",
                         Id = "QID2",
                         BlockElements = new List<SurveyBlockElementDto>
-                        { 
+                        {
                             new SurveyBlockElementDto
                             {
                                 Type = "TEXT",
@@ -160,10 +160,10 @@ public class ImportServiceTest
                     }}
                 }
          };
-       
+
        return await Task.FromResult(test);
     }
-    
+
     private async Task<SurveyElementBlockDto> TestSurveyBlocksChange()
     {
         var test = new SurveyElementBlockDto
@@ -177,7 +177,7 @@ public class ImportServiceTest
                     Description = "What is 1+1?",
                     Id = "QID1",
                     BlockElements = new List<SurveyBlockElementDto>
-                    { 
+                    {
                         new SurveyBlockElementDto
                         {
                             Type = "Text output",
@@ -196,7 +196,7 @@ public class ImportServiceTest
                     Description = "How old are you?",
                     Id = "QID3",
                     BlockElements = new List<SurveyBlockElementDto>
-                    { 
+                    {
                         new SurveyBlockElementDto
                         {
                             Type = "TEXT 2",
@@ -211,7 +211,7 @@ public class ImportServiceTest
                 }}
             }
         };
-       
+
         return await Task.FromResult(test);
     }
 
@@ -245,7 +245,7 @@ public class ImportServiceTest
                 }
             }
         };
-        
+
         var testSurveyElements2 = new SurveyElementQuestionsDto
         {
             SurveyId = "123qa",
@@ -267,15 +267,15 @@ public class ImportServiceTest
                 }
             }
         };
-        
+
         var testParent = new SurveyQuestionsDto
         {
             SurveyElements = [testSurveyElements, testSurveyElements2]
         };
-        
+
         return await Task.FromResult(testParent);
     }
-    
+
     private async Task<SurveyQuestionsDto> TestSurveyQuestionsChange()
     {
         var testSurveyElements2 = new SurveyElementQuestionsDto
@@ -299,13 +299,13 @@ public class ImportServiceTest
                 }
             }
         };
-        
+
         var testParent = new SurveyQuestionsDto
         {
             SurveyElements = [testSurveyElements2]
         };
-        
+
         return await Task.FromResult(testParent);
     }
-    
+
 }

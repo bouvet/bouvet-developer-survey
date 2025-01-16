@@ -8,10 +8,11 @@ export const useSurveyResult = (
 ): { data: Answer; error: { message: string }; isLoading: boolean } => {
   const { data, error, isLoading } = useSWR(
     questionId
-      ? `${environment.surveyAnswersEndpoint}/?questionId=${questionId}`
+      ? `${environment.apiUrl}/v1/results/questions/${questionId}`
       : null,
     fetcher
   );
+
   return {
     data,
     error,

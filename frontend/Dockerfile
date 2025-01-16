@@ -1,35 +1,50 @@
-# Stage 1: Build the application
-FROM node:18-alpine AS builder
+# Stage 1: Use a slim and secure base image for build steps.
+FROM node:18-alpine AS base
+# Declare the build argument for NEXT_PUBLIC_API_URL
 
-# Set the working directory
+# Stage 2: Install dependencies only when needed
+FROM base AS deps
+# Set current working directory
 WORKDIR /app
-
-# Copy package.json and package-lock.json
+# Copy files that contains dependencies
 COPY package.json package-lock.json ./
-
-# Install dependencies
+# Install only production dependencies
 RUN npm install
 
-# Copy the rest of the application files
+# Stage 3: Build application
+FROM base AS builder
+# Set current working directory
+WORKDIR /app
+# Copy files from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+ENV NEXT_TELEMETRY_DISABLED 1
 COPY . .
-
-# Build the application
+# Set the build-time environment variable (use the build ARG to pass the value)
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
-# Stage 2: Run the application
-FROM node:18-alpine
 
-# Set the working directory
+# Stage 4: Run application
+# Use a distroless and production secure image for production
+FROM base AS runner
 WORKDIR /app
+ENV NODE_ENV production
 
-# Copy the built application from the builder stage
-COPY --from=builder /app ./
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
 
-# Install only production dependencies
-RUN npm install --only=production
-
+COPY --from=builder /app/public ./public
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Next.js collects completely anonymous telemetry data about general usage.
+ENV NEXT_TELEMETRY_DISABLED 1
 # Expose the port the app runs on
+ENV PORT 3000
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# server.js is created by next build from the standalone output
+# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+CMD HOSTNAME="0.0.0.0" node server.js
