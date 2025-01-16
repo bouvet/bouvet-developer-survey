@@ -1,7 +1,7 @@
 @description('The location for the registry.')
 param location string = 'norwayeast'
 
-@description('The name of the container app.')
+@description('The name of the container environment.')
 param containerName string = 'bds-prod-containerenv-api'
 
 @description('The name of the container app.')
