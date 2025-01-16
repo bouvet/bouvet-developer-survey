@@ -63,5 +63,5 @@ jobs:
 
     - name: Get Container App URL
       run: |
-        fqdn=$(az containerapp show -n bds-prod-frontend -g ${{ secrets.AZURE_RG_PROD }} --query properties.configuration.ingress.fqdn -o tsv)
+        fqdn=$(az containerapp show -n bds-prod-containerapp-frontend -g ${{ secrets.AZURE_RG_PROD }} --query properties.configuration.ingress.fqdn -o tsv)
         echo "Container App is deployed at: https://$fqdn"

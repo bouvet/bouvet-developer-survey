@@ -61,7 +61,7 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
-        template: ./infra/container-qa-frontend.bicep
+        template: ./infra/container-frontend-test.bicep
         parameters: >
           location=norwayeast
           acrServer=${{ env.LOGIN_SERVER }}
