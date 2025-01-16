@@ -8,7 +8,7 @@ param containerName string = 'bds-test-containerenv-frontend'
 param containerAppName string = 'bds-test-containerapp-frontend'
 
 @description('The name of the Log Analytics workspace.')
-param logAnalyticsWorkspaceName string = 'bds-test-loganalytics-frontend'
+param logAnalyticsWorkspaceName string = 'bds-test-loganalytics'
 
 @description('The name of the ACR login server.')
 param acrServer string
