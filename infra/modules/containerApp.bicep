@@ -1,6 +1,9 @@
 @description('The location to deploy resource')
 param location string
 
+@description('Name of managed identity resource')
+param managedIdentityName string
+
 @description('The name of the Container App Environment')
 param containerAppName string
 
@@ -28,19 +31,12 @@ param targetPort int
 
 // Use User Assigned Managed Identity instead of System Assigned.
 // https://github.com/Azure/bicep/discussions/12056
-resource managedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
-  name: 'bds-test-managed-identity' // TODO: fix
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+  name: managedIdentityName
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: keyVaultName
-}
-
-// Bicep does not support conditional creating. So secrets are created manually.
-// This only ensures that this template will fail if this secret does not exist
-resource connectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' existing = {
-  parent: keyVault
-  name: 'sql-server-connection-string'
 }
 
 resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
@@ -49,7 +45,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${managedId.id}': {}
+      '${managedIdentity.id}': {}
     }
   }
   properties: {
@@ -74,9 +70,9 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
           value: acrPassword
         }
         {
-          name: 'sql-server-connection-string'
+          name: 'sql-server-connection-string' // github workflow will fail if this does not exist.
           keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/sql-server-connection-string'
-          identity: managedId.id
+          identity: managedIdentity.id
         }
       ]
     }

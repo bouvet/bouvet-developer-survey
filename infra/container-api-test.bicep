@@ -1,6 +1,9 @@
 @description('The location for the registry.')
 param location string = 'norwayeast'
 
+@description('Name of managed identity resource')
+param managedIdentityName string = 'bds-test-managedidentity'
+
 @description('The name of the container environment.')
 param containerName string = 'bds-test-containerenv-api'
 
@@ -36,6 +39,7 @@ module containerApp 'modules/containerApp.bicep' = {
   name: containerAppName
   params: {
     location: location
+    managedIdentityName: managedIdentityName
     containerAppName: containerAppName
     containerAppEnvironmentId: containerEnv.outputs.id
     acrLoginServer: acrServer
