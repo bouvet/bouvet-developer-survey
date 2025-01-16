@@ -12,8 +12,9 @@ param skuName string = 'standard'
 
 // Use User Assigned Managed Identity instead of System Assigned.
 // https://github.com/Azure/bicep/discussions/12056
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: managedIdentityName
+  location: location
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
@@ -31,6 +32,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     }
     accessPolicies: []
   }
+  dependsOn: [managedIdentity]
 }
 
 @description('Assign the Key Vault Secret User role to the managed identity')
@@ -38,7 +40,7 @@ resource keyVaultSecretUserRoleAssignment 'Microsoft.Authorization/roleAssignmen
   scope: keyVault
   name: guid(resourceGroup().id, managedIdentity.id, '4633458b-17de-408a-b874-0445c86b69e6')
   properties: {
-    roleDefinitionId: '/subscriptions/${subscription().id}/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6'
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
     principalId: managedIdentity.properties.principalId
   }
 }
