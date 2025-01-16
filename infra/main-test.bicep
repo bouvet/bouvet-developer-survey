@@ -42,6 +42,7 @@ module managedIdentity 'modules/managedIdentity.bicep' = {
 module keyVault 'modules/keyVault.bicep' = {
   name: keyVaultName
   params: {
+    managedIdentityName: managedIdentityName
     resourceName: keyVaultName
     location: location
   }
