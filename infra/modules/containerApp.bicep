@@ -1,4 +1,4 @@
-@description('The location to deploy resource');
+@description('The location to deploy resource')
 param location string
 
 @description('The name of the Container App Environment')
@@ -29,22 +29,7 @@ param targetPort int
 // Use User Assigned Managed Identity instead of System Assigned.
 // https://github.com/Azure/bicep/discussions/12056
 resource managedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
-  name: 'bds-test-managed-identity'
-}
-
-@description('This is the built-in Key Vault Secret User role. See https://docs.microsoft.com/azure/role-based-access-control/built-in-roles')
-resource keyVaultSecretUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
-  scope: resourceGroup()
-  name: '4633458b-17de-408a-b874-0445c86b69e6'
-}
-
-resource keyVaultSecretUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  scope: keyVault
-  name: guid(resourceGroup().id, managedId.id, keyVaultSecretUserRoleDefinition.id)
-  properties: {
-    roleDefinitionId: keyVaultSecretUserRoleDefinition.id
-    principalId: managedId.properties.principalId
-  }
+  name: 'bds-test-managed-identity' // TODO: fix
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {

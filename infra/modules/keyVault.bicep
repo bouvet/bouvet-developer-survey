@@ -1,4 +1,4 @@
-@description('Key Vault module name')
+@description('Key Vault name')
 param resourceName string
 
 @description('The location for the Key Vault.')
@@ -6,13 +6,6 @@ param location string
 
 @description('The SKU name of the Key Vault.')
 param skuName string = 'standard'
-
-// Use User Assigned Managed Identity instead of System Assigned.
-// https://github.com/Azure/bicep/discussions/12056
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: 'bds-test-managed-identity'
-  location: location
-}
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: resourceName
@@ -27,15 +20,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
       family: 'A'
       name: skuName
     }
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: managedIdentity.properties.principalId
-        permissions: {
-          secrets: ['get', 'list']
-        }
-      }
-    ]
+    accessPolicies: []
   }
 }
 
