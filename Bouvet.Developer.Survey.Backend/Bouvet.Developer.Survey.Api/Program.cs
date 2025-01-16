@@ -1,4 +1,3 @@
-using Azure.Identity;
 using Bouvet.Developer.Survey.Api.Extensions;
 using Bouvet.Developer.Survey.Api.Swagger;
 using Bouvet.Developer.Survey.Infrastructure.Data;
