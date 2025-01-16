@@ -91,12 +91,9 @@ catch (Exception ex)
     logger.LogError(ex, "An error occurred creating the DB.");
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
