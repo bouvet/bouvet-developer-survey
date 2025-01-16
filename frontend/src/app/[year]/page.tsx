@@ -15,7 +15,9 @@ export default function SurveyPage() {
           <h3 className="mt-10 font-bold text-left">
             Ingen data for denne perioden
           </h3>
-          <Link href="/" className="underline">Gå tilbake</Link>
+          <Link href="/" className="underline">
+            Gå tilbake
+          </Link>
         </section>
       </main>
     );
