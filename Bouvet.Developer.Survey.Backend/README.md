@@ -39,8 +39,8 @@ The key vault has not been connected to the project yet, but the secrets to conn
 ## Exporting the survey from Qualtrics
 
 First of all, we will have to go to https://www.qualtrics.com/ where the survey is located.
-We will have to export the survey structure and responses to a file. 
-* The structure file will be in the format of a .json file. 
+We will have to export the survey structure and responses to a file.
+* The structure file will be in the format of a .json file.
 * The responses file will be in the format of a .csv file.
 
 In order to export the survey structure, go to the survey you want to export and on the Survey tab, click the dropdown menu Tools and then Import/Export. And then click on Export Survey.
@@ -126,7 +126,7 @@ Where the parameter surveyId is the Guid of the survey you want to retrieve the 
             {
               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
               "blockElementId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-              "dateExportTag": "string",
+              "dataExportTag": "string",
               "questionText": "string",
               "questionDescription": "string",
               "isMultipleChoice": true,

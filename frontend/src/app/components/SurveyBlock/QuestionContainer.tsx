@@ -10,7 +10,7 @@ const QuestionContainer = ({ data }: Props) => {
     <div className="bg-white dark:text-white dark:bg-slate-800 w-full p-8 flex-[2]">
       <div className="sticky top-32 flex flex-col gap-4">
         <h3 className="md:text-4xl font-bold mb-2 md:mb-5 break-words text-2xl">
-          {data.dateExportTag}
+          {data.dataExportTag}
         </h3>
         <span>
           Ai generated notes on the data. Lorem ipsum dolor sit amet,
