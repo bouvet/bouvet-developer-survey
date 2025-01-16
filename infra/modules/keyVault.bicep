@@ -33,17 +33,12 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
-@description('This is the built-in Key Vault Secret User role. See https://docs.microsoft.com/azure/role-based-access-control/built-in-roles')
-resource keyVaultSecretUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
-  scope: resourceGroup()
-  name: '4633458b-17de-408a-b874-0445c86b69e6'
-}
-
+@description('Assign the Key Vault Secret User role to the managed identity')
 resource keyVaultSecretUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   scope: keyVault
-  name: guid(resourceGroup().id, managedIdentity.id, keyVaultSecretUserRoleDefinition.id)
+  name: guid(resourceGroup().id, managedIdentity.id, '4633458b-17de-408a-b874-0445c86b69e6')
   properties: {
-    roleDefinitionId: keyVaultSecretUserRoleDefinition.id
+    roleDefinitionId: '/subscriptions/${subscription().id}/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6'
     principalId: managedIdentity.properties.principalId
   }
 }
