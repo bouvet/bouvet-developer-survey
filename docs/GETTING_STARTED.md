@@ -29,7 +29,40 @@ DB_CONNECTION_STRING=Server=bds-db,1433;Database=bds-db;User ID=sa;Password=<you
 If you have the package install, you can create a password
 from the command line using the command `openssl rand --base64 16`
 
-__Running the containers__
+__Running the containers with Colima__
+
+Install colima with your preferred package manager.
+
+```
+# Install colima, docker and docker-compose
+# In this case we are on macOS using Homebrew
+brew install colima docker docker-compose
+
+# Start colima with 4gb ram, 4cpus and 100GB disk (default)
+colima start --cpu 4 --memory 4
+
+# Run docker-compose
+docker-compose up -d
+```
+
+> Install lazydocker TUI to inspect the running containers.
+> This is useful to start and stop containers as well
+> as viewing logs.
+
+```
+brew install lazydocker
+
+# start lazydocker in the terminal with the command
+lazydocker
+```
+
+This will start the containers.
+
+TODO: Why does the import csv return 400? when it all goes through?
+
+A usefull tool to ins
+
+__Running the containers with Docker Desktop__
 
 On the root of the project, you will see a `docker-compose.yaml` file.
 This contains the services we want to run as docker containers.
