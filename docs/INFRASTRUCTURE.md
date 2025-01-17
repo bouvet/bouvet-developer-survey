@@ -34,3 +34,20 @@ The GitHub workflows are located in the `.github/workflows` folder at the root o
 - **Pull-Request.yml** has the task of building and testing the project before a pull request can be accepted.
 - **Deploy-azure-resources.yml** handles deploying infrastructure files to the Azure Resource Group, starting with the QA test environment, and then the Production environment if approved by the repository owners.
 - **Azure-deploy-api.yml** is responsible for pushing images and deploying the latest image to an Azure Container App. For the QA step, this happens automatically, but updating the production image requires approval from an admin, along with attaching a tag to it.
+
+- sql server firewall rules [done]
+- container apps does not have static ip [don't need]
+- need a Vnet and private endpoints for this. [don't need]
+
+- frontend container app test workflow now gets the FQDN from the backend. [done]
+This means we don't have to configure it ourself.
+
+- I need to either recreate the database or fix it in using
+the query editor in Azure. Year column does not exist. [done]
+
+- Send mail til Kristin om tvilling SIM-kort. [done]
+
+- Deploy infra til prod
+
+- Print ut ting som Hanna har sent (selve brettet). []
+- Trenger vi en ny pipeline som deployer både dev og prod.
