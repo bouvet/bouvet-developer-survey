@@ -38,12 +38,12 @@ This contains the services we want to run as docker containers.
 # Build and start containers in the background
 docker compose up -d
 
-# Stop the containers
-docker compose down
 ```
 __Import data__
 
 Import survey and survey responses into the database.
+
+> Where do I find the files? Slack -> bds-team
 
 Go to `http://localhost:5001/index.html`. This is the GUI for the
 Open API specification of the backend API.
@@ -69,3 +69,8 @@ the database. Now we need to import user responses.
 - Press "Execute".
 
 Go to `http://localhost:3000`.
+
+To stop the containers type `docker compose down`.
+
+If you happen to delete the volumes mounted in the sql container,
+the data will be lost and you will have to do another import.
