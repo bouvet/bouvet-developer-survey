@@ -4,6 +4,9 @@ param location string = 'norwayeast'
 @description('Name of managed identity resource')
 param managedIdentityName string = 'bds-prod-managedidentity'
 
+@description('Key Vault module name')
+param keyVaultName string = 'bds-prod-keyvault'
+
 @description('The name of the container environment.')
 param containerName string = 'bds-prod-containerenv-api'
 
@@ -40,6 +43,7 @@ module containerApp 'modules/containerApp.bicep' = {
   params: {
     location: location
     managedIdentityName: managedIdentityName
+    keyVaultName: keyVaultName
     containerAppName: containerAppName
     containerAppEnvironmentId: containerEnv.outputs.id
     acrLoginServer: acrServer

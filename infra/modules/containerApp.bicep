@@ -8,7 +8,7 @@ param managedIdentityName string
 param containerAppName string
 
 @description('Key Vault module name')
-param keyVaultName string = 'bds-test-keyvault'
+param keyVaultName string
 
 @description('The ID of the Container App Environment')
 param containerAppEnvironmentId string
