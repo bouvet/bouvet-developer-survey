@@ -37,6 +37,23 @@ jobs:
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
 
+    - name: Retrieve Custom Domain from backend container app
+      id: get_custom_domain
+      run: |
+        # Fetch the custom domain using Azure CLI
+        CUSTOM_DOMAIN=$(az containerapp show --name bds-prod-containerapp-api --resource-group ${{ secrets.AZURE_RG_PROD }} --query "properties.configuration.ingress.customDomains[0].domain" -o tsv)
+
+        # Check if custom domain is found
+        if [ -z "$CUSTOM_DOMAIN" ]; then
+          echo "Custom domain not found. Failing the pipeline."
+          exit 1  # Exit with error if no custom domain is found
+        fi
+
+        # Set environment variable for the custom domain
+        BACKEND_URL="https://${CUSTOM_DOMAIN}/api"
+        echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
+        echo "Retrieved backend custom domain: $CUSTOM_DOMAIN"
+
     - name: Build and Push Frontend Image to ACR
       uses: azure/docker-login@v1
       with:
@@ -44,7 +61,7 @@ jobs:
         username: ${{ env.LOGIN_NAME }}
         password: ${{ env.PASSWORD }}
     - run: |
-        docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+        docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
         docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
