@@ -45,9 +45,8 @@ colima start --cpu 4 --memory 4
 docker-compose up -d
 ```
 
-> Install lazydocker TUI to inspect the running containers.
-> This is useful to start and stop containers as well
-> as viewing logs.
+> Install lazydocker TUI to administrate the running containers.
+> This is very useful to start, stop and debug containers.
 
 ```
 brew install lazydocker
@@ -103,7 +102,7 @@ the database. Now we need to import user responses.
 
 Go to `http://localhost:3000`.
 
-To stop the containers type `docker compose down`.
+To stop the containers type `docker-compose down`.
 
 If you happen to delete the volumes mounted in the sql container,
 the data will be lost and you will have to do another import.
