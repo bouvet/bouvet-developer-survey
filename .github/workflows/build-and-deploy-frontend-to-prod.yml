@@ -41,8 +41,7 @@ jobs:
       id: get_custom_domain
       run: |
         # Fetch the custom domain using Azure CLI
-        CUSTOM_DOMAIN=$(az containerapp show --name bds-prod-containerapp-api --resource-group ${{ secrets.AZURE_RG_PROD }} --query "properties.configuration.ingress.customDomains[0].domain" -o tsv)
-
+        CUSTOM_DOMAIN=$(az containerapp show --name bds-prod-containerapp-api --resource-group ${{ secrets.AZURE_RG_PROD }} --query "properties.configuration.ingress.customDomains[0].name" -o tsv)
         # Check if custom domain is found
         if [ -z "$CUSTOM_DOMAIN" ]; then
           echo "Custom domain not found. Failing the pipeline."
