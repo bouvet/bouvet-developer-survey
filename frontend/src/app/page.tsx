@@ -1,9 +1,13 @@
+"use client"; // TODO: just for test
+
 import { Fragment } from "react";
 import { Header } from "./components/Header";
 import { YearPickerCircle } from "./components/landing/YearPickerCircle";
 import { Wave } from "./components/landing/Wave";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  const router = useRouter();
   return (
     <Fragment>
       <Header simple />
@@ -22,6 +26,12 @@ export default function HomePage() {
               </p>
             </div>
             <YearPickerCircle />
+            <button
+              onClick={() => router.push("/generate-pdf?name=test123")}
+              className="px-5 py-2 bg-slate-900 text-white rounded-md"
+            >
+              Last ned PDF
+            </button>
           </div>
         </section>
       </main>
