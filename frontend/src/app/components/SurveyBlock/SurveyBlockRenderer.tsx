@@ -14,8 +14,10 @@ const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
 
   if (isLoading) return <div>Henter resultater...</div>;
   if (error) return <div>Error: {error.message}</div>;
+
   return (
-    <section className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6">
+    // css class survey-block is used for pdf generation to target this element.
+    <section className="flex survey-block text-black gap-4 flex-col lg:flex-row lg:gap-6">
       <QuestionContainer data={data} />
       <AnswerContainer tabs={tabs}>
         <BarChart {...barChartData} />
