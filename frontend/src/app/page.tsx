@@ -1,11 +1,15 @@
-import { Fragment } from "react";
+"use client";
+
 import { Header } from "./components/Header";
 import { YearPickerCircle } from "./components/landing/YearPickerCircle";
 import { Wave } from "./components/landing/Wave";
+import { MsalAuthenticationTemplate } from "@azure/msal-react";
+import { InteractionType } from "@azure/msal-browser";
 
 export default function HomePage() {
+
   return (
-    <Fragment>
+    <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
       <Header simple />
       <main>
         <section className="flex items-center h-screen z-10">
@@ -28,6 +32,6 @@ export default function HomePage() {
       <div className="absolute bottom-0 w-full z-0">
         <Wave />
       </div>
-    </Fragment>
+    </MsalAuthenticationTemplate>
   );
 }
