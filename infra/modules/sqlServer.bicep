@@ -64,7 +64,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
       {
         name: subnetName
         properties: {
-          addressPrefix: '10.0.0.0/27'
+          addressPrefix: '10.0.0.32/27'
         }
       }
     ]
@@ -87,6 +87,7 @@ resource sqlPrivateEndpoint 'Microsoft.Network/privateEndpoints@2024-05-01' = {
             description: 'Private endpoint for SQL server'
           }
           privateLinkServiceId: sqlServer.id
+          groupIds: ['sqlServer']
         }
       }
     ]
