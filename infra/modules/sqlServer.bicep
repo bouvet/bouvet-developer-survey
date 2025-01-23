@@ -57,14 +57,14 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '10.0.0.0/24' // 256 ip addresses in total
+        '10.0.0.0/24'
       ]
     }
     subnets: [
       {
         name: subnetName
         properties: {
-          addressPrefix: '10.0.1.0/27' // subnet with 32 addresses
+          addressPrefix: '10.0.0.0/27'
         }
       }
     ]
