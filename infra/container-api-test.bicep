@@ -16,6 +16,9 @@ param containerAppName string = 'bds-test-containerapp-api'
 @description('The name of the Log Analytics workspace.')
 param logAnalyticsWorkspaceName string = 'bds-test-loganalytics'
 
+@description('The name of the VNet.')
+param vnetName string = 'bds-test-vnet'
+
 @description('The name of the ACR login server.')
 param acrServer string
 
@@ -32,6 +35,7 @@ param containerImage string
 module containerEnv 'modules/containerEnv.bicep' = {
   name: containerName
   params: {
+    vnetName: vnetName
     containerAppEnvironmentName: containerName
     location: location
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
