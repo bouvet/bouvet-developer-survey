@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import OpenGraph from "./components/OpenGraph";
 
 export const metadata: Metadata = {
   title: "Bouvet Developer Survey",
@@ -26,6 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="no" suppressHydrationWarning>
+      <OpenGraph />
       <body className={inter.className}>
         <ThemeProvider attribute="data-mode">{children}</ThemeProvider>
       </body>
