@@ -7,6 +7,18 @@ param sqlDBName string
 @description('The location for the SQL Server.')
 param location string
 
+@description('The name of the VNet')
+param vnetName string
+
+@description('The name of the subnet')
+param subnetName string
+
+@description('The name of the private endpoint')
+param sqlPrivateEndpointName string
+
+@description('The name of the private endpoint connection')
+param sqlServerConnectionName string
+
 @description('The administrator login for the SQL Server.')
 param administratorLogin string
 
@@ -33,8 +45,50 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2022-05-01-preview' = {
     capacity: 1
     family: 'Gen5'
   }
-  properties:{
+  properties: {
     autoPauseDelay: 60
     minCapacity: 1
+  }
+}
+
+resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
+  name: vnetName
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '10.0.0.0/24' // 256 ip addresses in total
+      ]
+    }
+    subnets: [
+      {
+        name: subnetName
+        properties: {
+          addressPrefix: '10.0.1.0/27' // subnet with 32 addresses
+        }
+      }
+    ]
+  }
+}
+
+resource sqlPrivateEndpoint 'Microsoft.Network/privateEndpoints@2024-05-01' = {
+  name: sqlPrivateEndpointName
+  location: location
+  properties: {
+    subnet: {
+      id: vnet.properties.subnets[0].id
+    }
+    privateLinkServiceConnections: [
+      {
+        name: sqlServerConnectionName
+        properties: {
+          privateLinkServiceConnectionState: {
+            status: 'Approved'
+            description: 'Private endpoint for SQL server'
+          }
+          privateLinkServiceId: sqlServer.id
+        }
+      }
+    ]
   }
 }
