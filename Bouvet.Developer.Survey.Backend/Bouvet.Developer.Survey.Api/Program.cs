@@ -101,7 +101,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Require auth on all controllers
-// app.MapControllers().RequireAuthorization();
+app.MapControllers().RequireAuthorization();
 
 app.MapControllers();
 app.MapHealthChecks("/health");
