@@ -29,7 +29,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <div className="absolute bottom-0 w-full z-0">
+      <div className="absolute bottom-0 w-full z-0 pointer-events-none">
         <Wave />
       </div>
     </MsalAuthenticationTemplate>
