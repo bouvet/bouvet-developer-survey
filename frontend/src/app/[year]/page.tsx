@@ -5,6 +5,8 @@ import Hero from "@/app/components/hero/Hero";
 import Summary from "@/app/components/summary/Summary";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { MsalAuthenticationTemplate } from "@azure/msal-react";
+import { InteractionType } from "@azure/msal-browser";
 
 export default function SurveyPage() {
   const { year } = useParams<{ year: string }>();
@@ -23,9 +25,11 @@ export default function SurveyPage() {
     );
   return (
     <main>
-      <Hero />
-      <Summary />
-      <Survey />
+      <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
+        <Hero />
+        <Summary />
+        <Survey />
+      </MsalAuthenticationTemplate>
     </main>
   );
 }

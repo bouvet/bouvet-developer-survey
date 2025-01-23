@@ -1,13 +1,14 @@
-import { Fragment, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import Footer from "../components/Footer/Footer";
 import { Header } from "../components/Header";
+import AuthProvider from "../auth/authProvider";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <Fragment>
+    <AuthProvider>
       <Header />
       {children}
       <Footer />
-    </Fragment>
+    </AuthProvider>
   );
 }
