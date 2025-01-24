@@ -8,7 +8,7 @@ param managedIdentityName string = 'bds-test-managedidentity'
 param keyVaultName string = 'bds-test-keyvault'
 
 @description('The name of the container environment.')
-param containerName string = 'bds-test-containerenv-api'
+param containerEnvName string = 'bds-test-containerenv-api'
 
 @description('The name of the container app.')
 param containerAppName string = 'bds-test-containerapp-api'
@@ -33,10 +33,10 @@ param acrPassword string
 param containerImage string
 
 module containerEnv 'modules/containerEnv.bicep' = {
-  name: containerName
+  name: containerEnvName
   params: {
     vnetName: vnetName
-    containerAppEnvironmentName: containerName
+    containerAppEnvironmentName: containerEnvName
     location: location
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }

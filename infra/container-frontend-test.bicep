@@ -19,7 +19,6 @@ param acrServer string
 @description('The name of the ACR username.')
 param acrUsername string
 
-
 @secure()
 @description('The name of the ACR password.')
 param acrPassword string
