@@ -8,13 +8,16 @@ param managedIdentityName string = 'bds-prod-managedidentity'
 param keyVaultName string = 'bds-prod-keyvault'
 
 @description('The name of the container environment.')
-param containerName string = 'bds-prod-containerenv-api'
+param containerEnvName string = 'bds-prod-containerenv-api'
 
 @description('The name of the container app.')
 param containerAppName string = 'bds-prod-containerapp-api'
 
 @description('The name of the Log Analytics workspace.')
 param logAnalyticsWorkspaceName string = 'bds-prod-loganalytics'
+
+@description('The name of the VNet.')
+param vnetName string = 'bds-prod-vnet'
 
 @description('The name of the ACR login server.')
 param acrServer string
@@ -30,28 +33,86 @@ param acrPassword string
 param containerImage string
 
 module containerEnv 'modules/containerEnv.bicep' = {
-  name: containerName
+  name: containerEnvName
   params: {
-    containerAppEnvironmentName: containerName
+    vnetName: vnetName
+    containerAppEnvironmentName: containerEnvName
     location: location
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
 }
 
-module containerApp 'modules/containerApp.bicep' = {
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+  name: managedIdentityName
+}
+
+resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   name: containerAppName
-  params: {
-    location: location
-    managedIdentityName: managedIdentityName
-    keyVaultName: keyVaultName
-    containerAppName: containerAppName
-    containerAppEnvironmentId: containerEnv.outputs.id
-    acrLoginServer: acrServer
-    acrUsername: acrUsername
-    acrPassword: acrPassword
-    containerImage: containerImage
-    targetPort: 5001
+  location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedIdentity.id}': {}
+    }
+  }
+  properties: {
+    managedEnvironmentId: containerEnv.outputs.id
+    configuration: {
+      activeRevisionsMode: 'Multiple'
+      ingress: {
+        external: true
+        targetPort: 5001
+        allowInsecure: false
+        customDomains: [
+          {
+            bindingType: 'SniEnabled'
+            certificateId: 'surveyapi.bouvetapps.io-bds-prod-250120104816'
+            name: 'surveyapi.bouvetapps.io'
+          }
+        ]
+      }
+      registries: [
+        {
+          server: acrServer
+          passwordSecretRef: 'container-registry-password'
+          username: acrUsername
+        }
+      ]
+      secrets: [
+        {
+          name: 'container-registry-password'
+          value: acrPassword
+        }
+        {
+          name: 'sql-server-connection-string' // github workflow will fail if this does not exist.
+          keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/sql-server-connection-string'
+          identity: managedIdentity.id
+        }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: containerAppName
+          image: '${acrServer}/backend-image:${containerImage}'
+          resources: {
+            cpu: json('0.5')
+            memory: '1Gi'
+          }
+          env: [
+            {
+              name: 'ConnectionString'
+              secretRef: 'sql-server-connection-string'
+            }
+          ]
+        }
+      ]
+      scale: {
+        minReplicas: 0
+        maxReplicas: 2
+      }
+    }
   }
 }
 
-output fqdn string = containerApp.outputs.fqdn
+output fqdn string = containerApp.properties.configuration.ingress.fqdn

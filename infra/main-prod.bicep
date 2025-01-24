@@ -19,6 +19,18 @@ param sqlDBName string = 'bds-prod-sqldb'
 @description('The username for the SQL Server.')
 param sqlServerUsername string = 'bdsadmin'
 
+@description('The name of the VNet')
+param vnetName string = 'bds-prod-vnet'
+
+@description('The name of the subnet')
+param subnetName string = 'bds-prod-subnet'
+
+@description('The name of the private endpoint')
+param sqlPrivateEndpointName string = 'bds-prod-privateendpoint-sqlserver'
+
+@description('The name of the private endpoint connection')
+param sqlServerConnectionName string = 'bds-prod-sqlserver-connection'
+
 @secure()
 @description('The administrator password used for the sql server instance created.')
 param sqlServerPassword string
@@ -43,6 +55,10 @@ module keyVault 'modules/keyVault.bicep' = {
 module sqlServer 'modules/sqlServer.bicep' = {
   name: serverName
   params: {
+    vnetName: vnetName
+    subnetName: subnetName
+    sqlPrivateEndpointName: sqlPrivateEndpointName
+    sqlServerConnectionName: sqlServerConnectionName
     serverName: serverName
     sqlDBName: sqlDBName
     location: location
