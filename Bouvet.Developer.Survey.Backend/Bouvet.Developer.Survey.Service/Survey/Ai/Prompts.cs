@@ -11,7 +11,7 @@ public static class Prompts
         4. Context Awareness: Understand that the survey question, its description, and response percentages provide essential context for crafting your summary.
 
         Output Format:
-        Generate one sentence, maybe two dependining on the data to summarize the results. It cannot be longer. It  Avoid technical jargon and aim to communicate the findings in a way that a general audience can easily understand.
+        Generate one sentence, maybe two dependining on the data to summarize the results. It cannot be longer. Avoid technical jargon and aim to communicate the findings in a way that a general audience can easily understand.
 
         Example Output:
         Most respondents (48%) in the survey are aged 25-34, followed by 24% in the 35-44 age group. 
