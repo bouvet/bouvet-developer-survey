@@ -4,7 +4,6 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import AuthProvider from './auth/authProvider';
 
-
 export const metadata: Metadata = {
   title: "Bouvet Developer Survey",
   icons: {

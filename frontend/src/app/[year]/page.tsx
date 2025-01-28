@@ -3,6 +3,7 @@
 import Survey from "@/app/components/survey/Survey";
 import Hero from "@/app/components/hero/Hero";
 import Summary from "@/app/components/summary/Summary";
+<<<<<<< HEAD
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
@@ -23,6 +24,13 @@ export default function SurveyPage() {
         </section>
       </main>
     );
+=======
+import { notFound, useParams } from "next/navigation";
+
+export default function SurveyPage() {
+  const { year } = useParams<{ year: string }>();
+  if (year !== "2024") notFound();
+>>>>>>> feat/92-change-logo-to-support-dynamic-year
   return (
     <main>
       <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
