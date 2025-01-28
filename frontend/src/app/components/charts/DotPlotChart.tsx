@@ -13,9 +13,14 @@ const Plot = dynamic(() => import("react-plotly.js"), {
 interface DotPlotChartJsonProps {
   title?: string;
   data: DotPlot;
+  numberOfRespondents: number;
 }
 
-const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
+const DotPlotChart = ({
+  title,
+  data,
+  numberOfRespondents,
+}: DotPlotChartJsonProps) => {
   //check darkmode and set graph theme
   const theme = useChartTheme();
 
@@ -117,7 +122,7 @@ const DotPlotChart = ({ title, data }: DotPlotChartJsonProps) => {
         style={{ width: "100%", height: plotHeight }}
       />
       <div className="mt-auto mb-2 ml-auto">
-        <ChartCounter number={50} total={200} />
+        <ChartCounter numberOfRespondents={numberOfRespondents} />
       </div>
     </div>
   );

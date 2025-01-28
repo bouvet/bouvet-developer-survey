@@ -11,10 +11,10 @@ public class QuestionResponseDto
     public string QuestionText { get; set; } = null!;
     public string QuestionDescription { get; set; } = null!;
     public bool IsMultipleChoice { get; set; }
-
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     public virtual ICollection<GetChoiceDto>? Choices { get; set; }
+    public int NumberOfRespondents { get; set; }
 
     public static QuestionResponseDto CreateFromEntity(Question question, ICollection<GetChoiceDto> getChoiceDto)
     {
@@ -28,8 +28,10 @@ public class QuestionResponseDto
             IsMultipleChoice = question.IsMultipleChoice,
             CreatedAt = question.CreatedAt,
             UpdatedAt = question.UpdatedAt,
-			// NumberOfRespondents = //TODO
-            Choices = getChoiceDto
+            Choices = getChoiceDto,
+            NumberOfRespondents = question.ResponseUsers != null
+            ? question.ResponseUsers.Select(ru => ru.UserId).Distinct().Count()
+            : 0,
         };
     }
 }
