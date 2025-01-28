@@ -3,16 +3,19 @@ import { chartConfig, getGridShapes, useChartTheme } from "./chartConfig";
 import { BarChartData } from "@/app/hooks/useGetBarChartData";
 import ChartCounter from "./ChartCounter";
 
+interface Props extends BarChartData {
+  numberOfRespondents: number;
+}
+
 // lazy load 'react-plotly.js'
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-const BarChart = ({ x, y }: BarChartData) => {
+const BarChart = ({ x, y, numberOfRespondents }: Props) => {
   // check dark mode and set graph theme
   const theme = useChartTheme();
   const numberOfChoices = y.length;
   const plotHeight = numberOfChoices * 30;
   const shapes = getGridShapes(y);
-
   const chartData: Partial<Plotly.Data>[] = [
     {
       x,
@@ -77,7 +80,7 @@ const BarChart = ({ x, y }: BarChartData) => {
         />
       </div>
       <div className="mt-auto ml-auto">
-        <ChartCounter number={50} total={200} />
+        <ChartCounter numberOfRespondents={numberOfRespondents} />
       </div>
     </div>
   );

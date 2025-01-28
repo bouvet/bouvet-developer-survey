@@ -28,6 +28,7 @@ export interface SurveyBlock extends BaseEntity {
 export interface Survey extends BaseEntity {
   name: string;
   surveyId: string;
+  totalParticipants: number;
   lastSyncedAt: string;
   surveyBlocks: SurveyBlock[];
 }
@@ -42,6 +43,7 @@ export interface Answer extends BaseEntity {
   updatedAt: string | null;
   choices: Choice[];
   aiAnalysedText: string | null;
+  numberOfRespondents: number;
 }
 
 export interface Choice extends BaseEntity {

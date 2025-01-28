@@ -14,12 +14,21 @@ const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
 
   if (isLoading) return <div>Henter resultater...</div>;
   if (error) return <div>Error: {error.message}</div>;
+
   return (
     <section className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6">
       <QuestionContainer data={data} />
       <AnswerContainer tabs={tabs}>
-        <BarChart {...barChartData} />
-        {data.isMultipleChoice && <DotPlotChart data={dotPlot} />}
+        <BarChart
+          {...barChartData}
+          numberOfRespondents={data.numberOfRespondents}
+        />
+        {data.isMultipleChoice && (
+          <DotPlotChart
+            data={dotPlot}
+            numberOfRespondents={data?.numberOfRespondents || 0}
+          />
+        )}
       </AnswerContainer>
     </section>
   );

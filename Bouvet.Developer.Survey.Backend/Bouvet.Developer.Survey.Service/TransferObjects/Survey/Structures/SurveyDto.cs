@@ -10,6 +10,7 @@ public class SurveyDto
     public DateTimeOffset? UpdatedAt { get; set; }
     public DateTimeOffset? LastSyncedAt { get; set; }
     public virtual ICollection<SurveyElementDto>? SurveyBlocks { get; set; }
+    public int TotalParticipants { get; set; }
 
     public static SurveyDto CreateFromEntity(Domain.Entities.Survey.Survey survey)
     {
@@ -23,6 +24,7 @@ public class SurveyDto
             UpdatedAt = survey.UpdatedAt,
             LastSyncedAt = survey.LastSyncedAt,
             SurveyBlocks = survey.SurveyBlocks?.Select(SurveyElementDto.CreateFromEntity).ToList(),
+            TotalParticipants = survey.Users?.Count ?? 0
         };
     }
 }
