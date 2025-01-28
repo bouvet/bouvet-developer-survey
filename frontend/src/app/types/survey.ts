@@ -41,6 +41,7 @@ export interface Answer extends BaseEntity {
   createdAt: string;
   updatedAt: string | null;
   choices: Choice[];
+  aiAnalysedText: string | null;
 }
 
 export interface Choice extends BaseEntity {
