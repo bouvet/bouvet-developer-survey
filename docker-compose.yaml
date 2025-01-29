@@ -18,6 +18,8 @@ services:
     environment:
       - ConnectionString=${DB_CONNECTION_STRING}
       - DOTNET_ENVIRONMENT=Development
+      - OpenAiUrl=${OpenAiUrl}
+      - OpenAiSecretKey=${OpenAiSecretKey}
     build:
       context: ./Bouvet.Developer.Survey.Backend
       dockerfile: Dockerfile
