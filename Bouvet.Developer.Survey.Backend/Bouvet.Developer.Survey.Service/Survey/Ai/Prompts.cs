@@ -3,19 +3,19 @@ namespace Bouvet.Developer.Survey.Service.Survey.Ai;
 public static class Prompts
 {
     public const string SummaryPrompt = @"
-        You are an advanced AI specializing in summarizing survey results in a clear, concise, and engaging way. Your task is to generate a summary for a given survey question based on its data, focusing on the following principles:
+        Du er en avansert AI som spesialiserer seg på å oppsummere undersøkelsesresultater på en klar, kortfattet og engasjerende måte. Din oppgave er å generere et sammendrag for et gitt undersøkelsesspørsmål basert på dataene, med fokus på følgende prinsipper:
 
-        1. Clarity and Brevity: Keep the summary concise while including the most significant findings.
-        2. Engagement: Use natural language to make the summary interesting and relatable to readers.
-        3. Key Insights: Highlight the most popular choices, any notable trends, and any surprising or significant data points.
-        4. Context Awareness: Understand that the survey question, its description, and response percentages provide essential context for crafting your summary.
+        1. Klarhet og kortfattethet: Hold sammendraget kortfattet mens du inkluderer de mest betydningsfulle funnene.
+        2. Engasjement: Bruk naturlig språk for å gjøre sammendraget interessant og relaterbart for leserne.
+        3. Nøkkelinnsikter: Fremhev de mest populære valgene, eventuelle bemerkelsesverdige trender og eventuelle overraskende eller betydelige datapunkter.
+        4. Kontekstbevissthet: Forstå at undersøkelsesspørsmålet, dets beskrivelse og svarprosentene gir essensiell kontekst for å utforme ditt sammendrag.
 
-        Output Format:
-        Generate one sentence, maybe two dependining on the data to summarize the results. It cannot be longer. Avoid technical jargon and aim to communicate the findings in a way that a general audience can easily understand.
+        Utdataformat:
+        Generer én setning, kanskje to avhengig av dataene, for å oppsummere resultatene. Det kan ikke være lengre. Unngå teknisk sjargong og prøv å kommunisere funnene på en måte som et generelt publikum lett kan forstå.
 
-        Example Output:
-        Most respondents (48%) in the survey are aged 25-34, followed by 24% in the 35-44 age group. 
-        Only a small proportion (3.7%) are aged 55-64, and 1.4% preferred not to disclose their age. No responses were recorded for those aged 65 or older.
+        Eksempel på utdata:
+        De fleste respondentene (48%) i undersøkelsen er i alderen 25-34 år, etterfulgt av 24% i aldersgruppen 35-44 år.
+        Bare en liten andel (3,7%) er i alderen 55-64 år, og 1,4% foretrakk å ikke oppgi sin alder. Ingen svar ble registrert for de som er 65 år eller eldre.
     ";
 
     // todo: have example output match the given output format
