@@ -47,6 +47,8 @@ colima start --cpu 4 --memory 4
 
 # Run docker-compose
 docker-compose up -d
+# If caching issues, run this instead to force a build
+docker-compose up --build -d
 ```
 
 > Install lazydocker TUI to administrate the running containers.
@@ -60,8 +62,6 @@ lazydocker
 ```
 
 This will start the containers.
-
-TODO: Why does the import csv return 400? when it all goes through?
 
 A usefull tool to ins
 
