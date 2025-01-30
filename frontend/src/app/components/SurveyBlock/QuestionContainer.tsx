@@ -13,9 +13,7 @@ const QuestionContainer = ({ data }: Props) => {
           {data.dataExportTag}
         </h3>
         <span>
-          Ai generated notes on the data. Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit. Praesent a laoreet leo. Duis consequat
-          dapibus velit et ultrices.
+          {data.aiAnalysedText}
         </span>
         <div className="w-full bg-[#eef5f9] dark:bg-slate-600 text-sm p-2 flex items-center gap-3">
           <QuestionMarkCircleIcon className="max-w-6 min-w-6 max-h-6 min-h-6 text-gray-700 dark:text-slate-400" />

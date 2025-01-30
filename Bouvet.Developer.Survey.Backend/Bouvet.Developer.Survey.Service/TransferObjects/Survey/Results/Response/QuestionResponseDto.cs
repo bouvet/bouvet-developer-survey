@@ -7,7 +7,7 @@ public class QuestionResponseDto
 {
     public Guid Id { get; set; }
     public string DataExportTag { get; set; } = null!;
-    public AiAnalyseDto? AiAnalyse { get; set; } = null!;
+    public string? AiAnalysedText { get; set; }
     public string QuestionText { get; set; } = null!;
     public string QuestionDescription { get; set; } = null!;
     public bool IsMultipleChoice { get; set; }
@@ -22,7 +22,7 @@ public class QuestionResponseDto
         {
             Id = question.Id,
             DataExportTag = question.DateExportTag,
-            // AiAnalyse = AiAnalyseDto.CreateFromEntity(question.AiAnalyse ?? null),
+            AiAnalysedText = question.AiAnalyse?.Text,
             QuestionText = question.QuestionText,
             QuestionDescription = question.QuestionDescription,
             IsMultipleChoice = question.IsMultipleChoice,

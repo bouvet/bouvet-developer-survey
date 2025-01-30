@@ -25,9 +25,13 @@ Open your favorite editor and add thes two secrets.
 ```bash
 DB_PASSWORD=<your-password>
 DB_CONNECTION_STRING=Server=bds-db,1433;Database=bds-db;User ID=sa;Password=<your-password>;TrustServerCertificate=True;
+OpenAiUrl = <url-from-azure>
+OpenAiSecretKey = <secret-key-from-azure>
 ```
 If you have the package install, you can create a password
 from the command line using the command `openssl rand --base64 16`
+
+The secrets for the OpenAI test service can be found at bds-test-openai -> Resource Management -> Keys and Endpoint.
 
 __Running the containers with Colima__
 
