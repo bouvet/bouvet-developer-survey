@@ -96,6 +96,14 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
               name: 'ConnectionString'
               secretRef: 'sql-server-connection-string'
             }
+            {
+              name: 'OpenAiUrl'
+              secretRef: 'open-ai-url'
+            }
+            {
+              name: 'OpenAiSecretKey'
+              secretRef: 'open-ai-secret-key'
+            }
           ]
         }
       ]
