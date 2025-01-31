@@ -37,7 +37,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         customDomains: [
           {
             name: 'surveyapi.bouvetapps.io'
-            certificateId: '/subscriptions/${subscription().id}/resourceGroups/rg-bds/providers/Microsoft.App/managedEnvironments/bds-prod-containerenv-api/managedCertificates/surveyapi.bouvetapps.io-bds-prod-250120104816'
+            certificateId: resourceId('Microsoft.App/managedEnvironments', 'bds-prod-containerenv-frontend', 'managedCertificates', 'survey.bouvetapps.io-bds-prod-250120105916')
           }
         ]
       }
