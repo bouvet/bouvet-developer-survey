@@ -1,7 +1,7 @@
 @description('The location to deploy resource')
 param location string
 
-@description('The name of the Container App Environment')
+@description('The name of the Container App')
 param containerAppName string
 
 @description('The ID of the Container App Environment')
@@ -23,6 +23,10 @@ param containerImage string
 @description('The target port for the container app.')
 param targetPort int
 
+resource containerAppEnvironment 'Microsoft.App/managedEnvironments@2023-08-01-preview' existing = {
+  id: containerAppEnvironmentId
+}
+
 resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   name: containerAppName
   location: location
@@ -37,7 +41,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         customDomains: [
           {
             name: 'survey.bouvetapps.io'
-            certificateId: resourceId('Microsoft.App/managedEnvironments', containerAppEnvironmentId, 'managedCertificates', 'survey.bouvetapps.io-bds-prod-250120105916')
+            certificateId: resourceId(containerAppEnvironment.resourceGroup, 'Microsoft.App/managedEnvironments', containerAppEnvironment.name, 'managedCertificates', 'survey.bouvetapps.io-bds-prod-250120105916')
           }
         ]
       }
