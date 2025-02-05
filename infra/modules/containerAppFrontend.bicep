@@ -23,6 +23,9 @@ param containerImage string
 @description('The target port for the container app.')
 param targetPort int
 
+@description('The certificate ID for the custom domain')
+param certificateId string
+
 resource containerAppEnvironment 'Microsoft.App/managedEnvironments@2023-08-01-preview' existing = {
   id: containerAppEnvironmentId
 }
@@ -41,7 +44,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         customDomains: [
           {
             name: 'survey.bouvetapps.io'
-            certificateId: resourceId(containerAppEnvironment.resourceGroup, 'Microsoft.App/managedEnvironments', containerAppEnvironment.name, 'managedCertificates', 'survey.bouvetapps.io-bds-prod-250120105916')
+            certificateId: certificateId
           }
         ]
       }
