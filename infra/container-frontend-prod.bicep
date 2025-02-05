@@ -23,9 +23,6 @@ param acrPassword string
 @description('The name of the container image.')
 param containerImage string
 
-@description('The certificate ID for the custom domain')
-param certificateId string
-
 module containerEnv 'modules/containerEnv.bicep' = {
   name: containerName
   params: {
@@ -46,7 +43,6 @@ module containerApp 'modules/containerAppFrontend.bicep' = {
     acrPassword: acrPassword
     containerImage: containerImage
     targetPort: 3000
-    certificateId: certificateId  // Pass certificateId to module
   }
 }
 

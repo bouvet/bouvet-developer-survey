@@ -64,22 +64,6 @@ jobs:
         docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
-    - name: Retrieve Custom Domain Certificate ID
-      id: get_certificate_id
-      run: |
-        certificateId=$(az containerapp certificate show \
-          --name bds-prod-containerapp-frontend \
-          --resource-group ${{ secrets.AZURE_RG_PROD }} \
-          --query "id" -o tsv)
-
-        if [ -z "$certificateId" ]; then
-          echo "Certificate ID not found. Failing the pipeline."
-          exit 1
-        fi
-
-        echo "CERTIFICATE_ID=${certificateId}" >> $GITHUB_ENV
-        echo "Retrieved Certificate ID: $certificateId"
-
     - name: Deploy to Container Apps
       uses: azure/arm-deploy@v1
       with:
@@ -92,7 +76,6 @@ jobs:
           acrUsername=${{ env.LOGIN_NAME }}
           acrPassword=${{ env.PASSWORD }}
           containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
-          certificateId=${{ env.CERTIFICATE_ID }}
 
     - name: Get Container App URL
       run: |
