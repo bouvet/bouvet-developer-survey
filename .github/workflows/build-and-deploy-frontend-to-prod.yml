@@ -77,6 +77,28 @@ jobs:
           acrPassword=${{ env.PASSWORD }}
           containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
 
+    # Step to Activate Custom Domain and Associate Managed Certificate
+    - name: Activate Custom Domain and Associate Managed Certificate
+      run: |
+        # Fetch the custom domain and certificate associated with the container app
+        CUSTOM_DOMAIN=$(az containerapp show --name bds-prod-containerapp-frontend --resource-group ${{ secrets.AZURE_RG_PROD }} --query "properties.configuration.ingress.customDomains[0].name" -o tsv)
+        CERTIFICATE_ID=$(az containerapp show --name bds-prod-containerapp-frontend --resource-group ${{ secrets.AZURE_RG_PROD }} --query "properties.configuration.ingress.customDomains[0].certificateId" -o tsv)
+
+        # Ensure that both the custom domain and certificate exist
+        if [ -z "$CUSTOM_DOMAIN" ] || [ -z "$CERTIFICATE_ID" ]; then
+          echo "Custom domain or certificate not found. Failing the pipeline."
+          exit 1  # Exit with error if either is missing
+        fi
+
+        # Activate the custom domain and associate the managed certificate
+        az containerapp ingress update \
+          --name bds-prod-containerapp-frontend \
+          --resource-group ${{ secrets.AZURE_RG_PROD }} \
+          --custom-domains $CUSTOM_DOMAIN \
+          --status "Active" \
+          --certificate "$CERTIFICATE_ID"
+        echo "Custom domain $CUSTOM_DOMAIN activated with certificate."
+
     - name: Get Container App URL
       run: |
         fqdn=$(az containerapp show -n bds-prod-containerapp-frontend -g ${{ secrets.AZURE_RG_PROD }} --query properties.configuration.ingress.fqdn -o tsv)
