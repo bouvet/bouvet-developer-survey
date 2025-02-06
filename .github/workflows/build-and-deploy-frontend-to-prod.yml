@@ -37,6 +37,15 @@ jobs:
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
 
+    - name: Check if Azure Subscription ID and Resource Group are set
+      run: |
+         if [ -z "${{ secrets.AZURE_SUBSCRIPTION_ID }}" ] || [ -z "${{ secrets.AZURE_RG_PROD }}" ]; then
+          echo "One or more secrets are missing!"
+          exit 1
+         else
+          echo "Secrets are available."
+         fi
+
     - name: Set Certificate ID
       run: |
         CERTIFICATE_ID="/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.AZURE_RG_PROD }}/providers/Microsoft.App/managedEnvironments/bds-prod-containerenv-frontend/certificates/survey.bouvetapps.io-bds-prod-250120105916"
