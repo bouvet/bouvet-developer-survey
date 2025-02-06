@@ -23,6 +23,9 @@ param containerImage string
 @description('The target port for the container app.')
 param targetPort int
 
+@description('The certificate id')
+param certificateId string
+
 resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   name: containerAppName
   location: location
@@ -34,6 +37,9 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         external: true
         targetPort: targetPort
         allowInsecure: false
+        customDomains: [
+          { name: 'survey.bouvetapps.io', bindingType: 'SniEnabled', certificateId: certificateId }
+        ]
       }
       secrets: [
         {

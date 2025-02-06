@@ -37,6 +37,11 @@ jobs:
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
 
+    - name: Set Certificate ID
+      run: |
+        CERTIFICATE_ID="/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.AZURE_RG_PROD }}/providers/Microsoft.App/managedEnvironments/bds-prod-containerenv-frontend/certificates/survey.bouvetapps.io-bds-prod-250120105916"
+        echo "CERTIFICATE_ID=${CERTIFICATE_ID}" >> $GITHUB_ENV
+
     - name: Retrieve Custom Domain from backend container app
       id: get_custom_domain
       run: |
@@ -76,6 +81,7 @@ jobs:
           acrUsername=${{ env.LOGIN_NAME }}
           acrPassword=${{ env.PASSWORD }}
           containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+          certificateId=${{ env.CERTIFICATE_ID }}
 
     - name: Get Container App URL
       run: |
