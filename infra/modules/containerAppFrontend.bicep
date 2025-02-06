@@ -35,7 +35,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
         targetPort: targetPort
         allowInsecure: false
         customDomains: [
-          { name: 'survey.bouvetapps.io', bindingType: 'Disabled' }
+          { name: 'survey.bouvetapps.io' }
         ]
       }
       secrets: [
