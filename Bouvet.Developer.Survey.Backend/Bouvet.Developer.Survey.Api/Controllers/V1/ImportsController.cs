@@ -23,7 +23,7 @@ public class ImportsController : ControllerBase
     }
 
     /// <summary>
-    /// Import a survey structure from json
+    /// Import a survey structure from json.
     /// </summary>
     /// <param name="file">The file to upload</param>
     /// <param name="year">The survey year</param>
