@@ -14,7 +14,7 @@ const Survey = () => {
       </p>
       <p>
         Denne rapporten presenterer svarene fra undersøkelsen, og viser trendene
-        våre innen programmeringsspråk, rammeverk, KI og sikkerhetsverktøy
+        våre innen programmeringsspråk, rammeverk, KI og sikkerhetsverktøy.
       </p>
       <h3 className="mt-10 font-bold text-left">Topp 10:</h3>
       <p>

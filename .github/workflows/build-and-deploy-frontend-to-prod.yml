@@ -37,15 +37,6 @@ jobs:
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
 
-    - name: Debug subscription ID
-      run: |
-        echo "AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION }}"
-
-    - name: Set Certificate ID
-      run: |
-        CERTIFICATE_ID="/subscriptions/${{ secrets.AZURE_SUBSCRIPTION }}/resourceGroups/${{ secrets.AZURE_RG_PROD }}/providers/Microsoft.App/managedEnvironments/bds-prod-containerenv-frontend/certificates/survey.bouvetapps.io-bds-prod-250120105916"
-        echo "CERTIFICATE_ID=${CERTIFICATE_ID}" >> $GITHUB_ENV
-
     - name: Retrieve Custom Domain from backend container app
       id: get_custom_domain
       run: |
@@ -73,19 +64,12 @@ jobs:
         docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
         echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
-    - name: Deploy to Container Apps
-      uses: azure/arm-deploy@v1
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ secrets.AZURE_RG_PROD }}
-        template: ./infra/container-frontend-prod.bicep
-        parameters: >
-          location=norwayeast
-          acrServer=${{ env.LOGIN_SERVER }}
-          acrUsername=${{ env.LOGIN_NAME }}
-          acrPassword=${{ env.PASSWORD }}
-          containerImage=${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
-          certificateId=${{ env.CERTIFICATE_ID }}
+    - name: Update Container App Image
+      run: |
+        az containerapp update \
+          --name bds-prod-containerapp-frontend \
+          --resource-group ${{ secrets.AZURE_RG_PROD }} \
+          --image ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
 
     - name: Get Container App URL
       run: |
