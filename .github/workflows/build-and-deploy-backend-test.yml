@@ -96,9 +96,9 @@ jobs:
       - name: Get ACR Credentials
         id: getacrcreds
         run: |
-          loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
-          loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
-          password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
+          loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query "[0].loginServer" -o tsv)
+          loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query username -o tsv)
+          password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query "passwords[0].value" -o tsv)
           echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
           echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
           echo "PASSWORD=$password" >> $GITHUB_ENV
@@ -118,7 +118,7 @@ jobs:
         uses: azure/arm-deploy@v2
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+          resourceGroupName: ${{ secrets.AZURE_RG_TEST_DELETION }}
           template: infra/container-api-test.bicep
           parameters: acrServer=${{ env.LOGIN_SERVER }} acrUsername=${{ env.LOGIN_NAME }} acrPassword=${{ env.PASSWORD }} containerImage=${{ env.IMAGE_TAG }}
           failOnStdErr: false
