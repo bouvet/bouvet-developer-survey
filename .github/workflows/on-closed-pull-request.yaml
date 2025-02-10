@@ -4,9 +4,6 @@ on:
   pull_request:
     types: [closed]
     branches: [main]
-    paths-ignore:
-    - README.md
-    - docs/
   workflow_dispatch:
     inputs:
       pr:
@@ -19,7 +16,7 @@ env:
 
 jobs:
   remove:
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     name: 🗑️ Remove
 
@@ -29,9 +26,16 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0
+
+    - name: Install Azure Resources Cleaner
+      run: dotnet tool install --global azure-resources-cleaner
+
     - name: Remove review resources
       run: |
-        dotnet tool install --global azure-resources-cleaner && \
         azrc \
-        --pr ${{ inputs.pr || github.event.pull_request.number }} \
+        --pr ${{ github.event.pull_request.number || inputs.pr }} \
         --subscription ${{ env.AZURE_SUBSCRIPTION_ID }}
