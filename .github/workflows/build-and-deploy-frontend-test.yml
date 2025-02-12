@@ -38,15 +38,15 @@ jobs:
     - name: Get ACR name
       id: getacrname
       run: |
-        acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query "[0].name" -o tsv)
+        acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].name" -o tsv)
         echo "ACR_NAME=$acrName" >> $GITHUB_ENV
 
     - name: Get ACR Credentials
       id: getacrcreds
       run: |
-        loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query "[0].loginServer" -o tsv)
-        loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query username -o tsv)
-        password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query "passwords[0].value" -o tsv)
+        loginServer=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].loginServer" -o tsv)
+        loginName=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query username -o tsv)
+        password=$(az acr credential show -n ${{ env.ACR_NAME }} --resource-group ${{ secrets.AZURE_RG_TEST }} --query "passwords[0].value" -o tsv)
         echo "LOGIN_SERVER=$loginServer" >> $GITHUB_ENV
         echo "LOGIN_NAME=$loginName" >> $GITHUB_ENV
         echo "PASSWORD=$password" >> $GITHUB_ENV
@@ -55,7 +55,7 @@ jobs:
       id: get_backend_fqdn
       run: |
         # Fetch the backend FQDN dynamically using Azure CLI
-        BACKEND_FQDN=$(az containerapp show --name bds-test-containerapp-api --resource-group ${{ secrets.AZURE_RG_TEST_DELETION }} --query "properties.configuration.ingress.fqdn" -o tsv)
+        BACKEND_FQDN=$(az containerapp show --name bds-test-containerapp-api --resource-group ${{ secrets.AZURE_RG_TEST }} --query "properties.configuration.ingress.fqdn" -o tsv)
         BACKEND_URL="https://${BACKEND_FQDN}/api"
         echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
         echo "Retrieved backend FQDN: $BACKEND_FQDN"
@@ -75,7 +75,7 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ secrets.AZURE_RG_TEST_DELETION }}
+        resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
         template: ./infra/container-frontend-test.bicep
         parameters: >
           location=norwayeast
@@ -86,5 +86,5 @@ jobs:
 
     - name: Get Container App URL
       run: |
-        fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG_TEST_DELETION }} --query properties.configuration.ingress.fqdn -o tsv)
+        fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG_TEST }} --query properties.configuration.ingress.fqdn -o tsv)
         echo "Container App is deployed at: https://$fqdn"
