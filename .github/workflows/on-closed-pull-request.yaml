@@ -4,10 +4,8 @@ on:
   pull_request:
     types: [closed]
     branches: [main]
-  workflow_dispatch:
 
 env:
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   RESOURCE_GROUP: rg-bds-test
 
 jobs:
@@ -22,7 +20,11 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Set PR Number
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
       - name: Remove resources from test environment
         run: |
+          echo "Removing resources for PR #$PR_NUMBER..."
           az resource list --resource-group $RESOURCE_GROUP --query "[].id" --output tsv |
-          xargs -I {} az resource delete --ids {} --subscription $AZURE_SUBSCRIPTION_ID
+          xargs -I {} az resource delete --ids {} --subscription ${{ secrets.AZURE_SUBSCRIPTION }}
