@@ -89,9 +89,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Get ACR Name
+        run: |
+          acrName=$(az acr list --resource-group ${{ secrets.AZURE_RG_TEST }} --query "[0].name" -o tsv)
+          echo "ACR_NAME=$acrName" >> $GITHUB_ENV
+
       - name: Enable ACR Admin Account
         run: |
-          az acr update -n bouvetSurveyContainerRegistry --admin-enabled true
+          az acr update -n ${{ env.ACR_NAME }} --admin-enabled true
 
       - name: Get ACR Credentials
         id: getacrcreds
