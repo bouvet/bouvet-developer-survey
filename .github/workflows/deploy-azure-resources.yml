@@ -17,23 +17,27 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Azure resources TEST
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Log into Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Log into Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Assign Key Vault access to Managed Identity
+        run: |
+          MI_PRINCIPAL_ID=$(az identity show --name bds-test-managedidentity --resource-group ${{ secrets.AZURE_RG_TEST }} --query 'principalId' --output tsv)
+          az role assignment create --assignee $MI_PRINCIPAL_ID --role "Key Vault Administrator" --scope "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION }}/resourceGroups/${{ secrets.AZURE_RG_TEST }}/providers/Microsoft.KeyVault/vaults/bds-test-keyvault"
 
-    - name: Deploy Azure Resources test
-      uses: azure/arm-deploy@v2
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
-        template: infra/main-test.bicep
-        parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}"
-        failOnStdErr: false
+      - name: Deploy Azure Resources test
+        uses: azure/arm-deploy@v2
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG_TEST }}
+          template: infra/main-test.bicep
+          parameters: 'sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD_TEST }}'
+          failOnStdErr: false
 
   deploy-azure-resources-prod:
     runs-on: ubuntu-latest
@@ -42,20 +46,19 @@ jobs:
     environment: Production
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Log into Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Log into Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Deploy Azure resources prod
-      uses: azure/arm-deploy@v2
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ secrets.AZURE_RG }}
-        template: infra/main-prod.bicep
-        parameters: "sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD }}"
-        failOnStdErr: false
+      - name: Deploy Azure resources prod
+        uses: azure/arm-deploy@v2
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: infra/main-prod.bicep
+          parameters: 'sqlServerPassword=${{ secrets.SQL_SERVER_PASSWORD }}'
+          failOnStdErr: false
