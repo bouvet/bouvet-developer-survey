@@ -39,3 +39,17 @@ jobs:
         run: |
           echo "Deleting virtual network..."
           az resource delete --ids /subscriptions/${{ secrets.AZURE_SUBSCRIPTION }}/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Network/virtualNetworks/bds-test-vnet --subscription ${{ secrets.AZURE_SUBSCRIPTION }} --verbose || true
+
+      - name: Get Container App URL
+        id: get_fqdn
+        run: |
+          fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG_TEST }} --query properties.configuration.ingress.fqdn -o tsv)
+          echo "Container App is deployed at: https://$fqdn"
+          echo "fqdn=$fqdn" >> $GITHUB_ENV
+
+      - name: Remove Azure AD Redirect URI
+        run: |
+          appId="${{ secrets.AZURE_AD_APP_ID }}"
+          oldUri="https://${{ env.fqdn }}"
+          echo "Removing redirect URI: $oldUri"
+          az ad app update --id $appId --remove web.redirectUris $oldUri
