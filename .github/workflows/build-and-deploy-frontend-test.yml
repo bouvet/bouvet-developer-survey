@@ -13,7 +13,7 @@ on:
       - main
     paths:
       - 'frontend/**'
-  workflow_dispatch: # Allow manual trigger from any branch
+  workflow_dispatch:
     inputs:
       branch:
         description: 'Branch to deploy'
@@ -57,7 +57,6 @@ jobs:
           BACKEND_FQDN=$(az containerapp show --name bds-test-containerapp-api --resource-group ${{ secrets.AZURE_RG_TEST }} --query "properties.configuration.ingress.fqdn" -o tsv)
           BACKEND_URL="https://${BACKEND_FQDN}/api"
           echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
-          echo "Retrieved backend FQDN: $BACKEND_FQDN"
 
       - name: Build and Push Frontend Image to ACR
         uses: azure/docker-login@v1
@@ -66,7 +65,7 @@ jobs:
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
-          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{ env.BACKEND_URL }} # Use the dynamically retrieved FQDN
+          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{ env.BACKEND_URL }}
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
@@ -88,10 +87,3 @@ jobs:
         run: |
           fqdn=$(az containerapp show -n bds-test-containerapp-frontend -g ${{ secrets.AZURE_RG_TEST }} --query properties.configuration.ingress.fqdn -o tsv)
           echo "Container App is deployed at: https://$fqdn"
-          echo "fqdn=$fqdn" >> $GITHUB_ENV  # Save fqdn to environment variable
-
-      - name: Update Azure AD Redirect URI
-        run: |
-          appId="${{ secrets.AZURE_AD_APP_ID }}"
-          newUri="https://${{ env.fqdn }}"  # Use the fqdn from the environment variable
-          az ad app update --id $appId --add web.redirectUris $newUri
