@@ -1,3 +1,5 @@
+"use client";
+
 import { useSurveyResult } from "@/app/hooks/useSurveyResult";
 import AnswerContainer from "./AnswerContainer";
 import QuestionContainer from "./QuestionContainer";
@@ -5,9 +7,11 @@ import BarChart from "../charts/BarChart";
 import useGetBarChartData from "@/app/hooks/useGetBarChartData";
 import useGetDotPlotData from "@/app/hooks/useGetDotPlotData";
 import DotPlotChart from "../charts/DotPlotChart";
+import { useSurveyFilters } from "@/app/Context/SurveyFilterContext";
 
 const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
-  const { data, error, isLoading } = useSurveyResult(questionId);
+  const { filters } = useSurveyFilters();
+  const { data, error, isLoading } = useSurveyResult(questionId, filters);
   const barChartData = useGetBarChartData(data);
   const dotPlot = useGetDotPlotData(data);
   const tabs = data?.isMultipleChoice ? ["Top 10", "Ønsket og beundret"] : [];

@@ -36,7 +36,7 @@ const UserMenu = () => {
         <MenuItem>
           <Button
             onClick={() => instance.logout()}
-            className="flex px-4 gap-3 hover:bg-"
+            className="flex px-4 gap-3"
           >
             <ArrowRightStartOnRectangleIcon className="size-6" />
             Sign out
