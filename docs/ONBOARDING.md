@@ -19,6 +19,10 @@ If you are not already in the Bouvet GitHub organization:
 
 Ask a team member to add you to the security group [bds-team](https://portal.azure.com/).
 
+### Get Docker license
+You can use any container runtime for this project, but Docker Desktop is preferred. 
+In order to use Docker Desktop, you need to apply for a license with [service desk](bds.bouvet.no) so it's smart to apply right away.
+
 ### Set Up Local Environment
 
 Follow the steps in [GETTING_STARTED.md](GETTING_STARTED.md).
