@@ -1,32 +1,56 @@
 import useSWR from "swr";
-import { fetcher } from "../lib/fetcher";
 import { Answer } from "../types/survey";
 import { environment } from "../lib/env";
+import { msalInstance } from "../auth/authProvider";
+import { scopes } from "../auth/authConfig";
 
-const buildQueryParams = (filters: Record<string, string[]>): string => {
-  const params = new URLSearchParams();
+export const postFetcher = async (
+  url: string,
+  filters: Record<string, string[]>
+) => {
+  try {
+    const accounts = msalInstance.getAllAccounts();
+    if (accounts.length === 0) {
+      throw new Error("No active account found. Please sign in.");
+    }
 
-  Object.entries(filters).forEach(([key, values]) => {
-    values.forEach((value) => {
-      params.append(key, value);
+    const accessTokenResponse = await msalInstance.acquireTokenSilent({
+      account: accounts[0],
+      scopes,
     });
-  });
 
-  return params.toString();
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessTokenResponse.accessToken}`,
+      },
+      body: JSON.stringify(filters),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return await response.json();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: "Failed to fetch data" };
+  }
 };
 
 export const useSurveyResult = (
   questionId: string,
-  filters: Record<string, string[]> = {} // Default to an empty object
+  filters?: Record<string, string[]>
 ): { data: Answer; error: { message: string } | null; isLoading: boolean } => {
-  const queryParams = buildQueryParams(filters);
-  const url = questionId
-    ? `${environment.apiUrl}/v1/results/questions/${questionId}${
-        queryParams ? `?${queryParams}` : ""
-      }`
-    : null;
+  const url = `${environment.apiUrl}/v1/results/questions/${questionId}`;
 
-  const { data, error, isLoading } = useSWR(url, fetcher);
+  const { data, error, isLoading } = useSWR(
+    questionId ? [url, filters] : null,
+    ([url, filters]) => postFetcher(url, filters || {})
+  );
 
   return {
     data,

@@ -11,8 +11,7 @@ const useGetBarChartData = (data: Answer): BarChartData => {
     return { y: [], x: [], title: "" };
   }
 
-  const results = data.choices
-    .reduce(
+  const results = data.choices?.reduce(
       (acc, choice) => {
         if (data.isMultipleChoice && choice.responses.length === 2) {
           const admiredResponse = choice.responses[0].text.includes("SISTE")
@@ -40,8 +39,8 @@ const useGetBarChartData = (data: Answer): BarChartData => {
 
   const slicedResults = data?.isMultipleChoice ? results.slice(-10) : results;
 
-  const y = slicedResults.map((choice) => choice.text);
-  const x = slicedResults.map((choice) => choice.percentage);
+  const y = slicedResults?.map((choice) => choice.text) || [];
+  const x = slicedResults?.map((choice) => choice.percentage)|| [];
   const title = data.dataExportTag;
   return { y, x, title };
 };

@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import AuthProvider from './auth/authProvider';
-
+import AuthProvider from "./auth/authProvider";
+import { SurveyFilterProvider } from "./Context/SurveyFilterContext";
 
 export const metadata: Metadata = {
   title: "Bouvet Developer Survey",
@@ -29,7 +29,9 @@ export default function RootLayout({
     <html lang="no" suppressHydrationWarning>
       <body className={inter.className}>
         <AuthProvider>
-          <ThemeProvider attribute="data-mode">{children}</ThemeProvider>
+          <SurveyFilterProvider>
+            <ThemeProvider attribute="data-mode">{children}</ThemeProvider>
+          </SurveyFilterProvider>
         </AuthProvider>
       </body>
     </html>

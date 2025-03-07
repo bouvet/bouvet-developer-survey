@@ -68,7 +68,7 @@ const SurveyFilter: FC<Props> = ({ questionId, category }) => {
         </div>
         <ComboboxOptions
           anchor="bottom"
-          className="z-50 min-w-56 bg-slate-700 shadow-md"
+          className="z-50 min-w-56 bg-slate-700 shadow-md max-h-2 border-red-600 border-2"
         >
           {filteredData.map((choice) => (
             <ComboboxOption
