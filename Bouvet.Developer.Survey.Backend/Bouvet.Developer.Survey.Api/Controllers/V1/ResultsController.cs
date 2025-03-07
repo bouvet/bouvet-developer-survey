@@ -84,13 +84,18 @@ public class ResultsController : ControllerBase
     /// <response code="200">Returns a question and their responses</response>
     /// <response code="401">If user is not authorized</response>
     /// <response code="403">User not authorized to view</response>
-    [HttpGet("Questions/{questionId:guid}")]
+    [HttpPost("Questions/{questionId:guid}")]
     [SwaggerResponse(200, "Returns a question and their responses", typeof(QuestionResponseDto))]
-    public async Task<IActionResult> GetQuestionById(Guid questionId)
+    public async Task<IActionResult> GetQuestionById(Guid questionId, [FromBody] Dictionary<Guid, List<string>> filters)
     {
-        var question = await _questionService.GetQuestionByIdAsync(questionId);
+        Console.WriteLine($"Received filters: {filters}");
+
+        var question = await _questionService.GetQuestionByIdAsync(questionId, filters);
         return Ok(question);
     }
+
+
+
 
     /// <summary>
     /// Get all response to a user to a survey

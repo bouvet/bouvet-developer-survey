@@ -13,13 +13,14 @@ public interface IQuestionService
     /// <param name="newQuestionDto">New question dto</param>
     /// <returns>Question dto</returns>
     Task<QuestionDetailsDto> CreateQuestionAsync(NewQuestionDto newQuestionDto);
-    
+
     /// <summary>
     /// Get question by id
     /// </summary>
     /// <param name="questionId">The question id</param>
     /// <returns>Question dto</returns>
-    Task<QuestionResponseDto> GetQuestionByIdAsync(Guid questionId);
+    Task<QuestionResponseDto> GetQuestionByIdAsync(Guid questionId, Dictionary<Guid, List<string>>? filters = null);
+
 
     /// <summary>
     /// Get a list of questions by survey id

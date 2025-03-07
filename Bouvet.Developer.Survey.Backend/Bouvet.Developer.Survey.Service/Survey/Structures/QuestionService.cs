@@ -6,6 +6,8 @@ using Bouvet.Developer.Survey.Service.TransferObjects.Import.SurveyStructure;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Response;
 using Bouvet.Developer.Survey.Service.TransferObjects.Survey.Structures;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace Bouvet.Developer.Survey.Service.Survey.Structures;
 
@@ -13,11 +15,13 @@ public class QuestionService : IQuestionService
 {
     private readonly DeveloperSurveyContext _context;
     private readonly IChoiceService _choiceService;
+    private readonly ILogger<QuestionService> _logger;
 
-    public QuestionService(DeveloperSurveyContext context, IChoiceService choiceService)
+    public QuestionService(DeveloperSurveyContext context, IChoiceService choiceService, ILogger<QuestionService> logger)
     {
         _context = context;
         _choiceService = choiceService;
+        _logger = logger;
     }
 
     public async Task CheckForDifference(SurveyQuestionsDto surveyQuestionsDto, Domain.Entities.Survey.Survey survey)
@@ -131,20 +135,110 @@ public class QuestionService : IQuestionService
         return dto;
     }
 
-    public async Task<QuestionResponseDto> GetQuestionByIdAsync(Guid questionId)
+    public async Task<QuestionResponseDto> GetQuestionByIdAsync(Guid questionId, Dictionary<Guid, List<string>> filters)
     {
-        var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
+        List<Guid> allUserIds;
 
+        if (filters == null || filters.Count == 0)
+        {
+            // No filters: Retrieve all users who have responded to this question
+            allUserIds = await _context.ResponseUsers
+                .Where(ru => ru.QuestionId == questionId)
+                .Select(ru => ru.UserId)
+                .Distinct()
+                .ToListAsync();
+
+            _logger.LogInformation("No filters applied. Retrieved all {userCount} users for questionId {questionId}", allUserIds.Count, questionId);
+        }
+        else
+        {
+            allUserIds = new List<Guid>();
+
+            // Loop through each key-value pair in the filters object (questionId, selectedValues)
+            foreach (var filter in filters)
+            {
+                var filterQuestionId = filter.Key;  // This is the questionId (key in the filter)
+                var selectedValues = filter.Value;  // This is the list of selected filter values (value in the filter)
+
+                // Fetch user IDs based on selected choices for this question
+                var usersForChoices = await GetUserIdsBySelectedChoicesAsync(filterQuestionId, selectedValues);
+
+                // Add the users to the allUserIds list
+                allUserIds.AddRange(usersForChoices);
+            }
+
+            // Remove duplicates (in case a user selected multiple choices)
+            allUserIds = allUserIds.Distinct().ToList();
+        }
+
+        // Retrieve the question entity
+        var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
         if (question == null) throw new NotFoundException("Question not found");
 
-        var choiceDtoS = await CreateChoicesAsync(questionId, question);
+        // Pass the filtered userIds to CreateChoicesAsync to filter responses for each choice
+        var choiceDtoS = await CreateChoicesAsync(questionId, question, allUserIds);
 
         var dto = QuestionResponseDto.CreateFromEntity(question, choiceDtoS);
 
         return dto;
     }
 
-    private async Task<ICollection<GetChoiceDto>> CreateChoicesAsync(Guid questionId, Question question)
+
+
+    private async Task<List<Guid>> GetUserIdsBySelectedChoicesAsync(Guid questionId, List<string> selectedValues)
+    {
+        // Normalize selectedValues (trim & lowercase)
+        var normalizedValues = selectedValues
+            .Select(v => v.Trim().ToLowerInvariant())
+            .ToList();
+
+        _logger.LogInformation("Normalized filter values: {normalizedValues}", string.Join(", ", normalizedValues));
+
+        // Fetch all choices for the current questionId
+        var allChoices = await _context.Choices
+            .Where(c => c.QuestionId == questionId)
+            .ToListAsync();
+
+        _logger.LogInformation("Fetched {choiceCount} choices for questionId {questionId}", allChoices.Count, questionId);
+
+        foreach (var choice in allChoices)
+        {
+            var normalizedChoiceText = choice.Text.Trim().ToLowerInvariant();
+            _logger.LogInformation("Comparing Choice Text: '{choiceText}' with Filter Values", normalizedChoiceText);
+
+            if (normalizedValues.Contains(normalizedChoiceText))
+            {
+                _logger.LogInformation("Match found for Choice Text: '{choiceText}'", normalizedChoiceText);
+            }
+        }
+
+        // Filter choices in memory
+        var choiceIds = allChoices
+            .Where(c => normalizedValues.Contains(c.Text.Trim().ToLowerInvariant()))
+            .Select(c => c.Id)
+            .ToList();
+
+        _logger.LogInformation("Found {choiceCount} matching choices for questionId {questionId}: {choices}", choiceIds.Count, questionId, string.Join(", ", choiceIds));
+
+        // Fetch all user IDs that have responded with one of the selected choices
+        var usersForChoices = await _context.ResponseUsers
+            .Include(ru => ru.Response) // Ensure Response is loaded
+            .Where(ru => choiceIds.Contains(ru.Response.ChoiceId))
+            .Select(ru => ru.UserId)
+            .ToListAsync();
+
+        _logger.LogInformation("Found {userCount} users who selected choices for questionId {questionId}", usersForChoices.Count, questionId);
+
+        // Return the distinct list of UserIds
+        return usersForChoices.Distinct().ToList();
+    }
+
+
+
+
+
+
+    private async Task<ICollection<GetChoiceDto>> CreateChoicesAsync(Guid questionId, Question question, List<Guid> userIds)
     {
         var choices = await _context.Choices
             .Where(c => c.QuestionId == questionId)
@@ -154,7 +248,8 @@ public class QuestionService : IQuestionService
 
         foreach (var choice in choices)
         {
-            var tbd = await CreateChoiceStatsAsync(choice.Id, question);
+            // Pass the userIds along to filter responses based on the valid users
+            var tbd = await CreateChoiceStatsAsync(choice.Id, question, userIds);
             var choiceDto = GetChoiceDto.CreateFromEntity(choice, tbd);
 
             choiceList.Add(choiceDto);
@@ -163,16 +258,19 @@ public class QuestionService : IQuestionService
         return choiceList;
     }
 
-    private async Task<AnswerDto> CreateChoiceStatsAsync(Guid choiceId, Question question)
-    {
-		// This is the responses for a specific choice
-		// So all the responses are the same
-        var responses = await _context.Responses
-            .Where(r => r.ChoiceId == choiceId)
-            .ToListAsync();
 
+    private async Task<AnswerDto> CreateChoiceStatsAsync(Guid choiceId, Question question, List<Guid> userIds)
+    {
+        // Filter responses for specific choice and users in the final filtered set
+        var responses = await _context.ResponseUsers
+          .Where(r => r.QuestionId == question.Id && userIds.Contains(r.UserId))
+          .Select(r => r.Response)
+          .ToListAsync();
+
+
+        // Calculate number of respondents from the filtered users
         var numberOfRespondents = await _context.ResponseUsers
-            .Where(r => r.QuestionId == question.Id)
+            .Where(r => r.QuestionId == question.Id && userIds.Contains(r.UserId)) // Filter by userIds
             .Select(r => r.UserId)
             .Distinct()
             .CountAsync();
@@ -208,59 +306,58 @@ public class QuestionService : IQuestionService
             totalPercentage = totalValue > 0
                 ? (int)Math.Ceiling((totalValue / (float)numberOfRespondents) * 100) // Normalize the value to a percentage
                 : 0;
-		}
+        }
 
-		// Add multiple choide responses array
-		var questionResponses = new List<GetResponseDto>();
+        // Add multiple choice responses array
+        var questionResponses = new List<GetResponseDto>();
 
-		if (question.IsMultipleChoice && responses.Count(r => r.HasWorkedWith) > 0)
-		{
-			questionResponses.Add(new GetResponseDto
-				{
-					Index = 0,
-					Text = "Jobbet med SISTE året",
-					Percentage = totalPercentage,
-				}
-			);
-		}
+        if (question.IsMultipleChoice && responses.Count(r => r.HasWorkedWith) > 0)
+        {
+            questionResponses.Add(new GetResponseDto
+            {
+                Index = 0,
+                Text = "Jobbet med SISTE året",
+                Percentage = totalPercentage,
+            });
+        }
 
-		if (question.IsMultipleChoice && responses.Count(r => r.WantsToWorkWith) > 0)
-		{
-			questionResponses.Add(new GetResponseDto
-				{
-					Index = 1,
-					Text = "Ønsker å jobbe med NESTE året",
-					Percentage = (int)Math.Ceiling((totalAdmired + totalDesired)/ (float)numberOfRespondents * 100),
-				}
-			);
-		}
+        if (question.IsMultipleChoice && responses.Count(r => r.WantsToWorkWith) > 0)
+        {
+            questionResponses.Add(new GetResponseDto
+            {
+                Index = 1,
+                Text = "Ønsker å jobbe med NESTE året",
+                Percentage = (int)Math.Ceiling((totalAdmired + totalDesired) / (float)numberOfRespondents * 100),
+            });
+        }
 
-		var choiceText = await _context.Choices
-			.Where(c => c.Id == choiceId)
-			.Select(c => c.Text)
-			.FirstOrDefaultAsync();
+        var choiceText = await _context.Choices
+            .Where(c => c.Id == choiceId)
+            .Select(c => c.Text)
+            .FirstOrDefaultAsync();
 
-		if (!question.IsMultipleChoice)
-		{
-			questionResponses.Add(new GetResponseDto
-				{
-					Index = 0,
-					Text = choiceText,
-					Percentage = totalPercentage
-				}
-			);
-		}
+        if (!question.IsMultipleChoice)
+        {
+            questionResponses.Add(new GetResponseDto
+            {
+                Index = 0,
+                Text = choiceText,
+                Percentage = totalPercentage
+            });
+        }
 
+        return new AnswerDto
+        {
+            Stats = new GetStatsDto
+            {
+                TotalPercentage = totalPercentage,
+                AdmiredPercentage = admiredPercentage,
+                DesiredPercentage = desiredPercentage,
+            },
+            Responses = questionResponses
+        };
+    }
 
-		return new AnswerDto{
-			Stats = new GetStatsDto{
-				TotalPercentage = totalPercentage,
-				AdmiredPercentage = admiredPercentage,
-				DesiredPercentage = desiredPercentage,
-			},
-			Responses = questionResponses
-		};
-	}
 
     public async Task<IEnumerable<QuestionDetailsDto>> GetQuestionsBySurveyBlockIdAsync(Guid surveyBlockId)
     {
