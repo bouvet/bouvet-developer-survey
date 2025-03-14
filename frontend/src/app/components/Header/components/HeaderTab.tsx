@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import HeaderDropdownNavigation from "@/app/components/Header/components/HeaderDropdownNavigation";
 
 export type HeaderTabProps = {
   item: { id: string; label: string };
@@ -7,16 +8,20 @@ export type HeaderTabProps = {
 };
 export const HeaderTab = ({ item, isActive }: HeaderTabProps) => {
   return (
-    <Link
-      href={`#${item.id}`}
-      className={`
+    <li className="group relative">
+      <Link
+        href={`#${item.id}`}
+        className={`
     hover:underline 
     decoration-2
-    underline-offset-4
+    underline-offset-
+    menu-hover
     ${isActive ? "underline" : ""}
   `}
-    >
-      {item.label}
-    </Link>
+      >
+        {item.label}
+      </Link>
+      {item.id === "technology" && <HeaderDropdownNavigation />}
+    </li>
   );
 };

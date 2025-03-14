@@ -6,7 +6,13 @@ import useGetBarChartData from "@/app/hooks/useGetBarChartData";
 import useGetDotPlotData from "@/app/hooks/useGetDotPlotData";
 import DotPlotChart from "../charts/DotPlotChart";
 
-const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
+const SurveyBlockRenderer = ({
+  questionId,
+  surveyId,
+}: {
+  questionId: string;
+  surveyId: string;
+}) => {
   const { data, error, isLoading } = useSurveyResult(questionId);
   const barChartData = useGetBarChartData(data);
   const dotPlot = useGetDotPlotData(data);
@@ -16,7 +22,10 @@ const SurveyBlockRenderer = ({ questionId }: { questionId: string }) => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <section className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6">
+    <section
+      id={surveyId}
+      className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6 scroll-mt-32"
+    >
       <QuestionContainer data={data} />
       <AnswerContainer tabs={tabs}>
         <BarChart

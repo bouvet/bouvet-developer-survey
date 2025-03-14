@@ -23,10 +23,10 @@ export default function Header({ simple }: HeaderProps) {
       >
         <HeaderTitle />
         {!simple && (
-          <Fragment>
+          <>
             <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
             <HeaderTabs />
-          </Fragment>
+          </>
         )}
         <UserMenu />
       </nav>

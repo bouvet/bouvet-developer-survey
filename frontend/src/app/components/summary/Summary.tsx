@@ -23,7 +23,11 @@ const Summary = () => {
         blockElement.questions.forEach((question) => {
           if (!question.isMultipleChoice) {
             acc.push(
-              <SurveyBlockRenderer key={question.id} questionId={question.id} />
+              <SurveyBlockRenderer
+                key={question.id}
+                questionId={question.id}
+                surveyId={surveyBlock.description.replaceAll(/\s/g, "-")}
+              />
             );
           }
         });
