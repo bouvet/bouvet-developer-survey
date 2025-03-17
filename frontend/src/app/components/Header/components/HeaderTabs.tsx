@@ -17,7 +17,10 @@ export default function HeaderTabs() {
         .filter(
           (surveyBlock: SurveyBlock) =>
             surveyBlock.blockElements.filter(
-              (blockElement) => blockElement.questions.length > 0
+              (blockElement) =>
+                blockElement.questions.filter(
+                  (question: Question) => question.isMultipleChoice
+                ).length !== 0
             ).length !== 0
         )
         .map(
@@ -49,6 +52,7 @@ export default function HeaderTabs() {
       ),
     [data]
   );
+
   return (
     <ul className="hidden lg:flex w-full justify-center items-center space-x-6 font-bold text-sm">
       {menuItems.map((item) => (
