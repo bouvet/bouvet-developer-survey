@@ -1,12 +1,21 @@
 "use client";
 import Link from "next/link";
-import HeaderDropdownNavigation from "@/app/components/Header/components/HeaderDropdownNavigation";
+import HeaderDropdownNavigation, {
+  HeaderDropdownNavigationProps,
+} from "@/app/components/Header/components/HeaderDropdownNavigation";
 
 export type HeaderTabProps = {
   item: { id: string; label: string };
   isActive: boolean;
+  technology: HeaderDropdownNavigationProps[];
+  aboutParticipants: HeaderDropdownNavigationProps[];
 };
-export const HeaderTab = ({ item, isActive }: HeaderTabProps) => {
+export const HeaderTab = ({
+  item,
+  isActive,
+  technology,
+  aboutParticipants,
+}: HeaderTabProps) => {
   return (
     <li className="group relative">
       <Link
@@ -21,7 +30,12 @@ export const HeaderTab = ({ item, isActive }: HeaderTabProps) => {
       >
         {item.label}
       </Link>
-      {item.id === "technology" && <HeaderDropdownNavigation />}
+      {item.id === "technology" && (
+        <HeaderDropdownNavigation items={technology} />
+      )}
+      {item.id === "about_participants" && (
+        <HeaderDropdownNavigation items={aboutParticipants} />
+      )}
     </li>
   );
 };

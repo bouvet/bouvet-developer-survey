@@ -1,3 +1,4 @@
+"use client";
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import { ReactNode } from "react";
 import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
@@ -26,7 +27,7 @@ const Summary = () => {
               <SurveyBlockRenderer
                 key={question.id}
                 questionId={question.id}
-                surveyId={surveyBlock.description.replaceAll(/\s/g, "-")}
+                hrefId={question.dateExportTag!}
               />
             );
           }

@@ -8,10 +8,10 @@ import DotPlotChart from "../charts/DotPlotChart";
 
 const SurveyBlockRenderer = ({
   questionId,
-  surveyId,
+  hrefId,
 }: {
   questionId: string;
-  surveyId: string;
+  hrefId: string;
 }) => {
   const { data, error, isLoading } = useSurveyResult(questionId);
   const barChartData = useGetBarChartData(data);
@@ -23,7 +23,7 @@ const SurveyBlockRenderer = ({
 
   return (
     <section
-      id={surveyId}
+      id={hrefId.replaceAll(/\s/g, "-")}
       className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6 scroll-mt-32"
     >
       <QuestionContainer data={data} />

@@ -1,3 +1,4 @@
+"use client";
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import { BlockElement, SurveyBlock } from "@/app/types/survey";
 import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
@@ -44,7 +45,7 @@ const Survey = () => {
                 <SurveyBlockRenderer
                   key={question.id}
                   questionId={question.id}
-                  surveyId={block.description.replaceAll(/\s/g, "-")}
+                  hrefId={block.description.replaceAll(/\s/g, "-")}
                 />
               );
               return acc;
