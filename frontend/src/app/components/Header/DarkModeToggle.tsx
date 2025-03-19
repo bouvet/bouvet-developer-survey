@@ -14,7 +14,7 @@ const DarkModeToggle = () => {
   }, []);
 
   if (!mounted) {
-    return null; 
+    return null;
   }
 
   const isDarkMode = theme === "dark";
@@ -26,13 +26,13 @@ const DarkModeToggle = () => {
     >
       {isDarkMode ? (
         <>
-          <SunIcon className="size-6" />
-          Light mode
+          <SunIcon className="size-6" aria-hidden="true" />
+          <span>Light mode</span>
         </>
       ) : (
         <>
-          <MoonIcon className="size-6" />
-          Dark mode
+          <MoonIcon className="size-6" aria-hidden="true" />
+          <span>Dark mode</span>
         </>
       )}
     </Button>
