@@ -7,7 +7,8 @@ export interface BaseEntity {
 
 export interface Question extends BaseEntity {
   blockElementId: string;
-  dataExportTag: string;
+  dataExportTag?: string;
+  dateExportTag?: string;
   questionText: string;
   questionDescription: string;
   isMultipleChoice: boolean;
@@ -42,7 +43,7 @@ export interface Answer extends BaseEntity {
   createdAt: string;
   updatedAt: string | null;
   choices: Choice[];
-  aiAnalysedText: string | null;
+  aiAnalysedText: string | null;
   numberOfRespondents: number;
 }
 

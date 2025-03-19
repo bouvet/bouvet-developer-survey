@@ -1,3 +1,4 @@
+"use client";
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import { ReactNode } from "react";
 import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
@@ -23,7 +24,11 @@ const Summary = () => {
         blockElement.questions.forEach((question) => {
           if (!question.isMultipleChoice) {
             acc.push(
-              <SurveyBlockRenderer key={question.id} questionId={question.id} />
+              <SurveyBlockRenderer
+                key={question.id}
+                questionId={question.id}
+                hrefId={question.dateExportTag!}
+              />
             );
           }
         });
