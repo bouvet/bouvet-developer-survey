@@ -1,6 +1,5 @@
-"use client";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-// Component
+
 export default function HeaderMobileMenuButton({
   onClick,
 }: {

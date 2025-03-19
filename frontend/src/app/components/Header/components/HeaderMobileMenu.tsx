@@ -1,15 +1,22 @@
-"use client";
 import { useActiveSectionId } from "@/app/hooks/useActiveSectionId";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { menuItems } from "./menuItems";
+import { MenuItemId, menuItems } from "./menuItems";
+import { HeaderDropdownNavigationProps } from "@/app/components/Header/components/HeaderDropdownNavigation";
+import HeaderMobileDropdownNavigation from "@/app/components/Header/components/HeaderMobileDropdownNavigation";
+import Link from "next/link";
 
 export default function MobileMenu({
   mobileMenuOpen,
   onClick,
+  subNavigationItems,
 }: {
   mobileMenuOpen: boolean;
-  onClick: (bool: unknown) => void;
+  onClick: (bool: boolean) => void;
+  subNavigationItems: {
+    technology: HeaderDropdownNavigationProps[];
+    aboutParticipants: HeaderDropdownNavigationProps[];
+  };
 }) {
   const activeId = useActiveSectionId();
 
@@ -32,31 +39,47 @@ export default function MobileMenu({
           </button>
         </div>
         <nav className="px-4 py-2">
-          <div className="space-y-3">
+          <ul className="space-y-3">
             {menuItems.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                onClick={() => {
-                  onClick(false);
-                }}
-                className={`
-                  block px-3 py-1 text-sm font-bold
+              <li key={item.id} className="flex gap-x-1.5">
+                <Link
+                  href={`#${item.id}`}
+                  onClick={() => {
+                    onClick(false);
+                  }}
+                  className={`
+                  px-3 py-1 text-sm font-bold
                   hover:underline decoration-2 underline-offset-
-                  ${activeId === item.id 
-                    ? 'text-[#11133C] underline' 
-                    : 'text-gray-600'
+                  ${
+                    activeId === item.id
+                      ? "text-[#11133C] underline"
+                      : "text-gray-600"
                   }
-                  dark:${activeId === item.id 
-                    ? 'text-[#11133C] underline' 
-                    : 'text-white'
+                  dark:${
+                    activeId === item.id
+                      ? "text-[#11133C] underline"
+                      : "text-white"
                   }
                 `}
-              >
-                {item.label}
-              </a>
+                >
+                  {item.label}
+                </Link>
+
+                {item.id === MenuItemId.TECHNOLOGY && (
+                  <HeaderMobileDropdownNavigation
+                    items={subNavigationItems.technology}
+                    onClick={onClick}
+                  />
+                )}
+                {item.id === MenuItemId.ABOUT_PARTICIPANTS && (
+                  <HeaderMobileDropdownNavigation
+                    items={subNavigationItems.aboutParticipants}
+                    onClick={onClick}
+                  />
+                )}
+              </li>
             ))}
-          </div>
+          </ul>
         </nav>
       </DialogPanel>
     </Dialog>

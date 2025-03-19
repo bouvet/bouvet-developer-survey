@@ -3,18 +3,20 @@ import Link from "next/link";
 import HeaderDropdownNavigation, {
   HeaderDropdownNavigationProps,
 } from "@/app/components/Header/components/HeaderDropdownNavigation";
+import { MenuItemId } from "@/app/components/Header/components/menuItems";
 
 export type HeaderTabProps = {
   item: { id: string; label: string };
   isActive: boolean;
-  technology: HeaderDropdownNavigationProps[];
-  aboutParticipants: HeaderDropdownNavigationProps[];
+  subNavigationItems: {
+    technology: HeaderDropdownNavigationProps[];
+    aboutParticipants: HeaderDropdownNavigationProps[];
+  };
 };
 export const HeaderTab = ({
   item,
   isActive,
-  technology,
-  aboutParticipants,
+  subNavigationItems,
 }: HeaderTabProps) => {
   return (
     <li className="group relative">
@@ -30,11 +32,13 @@ export const HeaderTab = ({
       >
         {item.label}
       </Link>
-      {item.id === "technology" && (
-        <HeaderDropdownNavigation items={technology} />
+      {item.id === MenuItemId.TECHNOLOGY && (
+        <HeaderDropdownNavigation items={subNavigationItems.technology} />
       )}
-      {item.id === "about_participants" && (
-        <HeaderDropdownNavigation items={aboutParticipants} />
+      {item.id === MenuItemId.ABOUT_PARTICIPANTS && (
+        <HeaderDropdownNavigation
+          items={subNavigationItems.aboutParticipants}
+        />
       )}
     </li>
   );
