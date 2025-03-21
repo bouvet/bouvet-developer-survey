@@ -26,7 +26,7 @@ const QuestionContainer = ({ data }: Props) => {
           {isSmallScreen && (
             <button onClick={() => setIsOpen((prev) => !prev)}>
               <ChevronDownIcon
-                className={`text-gray-600 h-6 w-6 transition ${isOpen && "rotate-180"}`}
+                className={`text-gray-600 dark:text-[var(--foreground)] h-6 w-6 transition ${isOpen && "rotate-180"}`}
                 aria-hidden="true"
               />
             </button>
