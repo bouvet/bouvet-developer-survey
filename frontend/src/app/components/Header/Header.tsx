@@ -5,6 +5,7 @@ import HeaderTabs from "./components/HeaderTabs";
 import HeaderMobileMenu from "./components/HeaderMobileMenu";
 import HeaderMobileMenuButton from "./components/HeaderMobileMenuButton";
 import UserMenu from "./UserMenu";
+import FilterMenu from "./DataFilter/filterMenu";
 
 export type HeaderProps = {
   /**
@@ -28,6 +29,9 @@ export default function Header({ simple }: HeaderProps) {
             <HeaderTabs />
           </Fragment>
         )}
+        <FilterMenu />
+        {/* <FilterMenu /> */}
+        {/* Om jeg fjerne filtermenu fungere forsiden som normalt, men ser da ikke filteret i header */}
         <UserMenu />
       </nav>
       <HeaderMobileMenu

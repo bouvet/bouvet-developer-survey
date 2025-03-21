@@ -22,6 +22,7 @@ const DotPlotChart = ({
   numberOfRespondents,
 }: DotPlotChartJsonProps) => {
   //check darkmode and set graph theme
+  console.log("DotPlot Data in Chart File:", data);
   const theme = useChartTheme();
 
   // calculate the height of the plot based on the number of choices
@@ -31,6 +32,7 @@ const DotPlotChart = ({
 
   const traces = data.map((trace) => {
     if (trace.x1 === null || trace.x2 === null) return null;
+
     // If the first value is greater than the second, swap the values
     const isX1Greater = trace.x1 > trace.x2;
 
@@ -129,3 +131,4 @@ const DotPlotChart = ({
 };
 
 export default DotPlotChart;
+
