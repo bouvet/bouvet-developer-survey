@@ -2,18 +2,17 @@
 
 import { Header } from "./components/Header";
 import { YearPickerCircle } from "./components/landing/YearPickerCircle";
-import { Wave } from "./components/landing/Wave";
+import { WaveFooter } from "./components/landing/WaveFooter";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
 import { InteractionType } from "@azure/msal-browser";
 
 export default function HomePage() {
-
   return (
     <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
       <Header simple />
-      <main>
-        <section className="flex items-center h-screen z-10">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 sm:px-40 px-8 w-full">
+      <main className={`justify-center content-center h-[calc(100dvh-20rem)]`}>
+        <section className="flex items-center z-10 h-full">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 sm:px-40 px-8 w-full h-full">
             <div className="flex flex-col max-w-lg ">
               <h2 className="text-4xl font-bold mb-5 sm:text-5xl text-nowrap">
                 Developer Survey
@@ -29,9 +28,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <div className="absolute bottom-0 w-full z-0 pointer-events-none">
-        <Wave />
-      </div>
+      <WaveFooter />
     </MsalAuthenticationTemplate>
   );
 }
