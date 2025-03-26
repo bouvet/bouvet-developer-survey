@@ -14,9 +14,9 @@ const ChartCounter = ({ numberOfRespondents }: ChartCounterProps) => {
 
   return (
     <div className="flex items-center space-x-1 text-white">
-      <div>Antall svar:</div>
-      <div className="font-bold">{numberOfRespondents}</div>
-      <div className="font-bold">({percentage}%)</div>
+      <span>Antall svar:</span>
+      <span className="font-bold">{numberOfRespondents}</span>
+      <span className="font-bold">({percentage}%)</span>
     </div>
   );
 };
