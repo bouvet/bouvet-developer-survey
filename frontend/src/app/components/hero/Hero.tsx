@@ -10,7 +10,6 @@ const Survey = () => {
     setIsOpen(!isSmallScreen);
   }, [isSmallScreen]);
 
-  /*TODO: dark*/
   return (
     <section id="introduction" className="survey-section">
       {/* TODO: Get text dynamically from Survey API? */}
