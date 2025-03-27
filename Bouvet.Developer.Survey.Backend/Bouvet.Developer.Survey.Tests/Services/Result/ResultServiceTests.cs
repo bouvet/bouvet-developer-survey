@@ -90,7 +90,7 @@ public class ResultServiceTests
             BlockElementId = ElementQuestionId,
             SurveyId = SurveyId,
             QuestionId = "QID1",
-            DateExportTag = "Tag",
+            DataExportTag = "Tag",
             QuestionText = "What is your name?",
             QuestionDescription = "Name",
         });

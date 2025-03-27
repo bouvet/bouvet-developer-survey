@@ -27,7 +27,7 @@ const Summary = () => {
               <SurveyBlockRenderer
                 key={question.id}
                 questionId={question.id}
-                hrefId={question.dateExportTag!}
+                hrefId={question.dataExportTag}
               />
             );
           }

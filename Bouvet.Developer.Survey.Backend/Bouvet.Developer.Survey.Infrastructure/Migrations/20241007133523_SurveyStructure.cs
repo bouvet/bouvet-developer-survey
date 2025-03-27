@@ -83,7 +83,7 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BlockElementId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SurveyId = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    DateExportTag = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    DataExportTag = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuestionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),

@@ -15,7 +15,7 @@ public class Question : IEntitiesDateTimeOffsett
     public string QuestionId { get; set; } = null!;
     
     [MaxLength(250)]
-    public string DateExportTag { get; set; } = null!;
+    public string DataExportTag { get; set; } = null!;
     public string QuestionText { get; set; } = null!;
     public string QuestionDescription { get; set; } = null!;
     public bool IsMultipleChoice { get; set; } = false;

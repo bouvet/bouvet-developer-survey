@@ -170,7 +170,7 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("DateExportTag")
+                    b.Property<string>("DataExportTag")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");

@@ -82,7 +82,7 @@ public class ResponseServiceTests
             BlockElementId = ElementQuestionId,
             SurveyId = SurveyId,
             QuestionId = "QID2",
-            DateExportTag = "2021-09-01",
+            DataExportTag = "2021-09-01",
             QuestionText = "What is your name?",
             QuestionDescription = "Name",
         });

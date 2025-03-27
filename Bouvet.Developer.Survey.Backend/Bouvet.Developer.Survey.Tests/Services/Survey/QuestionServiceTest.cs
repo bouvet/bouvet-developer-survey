@@ -77,7 +77,7 @@ public class QuestionServiceTest
             BlockElementId = ElementQuestionId,
             SurveyId = SurveyId,
             QuestionId = "QID1",
-            DateExportTag = "2021-09-01",
+            DataExportTag = "2021-09-01",
             QuestionText = "What is your name?",
             QuestionDescription = "Name",
         });
@@ -90,7 +90,7 @@ public class QuestionServiceTest
         {
             BlockElementId = "1234",
             SurveyId = SurveyId,
-            DateExportTag = "2021-09-01",
+            DataExportTag = "2021-09-01",
             QuestionText = "What is your name?",
             QuestionDescription = "Name"
         };
@@ -122,7 +122,7 @@ public class QuestionServiceTest
         var updatedQuestionDto = new NewQuestionDto
         {
             SurveyId = SurveyId,
-            DateExportTag = "2021-09-01",
+            DataExportTag = "2021-09-01",
             QuestionText = "What is your name?",
             QuestionDescription = "Name"
         };
@@ -166,7 +166,7 @@ public class QuestionServiceTest
             BlockElementId = ElementQuestionId,
             SurveyId = SurveyId,
             QuestionId = "QID1",
-            DateExportTag = "2021-09-01",
+            DataExportTag = "2021-09-01",
             QuestionText = "What is your name?",
             QuestionDescription = "Name",
             Choices = new List<NewChoiceDto>
@@ -219,7 +219,7 @@ public class QuestionServiceTest
         var updatedQuestionDto = new NewQuestionDto
         { 
             SurveyId = SurveyId,
-            DateExportTag = "TAG",
+            DataExportTag = "TAG",
             QuestionText = "What is your name?",
             QuestionDescription = "Name"
         };

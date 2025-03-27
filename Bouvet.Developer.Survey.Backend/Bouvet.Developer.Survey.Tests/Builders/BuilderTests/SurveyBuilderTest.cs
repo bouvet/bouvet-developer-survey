@@ -70,7 +70,7 @@ public class SurveyBuilderTest
         Assert.Equal(QuestionBuilder.QuestionText, question.QuestionText);
         Assert.Equal(QuestionBuilder.QuestionDescription, question.QuestionDescription);
         Assert.Equal(QuestionBuilder.SurveyId, question.SurveyId);
-        Assert.Equal(QuestionBuilder.DateExportTag, question.DateExportTag);
+        Assert.Equal(QuestionBuilder.DataExportTag, question.DataExportTag);
         Assert.Equal(_surveyBlockBuilder.Id, question.BlockElementId);
     }
     

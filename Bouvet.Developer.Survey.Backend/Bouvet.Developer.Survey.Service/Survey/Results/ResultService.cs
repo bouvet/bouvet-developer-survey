@@ -107,7 +107,7 @@ public class ResultService : IResultService
             questionChoiceNumber = field.Value;
         }
     
-        var question = questions.FirstOrDefault(q => q.DateExportTag == questionExportTag);
+        var question = questions.FirstOrDefault(q => q.DataExportTag == questionExportTag);
 
         if (question == null)
         {
@@ -139,7 +139,7 @@ public class ResultService : IResultService
         // Try to find the choice for the current choiceNumber
         if (!choicesDictionary.TryGetValue(choiceNumbers.First(), out var choice))
         {
-            Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DateExportTag} and index: {choiceNumbers.First()}");
+            Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DataExportTag} and index: {choiceNumbers.First()}");
             return;  // If choice not found, skip processing for this choiceNumber
         }
 
@@ -180,7 +180,7 @@ public class ResultService : IResultService
 
                 if (choiceOnIndex == null)
                 {
-                    Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DateExportTag} and index: {fieldValue}");
+                    Console.WriteLine($"Choice not found for question: {questionDetails.Id} with name: {questionDetails.DataExportTag} and index: {fieldValue}");
                     return;
                 }
 
@@ -245,18 +245,18 @@ public class ResultService : IResultService
             // If the question has choices, add each choice with an index to the export tags
             if (question.Choices != null && question.Choices.Count > 0)
             {
-                exportTags.Add(new ExportTagDto { DateExportTag = question.DateExportTag });
+                exportTags.Add(new ExportTagDto { DataExportTag = question.DataExportTag });
                 for (var i = 0; i < question.Choices.Count; i++)
                 {
-                    // Append the choice index to the DateExportTag
-                    var choiceTag = $"{question.DateExportTag}_{i + 1}"; // Index starts from 1 for user-friendliness
-                    exportTags.Add(new ExportTagDto { DateExportTag = choiceTag });
+                    // Append the choice index to the DataExportTag
+                    var choiceTag = $"{question.DataExportTag}_{i + 1}"; // Index starts from 1 for user-friendliness
+                    exportTags.Add(new ExportTagDto { DataExportTag = choiceTag });
                 }
             }
             else
             {
-                // If no choices, add the original DateExportTag
-                exportTags.Add(new ExportTagDto { DateExportTag = question.DateExportTag });
+                // If no choices, add the original DataExportTag
+                exportTags.Add(new ExportTagDto { DataExportTag = question.DataExportTag });
             }
         }
     

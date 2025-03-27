@@ -108,8 +108,8 @@ public class ImportSurveyService : IImportSurveyService
         // Deserialize the CSV records to a list of dictionaries
         var records = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(csvRecords);
 
-        // Create a HashSet of DateExportTags from questions for quick lookup
-        var exportTagSet = new HashSet<string>(questions.Select(q => q.DateExportTag)!);
+        // Create a HashSet of DataExportTags from questions for quick lookup
+        var exportTagSet = new HashSet<string>(questions.Select(q => q.DataExportTag)!);
 
         // Filter the records to include only those fields present in the exportTagSet and contain numeric values
         if (records != null)

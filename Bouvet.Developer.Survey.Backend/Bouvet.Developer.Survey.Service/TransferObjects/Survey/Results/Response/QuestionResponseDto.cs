@@ -21,7 +21,7 @@ public class QuestionResponseDto
         return new QuestionResponseDto
         {
             Id = question.Id,
-            DataExportTag = question.DateExportTag,
+            DataExportTag = question.DataExportTag,
             AiAnalysedText = question.AiAnalyse?.Text,
             QuestionText = question.QuestionText,
             QuestionDescription = question.QuestionDescription,

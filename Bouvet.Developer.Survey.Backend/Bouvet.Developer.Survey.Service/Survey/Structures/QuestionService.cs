@@ -45,7 +45,7 @@ public class QuestionService : IQuestionService
                     QuestionId = surveyElement.PrimaryAttribute,
                     SurveyId = survey.SurveyId,
                     IsMultipleChoice = surveyElement.Payload != null && surveyElement.Payload.Answers?.Count > 0,
-                    DateExportTag = surveyElement.Payload != null ? surveyElement.Payload.DataExportTag : string.Empty,
+                    DataExportTag = surveyElement.Payload != null ? surveyElement.Payload.DataExportTag : string.Empty,
                     QuestionText = surveyElement.Payload != null ? surveyElement.Payload.QuestionText : string.Empty,
                     QuestionDescription = surveyElement.Payload != null
                         ? surveyElement.Payload.QuestionDescription
@@ -67,7 +67,7 @@ public class QuestionService : IQuestionService
                     BlockElementId = surveyElement.PrimaryAttribute,
                     SurveyId = survey.SurveyId,
                     IsMultipleChoice = surveyElement.Payload != null && surveyElement.Payload.Answers?.Count > 0,
-                    DateExportTag = surveyElement.Payload != null ? surveyElement.Payload.DataExportTag : string.Empty,
+                    DataExportTag = surveyElement.Payload != null ? surveyElement.Payload.DataExportTag : string.Empty,
                     QuestionText = surveyElement.Payload != null ? surveyElement.Payload.QuestionText : string.Empty,
                     QuestionDescription = surveyElement.Payload != null
                         ? surveyElement.Payload.QuestionDescription
@@ -114,7 +114,7 @@ public class QuestionService : IQuestionService
             SurveyId = newQuestionDto.SurveyId,
             IsMultipleChoice = newQuestionDto.IsMultipleChoice,
             QuestionId = newQuestionDto.QuestionId,
-            DateExportTag = newQuestionDto.DateExportTag,
+            DataExportTag = newQuestionDto.DataExportTag,
             QuestionText = newQuestionDto.QuestionText,
             QuestionDescription = newQuestionDto.QuestionDescription,
             CreatedAt = DateTimeOffset.Now
@@ -296,9 +296,9 @@ public class QuestionService : IQuestionService
 
         var change = false;
 
-        if (question.DateExportTag != updateQuestionDto.DateExportTag)
+        if (question.DataExportTag != updateQuestionDto.DataExportTag)
         {
-            question.DateExportTag = updateQuestionDto.DateExportTag;
+            question.DataExportTag = updateQuestionDto.DataExportTag;
             change = true;
         }
 
