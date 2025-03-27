@@ -49,7 +49,7 @@ export default function Header({ simple }: HeaderProps) {
               if (!question.isMultipleChoice) {
                 acc.push({
                   id: question.id,
-                  text: question.dateExportTag!,
+                  text: question.dataExportTag,
                 });
               }
             });

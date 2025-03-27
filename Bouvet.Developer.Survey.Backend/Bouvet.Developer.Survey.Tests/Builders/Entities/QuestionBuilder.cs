@@ -10,7 +10,7 @@ public class QuestionBuilder
     public const string QuestionText = "Test Question";
     public const string QuestionDescription = "Test Question Description";
     public const string SurveyId = "survey-123456";
-    public const string DateExportTag = "date-123456";
+    public const string DataExportTag = "date-123456";
         
     
     public QuestionBuilder()
@@ -22,7 +22,7 @@ public class QuestionBuilder
             Id = Id,
             BlockElementId = surveyBlock.Id,
             SurveyId = SurveyId,
-            DateExportTag = DateExportTag,
+            DataExportTag = DataExportTag,
             QuestionText = QuestionText,
             QuestionDescription = QuestionDescription
         };

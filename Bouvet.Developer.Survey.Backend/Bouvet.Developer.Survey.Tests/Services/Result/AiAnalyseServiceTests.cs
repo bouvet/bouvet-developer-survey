@@ -79,7 +79,7 @@ public class AiAnalyseServiceTests
             BlockElementId = ElementQuestionId,
             SurveyId = SurveyId,
             QuestionId = "QID1",
-            DateExportTag = "2021-09-01",
+            DataExportTag = "2021-09-01",
             QuestionText = "What is your name?",
             QuestionDescription = "Name",
         });

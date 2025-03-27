@@ -7,8 +7,7 @@ export interface BaseEntity {
 
 export interface Question extends BaseEntity {
   blockElementId: string;
-  dataExportTag?: string;
-  dateExportTag?: string;
+  dataExportTag: string;
   questionText: string;
   questionDescription: string;
   isMultipleChoice: boolean;

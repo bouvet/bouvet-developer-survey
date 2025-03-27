@@ -7,7 +7,7 @@ public class QuestionDetailsDto
     public Guid Id { get; set; }
     public Guid BlockElementId { get; set; }
     public string SurveyId { get; set; } = null!;
-    public string DateExportTag { get; set; } = null!;
+    public string DataExportTag { get; set; } = null!;
     public string QuestionText { get; set; } = null!;
     public string QuestionDescription { get; set; } = null!;
     public bool IsMultipleChoice { get; set; }
@@ -22,7 +22,7 @@ public class QuestionDetailsDto
             Id = question.Id,
             BlockElementId = question.BlockElementId,
             SurveyId = question.SurveyId,
-            DateExportTag = question.DateExportTag,
+            DataExportTag = question.DataExportTag,
             QuestionText = question.QuestionText,
             QuestionDescription = question.QuestionDescription,
             IsMultipleChoice = question.IsMultipleChoice,
