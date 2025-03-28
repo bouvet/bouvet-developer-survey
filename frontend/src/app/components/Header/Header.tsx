@@ -16,7 +16,7 @@ export type HeaderProps = {
   simple?: boolean;
 };
 export default function Header({ simple }: HeaderProps) {
-  const { data } = useSurveyStructure();
+  const { isLoading, data } = useSurveyStructure();
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const technology = useMemo(
@@ -73,6 +73,7 @@ export default function Header({ simple }: HeaderProps) {
             <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
             <HeaderTabs
               subNavigationItems={{ technology, aboutParticipants }}
+              isLoading={isLoading}
             />
           </>
         )}
