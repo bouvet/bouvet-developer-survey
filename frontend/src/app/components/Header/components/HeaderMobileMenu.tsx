@@ -52,12 +52,12 @@ export default function MobileMenu({
                   hover:underline decoration-2 underline-offset-
                   ${
                     activeId === item.id
-                      ? "text-[#11133C] underline"
+                      ? "text-[var(--foreground)] underline"
                       : "text-gray-600"
                   }
                   dark:${
                     activeId === item.id
-                      ? "text-[#11133C] underline"
+                      ? "text-[var(--foreground)] underline"
                       : "text-white"
                   }
                 `}

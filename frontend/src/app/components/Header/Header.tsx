@@ -22,7 +22,7 @@ export default function Header({ simple }: HeaderProps) {
   const technology = useMemo(
     () =>
       data?.surveyBlocks
-        .filter(
+        ?.filter(
           (surveyBlock: SurveyBlock) =>
             surveyBlock.blockElements.filter(
               (blockElement) =>
@@ -70,7 +70,10 @@ export default function Header({ simple }: HeaderProps) {
         <HeaderTitle />
         {!simple && (
           <>
-            <HeaderMobileMenuButton onClick={() => setMobileMenuOpen(true)} />
+            <HeaderMobileMenuButton
+              isLoading={isLoading}
+              onClick={() => setMobileMenuOpen(true)}
+            />
             <HeaderTabs
               subNavigationItems={{ technology, aboutParticipants }}
               isLoading={isLoading}
@@ -79,11 +82,13 @@ export default function Header({ simple }: HeaderProps) {
         )}
         <UserMenu />
       </nav>
-      <HeaderMobileMenu
-        mobileMenuOpen={mobileMenuOpen}
-        onClick={() => setMobileMenuOpen(false)}
-        subNavigationItems={{ technology, aboutParticipants }}
-      />
+      {!isLoading && (
+        <HeaderMobileMenu
+          mobileMenuOpen={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen(false)}
+          subNavigationItems={{ technology, aboutParticipants }}
+        />
+      )}
     </header>
   );
 }
