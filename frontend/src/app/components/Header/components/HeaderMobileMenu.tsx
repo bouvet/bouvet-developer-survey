@@ -1,6 +1,5 @@
 import { useActiveSectionId } from "@/app/hooks/useActiveSectionId";
 import { Dialog, DialogPanel } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { MenuItemId, menuItems } from "./menuItems";
 import { HeaderDropdownNavigationProps } from "@/app/components/Header/components/HeaderDropdownNavigation";
 import HeaderMobileDropdownNavigation from "@/app/components/Header/components/HeaderMobileDropdownNavigation";
@@ -27,18 +26,8 @@ export default function MobileMenu({
       className="lg:hidden"
     >
       <div className="fixed inset-0 z-10 bg-black/30" aria-hidden="true" />
-      <DialogPanel className="fixed inset-x-0 top-10 z-20 w-full bg-white dark:bg-slate-800">
-        <div className="px-6 py-4 flex items-center justify-between border-b border-gray-200">
-          <button
-            type="button"
-            onClick={() => onClick(false)}
-            className="rounded-md p-2 text-gray-700 hover:bg-gray-100"
-          >
-            <span className="sr-only">Close menu</span>
-            <XMarkIcon aria-hidden="true" className="h-6 w-6" />
-          </button>
-        </div>
-        <nav className="px-4 py-2">
+      <DialogPanel className="fixed inset-x-0 top-28 z-20 w-full bg-white dark:bg-slate-800">
+        <nav className="px-4 py-2 border-t border-gray-200">
           <ul className="space-y-3">
             {menuItems.map((item) => (
               <li key={item.id} className="flex gap-x-1.5">
