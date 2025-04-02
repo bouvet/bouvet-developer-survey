@@ -2,15 +2,11 @@
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import { ReactNode } from "react";
 import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
+import SkeletonLoading from "@/app/components/loading/SkeletonLoading";
 
 const Summary = () => {
   const { data, error, isLoading } = useSurveyStructure();
-  if (isLoading)
-    return (
-      <section id="about_participants" className="survey-section">
-        Henter resultater...
-      </section>
-    );
+  if (isLoading) return <SkeletonLoading />;
   if (error)
     return (
       <section id="about_participants" className="survey-section">

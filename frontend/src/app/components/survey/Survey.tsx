@@ -2,18 +2,13 @@
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import { BlockElement, SurveyBlock } from "@/app/types/survey";
 import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
+import SkeletonLoading from "@/app/components/loading/SkeletonLoading";
 
 const Survey = () => {
   // Get survey structure data
   const { data, error, isLoading } = useSurveyStructure();
 
-  if (isLoading) {
-    return (
-      <section id="technology" className="survey-section">
-        <div>Henter undersøkelsen...</div>
-      </section>
-    );
-  }
+  if (isLoading) return <SkeletonLoading />;
 
   if (error) {
     return (

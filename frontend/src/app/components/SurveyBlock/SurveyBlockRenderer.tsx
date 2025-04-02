@@ -5,6 +5,7 @@ import BarChart from "../charts/BarChart";
 import useGetBarChartData from "@/app/hooks/useGetBarChartData";
 import useGetDotPlotData from "@/app/hooks/useGetDotPlotData";
 import DotPlotChart from "../charts/DotPlotChart";
+import SkeletonLoading from "@/app/components/loading/SkeletonLoading";
 
 const SurveyBlockRenderer = ({
   questionId,
@@ -18,7 +19,7 @@ const SurveyBlockRenderer = ({
   const dotPlot = useGetDotPlotData(data);
   const tabs = data?.isMultipleChoice ? ["Top 10", "Ønsket og beundret"] : [];
 
-  if (isLoading) return <div>Henter resultater...</div>;
+  if (isLoading) return <SkeletonLoading />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
