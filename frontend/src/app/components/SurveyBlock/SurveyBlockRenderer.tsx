@@ -24,7 +24,7 @@ const SurveyBlockRenderer = ({
 
   return (
     <section
-      id={hrefId.replaceAll(/\s/g, "-")}
+      id={hrefId?.replaceAll(/\s/g, "-")}
       className="flex text-black gap-4 flex-col lg:flex-row lg:gap-6 scroll-mt-32"
     >
       <QuestionContainer data={data} />

@@ -32,7 +32,7 @@ export default function HeaderMobileDropdownNavigation({
               <MenuItem as="li" key={item.id}>
                 {({ close }) => (
                   <Link
-                    href={`#${item.text.replaceAll(/\s/g, "-")}`}
+                    href={`#${item?.text?.replaceAll(/\s/g, "-")}`}
                     className="hover:underline decoration-2 underline-offset-4"
                     onClick={() => {
                       close();

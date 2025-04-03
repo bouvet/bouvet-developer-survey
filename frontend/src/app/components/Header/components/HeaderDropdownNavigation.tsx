@@ -19,7 +19,7 @@ export default function HeaderDropdownNavigation({
           {items.map((item: HeaderDropdownNavigationProps) => (
             <li key={item.id}>
               <Link
-                href={`#${item.text.replaceAll(/\s/g, "-")}`}
+                href={`#${item?.text?.replaceAll(/\s/g, "-")}`}
                 className="hover:underline decoration-2 underline-offset-4"
               >
                 {item.text}

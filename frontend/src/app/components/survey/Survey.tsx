@@ -40,7 +40,7 @@ const Survey = () => {
                 <SurveyBlockRenderer
                   key={question.id}
                   questionId={question.id}
-                  hrefId={block.description.replaceAll(/\s/g, "-")}
+                  hrefId={block?.description?.replaceAll(/\s/g, "-")}
                 />
               );
               return acc;
