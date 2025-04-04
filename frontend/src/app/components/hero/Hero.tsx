@@ -1,3 +1,4 @@
+"use client";
 import useMediaMatch, { ScreenSize } from "@/app/hooks/useMediaMatch";
 import { useEffect, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
