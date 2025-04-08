@@ -5,14 +5,20 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { UserCircleIcon } from "@heroicons/react/16/solid";
+import {
+  DocumentArrowDownIcon,
+  UserCircleIcon,
+  UserIcon,
+} from "@heroicons/react/24/solid";
 import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
-import { UserIcon } from "@heroicons/react/24/solid";
 import DarkModeToggle from "./DarkModeToggle";
 import { useMsal } from "@azure/msal-react";
 
 const UserMenu = () => {
   const { accounts, instance } = useMsal();
+  const exportAsPdf = () => {
+    console.log("exportAsPdf");
+  };
 
   return (
     <Menu>
@@ -33,6 +39,12 @@ const UserMenu = () => {
         </MenuItem>
         <MenuItem as="li">
           <DarkModeToggle />
+        </MenuItem>
+        <MenuItem as="li">
+          <Button onClick={exportAsPdf} className="flex px-4 gap-3 hover:bg-">
+            <DocumentArrowDownIcon className="size-6" aria-hidden="true" />
+            <span>Last ned som pdf</span>
+          </Button>
         </MenuItem>
         <MenuItem as="li">
           <Button
