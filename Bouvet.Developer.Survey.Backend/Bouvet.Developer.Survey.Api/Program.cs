@@ -1,6 +1,8 @@
 using Bouvet.Developer.Survey.Api.Extensions;
 using Bouvet.Developer.Survey.Api.Swagger;
 using Bouvet.Developer.Survey.Infrastructure.Data;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structure;
+using Bouvet.Developer.Survey.Service.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -45,10 +47,13 @@ var connectionString = builder.Configuration["ConnectionString"];
 builder.Services.AddDbContext<DeveloperSurveyContext>(opt =>
     opt.UseLazyLoadingProxies().UseSqlServer(connectionString)
 );
+builder.Services.AddDbContext<BouvetSurveyContext>(opt =>
+    opt.UseSqlServer(connectionString));
 
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddServices();
+builder.Services.AddScoped<ISurveyStructureService, SurveyStructureService>();
 
 builder
     .Services.AddApiVersioning(options =>
