@@ -2,8 +2,7 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import AuthProvider from './auth/authProvider';
-
+import SessionWrapper from "@/app/api/auth/[...nextauth]/SessionWrapper";
 
 export const metadata: Metadata = {
   title: "Bouvet Developer Survey",
@@ -28,9 +27,9 @@ export default function RootLayout({
   return (
     <html lang="no" suppressHydrationWarning>
       <body className={inter.className}>
-        <AuthProvider>
+        <SessionWrapper>
           <ThemeProvider attribute="data-mode">{children}</ThemeProvider>
-        </AuthProvider>
+        </SessionWrapper>
       </body>
     </html>
   );
