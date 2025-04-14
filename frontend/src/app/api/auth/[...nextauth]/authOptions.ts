@@ -17,6 +17,7 @@ const authOptions: AuthOptions = {
       authorization: {
         params: {
           scope: `openid profile email api://${process.env.AZURE_AD_BACKEND_CLIENT_ID}/user_impersonation`,
+          prompt: "login",
         },
       },
     }),

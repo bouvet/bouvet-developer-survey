@@ -37,7 +37,7 @@ const UserMenu = () => {
         <MenuItem as="li">
           <Button
             onClick={async () =>
-              await signOut({ redirect: true, callbackUrl: "/" })
+              await signOut({ redirect: true, callbackUrl: "/signin" })
             }
             className="flex px-4 gap-3 hover:bg-"
           >
