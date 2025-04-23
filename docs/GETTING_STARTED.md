@@ -1,6 +1,7 @@
 # Getting Started
 
 __Clone repo__
+
 ```bash
 # clone repo
 git clone git@github.com:bouvet/bouvet-developer-survey.git
@@ -16,15 +17,18 @@ __Installation Requirements:__
 
 - Install a container runtime like Docker runtime, Colima, Podman or similar container runtime.
 
-> If you are not familiar with container runtimes, I would recommend installing [Docker Desktop](https://docs.docker.com/get-started/get-docker/) .</br>
+> If you are not familiar with container runtimes, I would recommend
+> installing [Docker Desktop](https://docs.docker.com/get-started/get-docker/) .</br>
 > Docker Desktop includes everything you need (GUI, Docker runtime and docker-compose).</br>
 > __Rememeber__: In order to use Docker Desktop, you need to apply for a license with service desk,
 > [bds.bouvet.no](bds.bouvet.no)
 
 __Create .env file__
+
 ```bash
 touch .env
 ```
+
 Open your favorite editor and add the secrets.
 
 ```bash
@@ -33,6 +37,7 @@ DB_CONNECTION_STRING=Server=bds-db,1433;Database=bds-db;User ID=sa;Password=<you
 OpenAiUrl = <url-from-azure>
 OpenAiSecretKey = <secret-key-from-azure>
 ```
+
 If you have the package install, you can create a password
 from the command line using the command `openssl rand --base64 16`
 
@@ -60,8 +65,6 @@ docker-compose up -d
 docker-compose up --build -d
 ```
 
-
-
 Install lazydocker TUI to administrate the running containers. This is very useful to start, stop and debug containers.
 
 ```bash
@@ -83,9 +86,11 @@ docker compose up -d
 
 ## Running (mostly) without docker
 
-Follow this guide to run the backend and frontend using IDE/CLI. In this guide, the database will still be run using docker for convinience. To run the database using docker, first complete the docker setup.
+Follow this guide to run the backend and frontend using IDE/CLI. In this guide, the database will still be run using
+docker for convinience. To run the database using docker, first complete the docker setup.
 
-Instead of using the .env file for local secrets, the secrets.json file will be used instead. This file is not directly a part of the project and is located on another part of your machine.
+Instead of using the .env file for local secrets, the secrets.json file will be used instead. This file is not directly
+a part of the project and is located on another part of your machine.
 
 First create the file. A refrence to the file will be added to your .csproj file.
 
@@ -102,7 +107,8 @@ dotnet user-secrets set "OpenAiSecretKey" "<same value as in the .env file>"
 dotnet user-secrets set "ConnectionString" "Server=localhost,1433;Database=bds-db;User ID=sa;Password=<your-password-from-the-.env-file>;TrustServerCertificate=True;"
 ```
 
-The Microsoft docs if anything is not working as stated: https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-9.0&tabs=windows
+The Microsoft docs if anything is not working as
+stated: https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-9.0&tabs=windows
 
 To start only the database using docker-compose:
 
@@ -111,6 +117,27 @@ docker-compose up bds-db -d
 ```
 
 Then run the backend and frontend using the CLI or IDE as you normally would.
+
+## Add login credentials for frontend
+
+__Create frontend/.env.local file__
+
+```bash
+touch frontend/.env.local
+```
+
+Then add the secrets and other configuration
+
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:5001/api
+NEXTAUTH_SECRET=<https://next-auth.js.org/configuration/options#nextauth_secret> 
+NEXTAUTH_URL=http://localhost:3000/
+ 
+AZURE_AD_CLIENT_SECRET=<ask a colleague. cant be copied from Azure>
+AZURE_AD_CLIENT_ID=<find it at Overview on Azure>
+AZURE_AD_TENANT_ID=<find it at Overview on Azure>
+AZURE_AD_BACKEND_CLIENT_ID=<find it at Manifest and search for"resourceAppId" (starts with 62;))>
+```
 
 ## Import data
 
@@ -149,12 +176,15 @@ If you happen to delete the volumes mounted in the sql container,
 the data will be lost and you will have to do another import.
 
 ## Known issues
-When stopping, and then starting the database using docker-compose, the database throws an error. To fix this, stop the containers and the delete volumes:
+
+When stopping, and then starting the database using docker-compose, the database throws an error. To fix this, stop the
+containers and the delete volumes:
 
 ```bash
 docker-compose down -v
 ```
 
-And then delete any volumes left manually. In lazydocker this can be done be marking the volume and pressing `d` and then `enter`.
+And then delete any volumes left manually. In lazydocker this can be done be marking the volume and pressing `d` and
+then `enter`.
 
 Doing this requires a new import of data into the database.

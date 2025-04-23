@@ -34,7 +34,7 @@ const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
-      if (token.error) console.log("Error token in Session", token.error);
+      if (token.error) console.error("Error token in Session", token.error);
 
       return session;
     },
