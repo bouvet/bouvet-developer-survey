@@ -25,7 +25,7 @@ const authOptions: AuthOptions = {
       tenantId: process.env.AZURE_AD_TENANT_ID,
       authorization: {
         params: {
-          scope: `openid profile email api://${process.env.AZURE_AD_BACKEND_CLIENT_ID}/user_impersonation offline_access`,
+          scope: `openid profile email offline_access api://${process.env.AZURE_AD_BACKEND_CLIENT_ID}/user_impersonation`,
           prompt: "login",
         },
       },
@@ -51,7 +51,7 @@ const authOptions: AuthOptions = {
 
         try {
           const response: Response = await fetch(
-            `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/authorize`,
+            `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/token`,
             {
               method: "POST",
               body: new URLSearchParams({
@@ -62,6 +62,7 @@ const authOptions: AuthOptions = {
               }),
             }
           );
+
           const tokensOrError = await response.json();
 
           if (!response.ok) throw tokensOrError;
@@ -72,8 +73,6 @@ const authOptions: AuthOptions = {
             refresh_token?: string;
           };
 
-          console.log("Creating new token: ", newTokens);
-
           return {
             ...token,
             accessToken: newTokens.access_token,
@@ -83,7 +82,7 @@ const authOptions: AuthOptions = {
               : token.refreshToken,
           };
         } catch (error) {
-          console.error("Error refreshing accessToken", error);
+          console.error(new Date(), "Error refreshing accessToken", error);
           token.error = "RefreshTokenError";
           return token;
         }
