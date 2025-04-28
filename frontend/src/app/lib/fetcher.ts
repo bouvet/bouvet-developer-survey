@@ -1,5 +1,5 @@
 export const fetcher = async (url: string | null, accessToken?: string) => {
-  if (url) {
+  if (url && accessToken) {
     try {
       const res = await fetch(url, {
         headers: {
