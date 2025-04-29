@@ -63,7 +63,7 @@ jobs:
         id: print_env_file
         run: |
           echo "Start: Frontend .env.production created"
-          echo cat frontend/.env.production
+          cat frontend/.env.production
           echo "End: Frontend .env.production created"
 
       - name: Build and Push Frontend Image to ACR
@@ -73,7 +73,7 @@ jobs:
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
-          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --env-file ./frontend/.env.production --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
+          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --env-file=./frontend/.env.production --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
