@@ -14,7 +14,7 @@ export const fetcher = async (url: string | null, accessToken?: string) => {
       return await res.json();
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("Error in fetcher:", error.message);
+        console.error(new Date(), "Error in fetcher:", error.message);
         return { error: error.message };
       }
       return { error: "Failed to fetch data" };

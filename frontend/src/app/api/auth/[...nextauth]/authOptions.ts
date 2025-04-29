@@ -34,7 +34,8 @@ const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
-      if (token.error) console.error("Error token in Session", token.error);
+      if (token.error)
+        console.error(new Date(), "Error token in Session", token.error);
 
       return session;
     },
@@ -72,6 +73,7 @@ const authOptions: AuthOptions = {
             expires_in: number;
             refresh_token?: string;
           };
+          token.error = undefined;
 
           return {
             ...token,
