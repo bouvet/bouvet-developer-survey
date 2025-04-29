@@ -74,12 +74,20 @@ jobs:
 
       - name: Build and Push Frontend Image to ACR
         uses: azure/docker-login@v1
+        env: {
+          NEXTAUTH_SECRET: ${ { secrets.NEXTAUTH_SECRET } },
+          NEXTAUTH_URL: https://survey.bouvetapps.io/,
+          AZURE_AD_CLIENT_SECRET: ${ { secrets.AZURE_AD_CLIENT_SECRET } },
+          AZURE_AD_CLIENT_ID: ${ { secrets.AZURE_AD_CLIENT_ID } },
+          AZURE_AD_TENANT_ID: ${ { secrets.AZURE_AD_TENANT_ID } },
+          AZURE_AD_BACKEND_CLIENT_ID: ${ { secrets.AZURE_AD_BACKEND_CLIENT_ID } }
+        }
         with:
           login-server: ${{ env.LOGIN_SERVER }}
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
-          docker build --env-file=./frontend/.env.production -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
+          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
