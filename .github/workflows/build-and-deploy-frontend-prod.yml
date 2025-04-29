@@ -53,6 +53,23 @@ jobs:
           echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
           echo "Retrieved backend custom domain: $CUSTOM_DOMAIN"
 
+      - name: Setup frontend .env.production
+        id: create_frontend_env
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          envkey_NEXTAUTH_URL: https://survey.bouvetapps.io/
+          envkey_AZURE_AD_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+          envkey_AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+          envkey_AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+          envkey_AZURE_AD_BACKEND_CLIENT_ID: ${{ secrets.AZURE_AD_BACKEND_CLIENT_ID }}
+          directory: frontend/
+          file_name: .env.production
+        run: |
+          echo "Start: Frontend .env.production created"
+          echo cat frontend/.env.production
+          echo "End: Frontend .env.production created"
+
       - name: Build and Push Frontend Image to ACR
         uses: azure/docker-login@v1
         with:
@@ -60,7 +77,7 @@ jobs:
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
-          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
+          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --env-file ./frontend/.env.production --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
