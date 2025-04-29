@@ -127,3 +127,19 @@ jobs:
           template: infra/container-api-test.bicep
           parameters: acrServer=${{ env.LOGIN_SERVER }} acrUsername=${{ env.LOGIN_NAME }} acrPassword=${{ env.PASSWORD }} containerImage=${{ env.IMAGE_TAG }}
           failOnStdErr: false
+      - name: Setup frontend .env.test WIP
+        id: create_frontend_env
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          envkey_NEXTAUTH_URL: http://localhost:3000/
+          envkey_AZURE_AD_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+          envkey_AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+          envkey_AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+          envkey_AZURE_AD_BACKEND_CLIENT_ID: ${{ secrets.AZURE_AD_BACKEND_CLIENT_ID }}
+          directory: frontend/
+          file_name: .env.test
+        run: |
+          echo "Start: Frontend .env.test created"
+          echo cat frontend/.env.test
+          echo "End: Frontend .env.test created"
