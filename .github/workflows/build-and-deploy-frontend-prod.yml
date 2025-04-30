@@ -79,7 +79,6 @@ jobs:
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
-          docker compose --env-file frontend/.env.production up
           docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
