@@ -1,5 +1,6 @@
 import { AuthOptions } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
+import AzureCredentialsProvider from "@/app/api/auth/AzureCredentialsProvider";
 
 declare module "next-auth" {
   interface Session {
@@ -16,16 +17,17 @@ declare module "next-auth/jwt" {
     error?: "RefreshTokenError";
   }
 }
+const credentials = await AzureCredentialsProvider();
 
 const authOptions: AuthOptions = {
   providers: [
     AzureADProvider({
-      clientId: process.env.AZURE_AD_CLIENT_ID as string,
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET as string,
-      tenantId: process.env.AZURE_AD_TENANT_ID,
+      clientId: credentials.clientId,
+      clientSecret: credentials.clientSecret,
+      tenantId: credentials.tenantId,
       authorization: {
         params: {
-          scope: `openid profile email offline_access api://${process.env.AZURE_AD_BACKEND_CLIENT_ID}/user_impersonation`,
+          scope: `openid profile email offline_access api://${credentials.backendClientId}/user_impersonation`,
           prompt: "login",
         },
       },
@@ -52,12 +54,12 @@ const authOptions: AuthOptions = {
 
         try {
           const response: Response = await fetch(
-            `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/token`,
+            `https://login.microsoftonline.com/${credentials.tenantId}/oauth2/v2.0/token`,
             {
               method: "POST",
               body: new URLSearchParams({
-                client_id: process.env.AZURE_AD_CLIENT_ID as string,
-                client_secret: process.env.AZURE_AD_CLIENT_SECRET as string,
+                client_id: credentials.clientId,
+                client_secret: credentials.clientSecret,
                 grant_type: "refresh_token",
                 refresh_token: token.refreshToken!,
               }),
