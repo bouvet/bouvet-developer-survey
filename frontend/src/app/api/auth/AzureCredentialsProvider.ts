@@ -8,7 +8,6 @@ interface IAzureCredentialsProvider {
   backendClientId: string;
 }
 
-//TODO: better name
 const AzureCredentialsProvider =
   async (): Promise<IAzureCredentialsProvider> => {
     let clientSecret = "",
