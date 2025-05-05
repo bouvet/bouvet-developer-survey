@@ -12,6 +12,8 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@azure/identity": "^4.9.1",
+    "@azure/keyvault-secrets": "^4.9.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
     "framer-motion": "^11.16.0",
