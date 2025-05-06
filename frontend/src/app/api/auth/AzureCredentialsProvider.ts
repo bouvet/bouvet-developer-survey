@@ -6,6 +6,7 @@ interface IAzureCredentialsProvider {
   clientId: string;
   tenantId: string;
   backendClientId: string;
+  nextAuthSecret: string;
 }
 
 const AzureCredentialsProvider =
@@ -13,13 +14,15 @@ const AzureCredentialsProvider =
     let clientSecret = "",
       clientId = "",
       tenantId = "",
-      backendClientId = "";
+      backendClientId = "",
+      nextAuthSecret = "";
 
     if (process.env.NODE_ENV !== "development") {
       clientId = process.env.AZURE_AD_CLIENT_ID as string;
       clientSecret = process.env.AZURE_AD_CLIENT_SECRET as string;
       tenantId = process.env.AZURE_AD_TENANT_ID as string;
       backendClientId = process.env.AZURE_AD_BACKEND_CLIENT_ID as string;
+      nextAuthSecret = process.env.NEXTAUTH_SECRET as string;
     } else {
       try {
         console.log("STARTING CREDENTIAL");
@@ -38,12 +41,14 @@ const AzureCredentialsProvider =
         const backendClientIdPromise = await client.getSecret(
           "AZURE-AD-BACKEND-CLIENT-ID"
         );
+        const nextAuthSecretPromise = await client.getSecret("NEXTAUTH-SECRET");
         console.log("CREDENTIAL AFTER GETS");
 
         clientSecret = clientSecretPromise.value!;
         clientId = clientIdPromise.value!;
         tenantId = tenantIdPromise.value!;
         backendClientId = backendClientIdPromise.value!;
+        nextAuthSecret = nextAuthSecretPromise.value!;
       } catch (error) {
         console.error("Error fetching from Azure key vault", error);
       }
@@ -53,6 +58,7 @@ const AzureCredentialsProvider =
       clientId,
       clientSecret,
       tenantId,
+      nextAuthSecret,
     };
   };
 

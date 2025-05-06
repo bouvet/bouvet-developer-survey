@@ -20,6 +20,7 @@ declare module "next-auth/jwt" {
 const credentials = await AzureCredentialsProvider();
 
 const authOptions: AuthOptions = {
+  secret: credentials.nextAuthSecret,
   providers: [
     AzureADProvider({
       clientId: credentials.clientId,
