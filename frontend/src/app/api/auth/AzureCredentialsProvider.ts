@@ -15,17 +15,20 @@ const AzureCredentialsProvider =
       tenantId = "",
       backendClientId = "";
 
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV !== "development") {
       clientId = process.env.AZURE_AD_CLIENT_ID as string;
       clientSecret = process.env.AZURE_AD_CLIENT_SECRET as string;
       tenantId = process.env.AZURE_AD_TENANT_ID as string;
       backendClientId = process.env.AZURE_AD_BACKEND_CLIENT_ID as string;
     } else {
       try {
+        console.log("STARTING CREDENTIAL");
         //https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-node?tabs=azure-cli%2Clinux&pivots=programming-language-typescript
         const credential = new DefaultAzureCredential();
+        console.log("CREDENTIAL DefaultAzureCredential");
         const url = "https://bds-prod-keyvault.vault.azure.net";
         const client = new SecretClient(url, credential);
+        console.log("CREDENTIAL CLIENT");
 
         const clientSecretPromise = await client.getSecret(
           "AZURE-AD-CLIENT-SECRET"
@@ -35,6 +38,7 @@ const AzureCredentialsProvider =
         const backendClientIdPromise = await client.getSecret(
           "AZURE-AD-BACKEND-CLIENT-ID"
         );
+        console.log("CREDENTIAL AFTER GETS");
 
         clientSecret = clientSecretPromise.value!;
         clientId = clientIdPromise.value!;
