@@ -60,7 +60,7 @@ jobs:
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
-          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}} --build-arg NEXTAUTH_SECRET="Z+N9fUaTGyuzP60xySmtxD5S6bhqYw5TBL3K1mpx+f8=" --build-arg NEXTAUTH_URL=https://survey.bouvetapps.io/
+          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}} --build-arg "NEXTAUTH_SECRET=Z+N9fUaTGyuzP60xySmtxD5S6bhqYw5TBL3K1mpx+f8=" --build-arg NEXTAUTH_URL=https://survey.bouvetapps.io/
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
