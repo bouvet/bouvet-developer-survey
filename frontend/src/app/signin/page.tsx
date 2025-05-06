@@ -5,9 +5,11 @@ import { signIn } from "next-auth/react";
 import { Suspense } from "react";
 
 const LoginPage = () => {
-  const searchParams = useSearchParams().get("callbackUrl");
+  const searchParams = useSearchParams();
   const doSignIn = async () => {
-    await signIn("azure-ad", { callbackUrl: searchParams ?? "/" });
+    await signIn("azure-ad", {
+      callbackUrl: searchParams.get("callbackUrl") ?? "/",
+    });
   };
   void doSignIn();
 
