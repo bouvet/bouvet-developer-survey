@@ -134,10 +134,6 @@ jobs:
         with:
           envkey_NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           envkey_NEXTAUTH_URL: http://localhost:3000/
-          envkey_AZURE_AD_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-          envkey_AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-          envkey_AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-          envkey_AZURE_AD_BACKEND_CLIENT_ID: ${{ secrets.AZURE_AD_BACKEND_CLIENT_ID }}
           directory: frontend/
           file_name: .env.test
       - name: Print env file
