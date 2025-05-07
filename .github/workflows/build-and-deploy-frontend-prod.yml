@@ -17,8 +17,8 @@ jobs:
         with:
           # creds: ${{ secrets.AZURE_CREDENTIALS }}
           client-id: 2f3f1b63-3f3d-4389-bf65-c43d09ff8aa5
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          tenant-id: c317fa72-b393-44ea-a87c-ea272e8d963d
+          subscription-id: dd8c1770-d4ea-4f83-b049-3a23bebe076e
 
       - name: Enable ACR Admin Account
         run: |
