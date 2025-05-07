@@ -16,7 +16,7 @@ jobs:
         uses: azure/login@v1
         with:
           # creds: ${{ secrets.AZURE_CREDENTIALS }}
-          client-id: c33fa244-b699-46ba-bd78-feb1b5c50195
+          client-id: 2f3f1b63-3f3d-4389-bf65-c43d09ff8aa5
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
 
