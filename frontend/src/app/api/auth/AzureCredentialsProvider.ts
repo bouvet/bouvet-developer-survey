@@ -33,7 +33,7 @@ const AzureCredentialsProvider =
         //https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-node?tabs=azure-cli%2Clinux&pivots=programming-language-typescript
         const credential = new ChainedTokenCredential(
           new ManagedIdentityCredential({
-            clientId: "90ec55ab-ff73-4a66-9396-74f49b6784a6",
+            objectId: "87415693-0d82-4d96-a402-0bc4e8e5e152",
           }),
           new AzureCliCredential()
         );
