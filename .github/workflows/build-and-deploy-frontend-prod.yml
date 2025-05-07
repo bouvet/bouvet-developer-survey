@@ -52,6 +52,13 @@ jobs:
           BACKEND_URL="https://${CUSTOM_DOMAIN}/api"
           echo "BACKEND_URL=${BACKEND_URL}" >> $GITHUB_ENV
           echo "Retrieved backend custom domain: $CUSTOM_DOMAIN"
+      
+      - name: Print Azure Client ID (Standalone Test)
+        run: |
+          npx ts-node -e "import provider from './frontend/src/app/api/auth/AzureCredentialsProvider';
+            provider().then(creds => {
+              console.log('Azure Client ID:', creds.clientId);
+            }).catch(err => { console.error(err); process.exit(1); })"
 
       - name: Build and Push Frontend Image to ACR
         uses: azure/docker-login@v1
