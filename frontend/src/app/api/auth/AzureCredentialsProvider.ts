@@ -22,6 +22,8 @@ const AzureCredentialsProvider =
       backendClientId = "",
       nextAuthSecret = "";
 
+    console.log("SKIP KEYVAULT FETCH", process.env.SKIP_KEYVAULT_FETCH);
+
     if (process.env.NODE_ENV === "development") {
       clientId = process.env.AZURE_AD_CLIENT_ID as string;
       clientSecret = process.env.AZURE_AD_CLIENT_SECRET as string;
