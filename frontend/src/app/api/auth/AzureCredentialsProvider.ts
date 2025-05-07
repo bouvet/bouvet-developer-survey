@@ -1,6 +1,6 @@
 import { SecretClient } from "@azure/keyvault-secrets";
 import {
-  AzureCliCredential,
+  // AzureCliCredential,
   ChainedTokenCredential,
   ManagedIdentityCredential,
   // DefaultAzureCredential
