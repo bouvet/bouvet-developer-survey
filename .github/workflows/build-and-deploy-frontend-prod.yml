@@ -7,6 +7,7 @@ on:
   workflow_dispatch: # manual trigger
     branches:
       - main
+      - 169-next-auth
     paths:
       - 'frontend/**'
 
