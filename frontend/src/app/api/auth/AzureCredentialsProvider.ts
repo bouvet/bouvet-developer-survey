@@ -1,5 +1,9 @@
 import { SecretClient } from "@azure/keyvault-secrets";
-import { DefaultAzureCredential } from "@azure/identity";
+import {
+  AzureCliCredential,
+  ChainedTokenCredential,
+  ManagedIdentityCredential,
+} from "@azure/identity";
 
 interface IAzureCredentialsProvider {
   clientSecret: string;
@@ -27,11 +31,16 @@ const AzureCredentialsProvider =
       try {
         console.log("STARTING CREDENTIAL");
         //https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-node?tabs=azure-cli%2Clinux&pivots=programming-language-typescript
-        const credential = new DefaultAzureCredential();
+        const credential = new ChainedTokenCredential(
+          new ManagedIdentityCredential({
+            clientId: "90ec55ab-ff73-4a66-9396-74f49b6784a6",
+          }),
+          new AzureCliCredential()
+        );
         console.log("CREDENTIAL DefaultAzureCredential");
         const url = "https://bds-prod-keyvault.vault.azure.net";
         const client = new SecretClient(url, credential);
-        console.log("CREDENTIAL CLIENT");
+        console.log("CREDENTIAL CLIENT", client);
 
         const clientSecretPromise = await client.getSecret(
           "AZURE-AD-CLIENT-SECRET"
