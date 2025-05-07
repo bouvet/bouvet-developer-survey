@@ -15,7 +15,10 @@ jobs:
       - name: 'Azure login'
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          # creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: 90ec55ab-ff73-4a66-9396-74f49b6784a6
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
 
       - name: Enable ACR Admin Account
         run: |
@@ -61,7 +64,7 @@ jobs:
           password: ${{ env.PASSWORD }}
       - run: |
           az acr login --name ${{ env.ACR_NAME }} 
-          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}} --build-arg NEXTAUTH_URL=https://survey.bouvetapps.io/ --build-arg AZURE_AD_CLIENT_ID=${{ secrets.AZURE_AD_CLIENT_ID }} --build-arg AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }} --build-arg AZURE_FEDERATED_TOKEN_FILE=/tmp/token --build-arg SKIP_KEYVAULT_FETCH=true
+          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}} --build-arg NEXTAUTH_URL=https://survey.bouvetapps.io/ --build-arg AZURE_AD_CLIENT_ID=${{ secrets.AZURE_AD_CLIENT_ID }} --build-arg AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }} --build-arg SKIP_KEYVAULT_FETCH=true
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
