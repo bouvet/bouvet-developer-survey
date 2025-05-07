@@ -60,6 +60,7 @@ jobs:
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
+          export SKIP_KEYVAULT_FETCH=true
           az acr login --name ${{ env.ACR_NAME }} 
           docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}} --build-arg NEXTAUTH_URL=https://survey.bouvetapps.io/ --build-arg AZURE_AD_CLIENT_ID=${{ secrets.AZURE_AD_CLIENT_ID }} --build-arg AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }} --build-arg AZURE_FEDERATED_TOKEN_FILE=/tmp/token
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
