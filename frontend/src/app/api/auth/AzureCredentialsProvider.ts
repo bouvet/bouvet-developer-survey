@@ -25,14 +25,10 @@ const AzureCredentialsProvider =
     console.log("SKIP KEYVAULT FETCH", process.env.SKIP_KEYVAULT_FETCH);
 
     if (process.env.NODE_ENV === "development") {
-      clientId = process.env.AZURE_AD_CLIENT_ID as string;
-      clientSecret = process.env.AZURE_AD_CLIENT_SECRET as string;
-      tenantId = process.env.AZURE_AD_TENANT_ID as string;
-      backendClientId = process.env.AZURE_AD_BACKEND_CLIENT_ID as string;
-      nextAuthSecret = process.env.NEXTAUTH_SECRET as string;
+      
     } else {
 
-      if (process.env.SKIP_KEYVAULT_FETCH !== "true") {
+      if (process.env.SKIP_KEYVAULT_FETCH === "true") {
         try {
 
           console.log("STARTING CREDENTIAL");

@@ -37,6 +37,7 @@ function useOnScreen(elements: HTMLElement[]) {
       },
       { threshold: 0.125 }
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elements]);
 
   useEffect(() => {
@@ -53,6 +54,7 @@ const useRerenderOnScroll = () => {
     window.addEventListener("scroll", () => {
       forceUpdate();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
