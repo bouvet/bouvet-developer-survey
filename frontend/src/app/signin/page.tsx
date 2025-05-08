@@ -16,7 +16,7 @@ const Login = () => {
 
     console.log("########## callbackUrl2222222 ########", callbackUrl);
     await signIn("azure-ad", {
-      callbackUrl,
+      callbackUrl: "https://survey.bouvetapps.io/",
     });
   };
   void doSignIn();
