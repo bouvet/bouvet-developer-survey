@@ -41,10 +41,12 @@ const AzureCredentialsProvider =
           clientId = process.env.AZURE_CLIENT_ID as string;
           tenantId = process.env.AZURE_TENANT_ID as string;
           const subsId = process.env.AZURE_SUBSCRIPTION_ID as string;
+          const nexturl = process.env.NEXTAUTH_URL as string;
 
           console.log("AZURE_CLIENT_ID", clientId);
           console.log("AZURE_TENANT_ID", tenantId);
           console.log("AZURE_SUBSCRIPTION_ID", subsId);
+          console.log("NEXTAUTH_URL", nexturl);
 
           // const credential = new DefaultAzureCredential();
 
