@@ -37,6 +37,7 @@ const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
+      console.log("session accessToken", session.accessToken);
       if (token.error)
         console.error(new Date(), "Error token in Session", token.error);
 
@@ -44,6 +45,7 @@ const authOptions: AuthOptions = {
     },
     async jwt({ token, account }) {
       if (account) {
+        console.log("IN ACCOUNT");
         token.accessToken = account.access_token as string;
         token.expiresAt = account.expires_at as number;
         token.refreshToken = account.refresh_token;
@@ -52,7 +54,7 @@ const authOptions: AuthOptions = {
         return token;
       } else {
         if (!token.refreshToken) throw new Error("Invalid refresh token");
-
+        console.log("IN REFRESH TOKEN", token.refreshToken);
         try {
           const response: Response = await fetch(
             `https://login.microsoftonline.com/${credentials.tenantId}/oauth2/v2.0/token`,
@@ -93,7 +95,43 @@ const authOptions: AuthOptions = {
         }
       }
     },
+    async redirect({ url, baseUrl }) {
+      console.log("REDIRECT URL", url);
+      console.log("REDIRECT BASEURL", baseUrl);
+      if (process.env.NODE_ENV === "development") {
+        return url;
+      }
+      const primaryDomain = "https://survey.bouvetapps.io/";
+      let newUrl = url;
+      if (url.startsWith("/")) {
+        newUrl = `https://${primaryDomain}${url}`;
+      } else if (url.startsWith("http")) {
+        newUrl = rewriteUrl(url, primaryDomain);
+      }
+
+      return newUrl;
+    },
   },
 };
+
+function rewriteUrl(url: string, domain: string) {
+  const parsed = new URL(url);
+  const params = new URLSearchParams(parsed.search);
+
+  // Replace the domain in the callbackUrl
+  if (params.has("callbackUrl")) {
+    const callbackUrl = params.get("callbackUrl");
+    if (callbackUrl?.startsWith("http")) {
+      const newCallBackUrl = new URL(String(callbackUrl));
+
+      const newUrl = `https://${domain}${newCallBackUrl.pathname}?${newCallBackUrl.searchParams}`;
+      params.set("callbackUrl", newUrl);
+    }
+  }
+
+  // Reconstruct the URL without the token
+  const newUrl = `https://${domain}${parsed.pathname}?${params.toString()}`;
+  return newUrl;
+}
 
 export default authOptions;
