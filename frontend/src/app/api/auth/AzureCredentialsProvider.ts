@@ -32,7 +32,7 @@ const AzureCredentialsProvider =
       nextAuthSecret = process.env.NEXTAUTH_SECRET as string;
     } else {
 
-      if (process.env.SKIP_KEYVAULT_FETCH === "true") {
+      if (process.env.SKIP_KEYVAULT_FETCH !== "true") {
         try {
 
           console.log("STARTING CREDENTIAL");
