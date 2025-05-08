@@ -7,11 +7,14 @@ import { Suspense } from "react";
 const Login = () => {
   const searchParams = useSearchParams();
   const doSignIn = async () => {
+    const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+    console.log("########## callbackUrl ########", callbackUrl);
     await signIn("azure-ad", {
-      callbackUrl: searchParams.get("callbackUrl") ?? "/",
+      callbackUrl,
     });
   };
   void doSignIn();
+  
   return (
     <main className="w-full h-dvh flex p-0 place-content-center place-items-center">
       <div className="flex flex-col gap-5" role="status">
