@@ -7,16 +7,13 @@ import { Suspense } from "react";
 const Login = () => {
   const searchParams = useSearchParams();
   const doSignIn = async () => {
-    let callbackUrl = searchParams.get("callbackUrl");
-    console.log("########## callbackUrl ########", callbackUrl);
-    callbackUrl =
-      callbackUrl === null || callbackUrl.includes("https://0.0.0.0:3000/")
-        ? "/"
-        : callbackUrl;
-
-    console.log("########## callbackUrl2222222 ########", callbackUrl);
+    const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+    /*console.log("########## callbackUrl ########", callbackUrl);
+    callbackUrl = callbackUrl === null || callbackUrl.includes("https://0.0.0.0:3000/")
+      ? "/"
+      : callbackUrl;*/
     await signIn("azure-ad", {
-      callbackUrl: "https://survey.bouvetapps.io/",
+      callbackUrl,
     });
   };
   void doSignIn();

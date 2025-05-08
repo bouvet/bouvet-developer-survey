@@ -101,7 +101,7 @@ const authOptions: AuthOptions = {
       if (process.env.NODE_ENV === "development") {
         return url;
       }
-      const primaryDomain = "https://survey.bouvetapps.io/";
+      const primaryDomain = "survey.bouvetapps.io/";
       let newUrl = url;
       if (url.startsWith("/")) {
         newUrl = `https://${primaryDomain}${url}`;
