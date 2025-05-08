@@ -40,13 +40,23 @@ const AzureCredentialsProvider =
           
           clientId = process.env.AZURE_CLIENT_ID as string;
           tenantId = process.env.AZURE_TENANT_ID as string;
-          console.log("CREDENTIALS", {
-            clientId,
-            tenantId,
-            // subsID,
+          let subsId = process.env.AZURE_SUBSCRIPTION_ID as string;
+
+          console.log("AZURE_CLIENT_ID", clientId);
+          console.log("AZURE_TENANT_ID", tenantId);
+          console.log("AZURE_SUBSCRIPTION_ID", subsId);
+
+          // const credential = new DefaultAzureCredential();
+
+
+          // use clientid, tenatant and subscription id + oidc github action auth as azure credentials
+
+          const credential = new DefaultAzureCredential({
+            managedIdentityClientId: process.env.AZURE_CLIENT_ID,
+            tenantId: process.env.AZURE_TENANT_ID,
+            subscriptionId: process.env.AZURE_SUBSCRIPTION_ID,
           });
 
-          const credential = new DefaultAzureCredential();
           console.log("CREDENTIAL DefaultAzureCredential");
           const url = "https://bds-prod-keyvault.vault.azure.net";
           const client = new SecretClient(url, credential);
