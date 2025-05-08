@@ -79,6 +79,7 @@ jobs:
             --name bds-prod-containerapp-frontend \
             --resource-group ${{ secrets.AZURE_RG_PROD }} \
             --image ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+            --set-env-vars NEXTAUTH_URL=https://survey.bouvetapps.io/
 
       - name: Get Container App URL
         run: |
