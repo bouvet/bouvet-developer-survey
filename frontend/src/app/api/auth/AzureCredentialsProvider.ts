@@ -46,12 +46,7 @@ const AzureCredentialsProvider =
           // # tenant-id: c317fa72-b393-44ea-a87c-ea272e8d963d
           // # subscription-id: dd8c1770-d4ea-4f83-b049-3a23bebe076e
 
-          const credential = new DefaultAzureCredential({
-            // managedIdentityClientId: "90ec55ab-ff73-4a66-9396-74f49b6784a6",
-            clientId: "2f3f1b63-3f3d-4389-bf65-c43d09ff8aa5",
-            tenantId: "c317fa72-b393-44ea-a87c-ea272e8d963d",
-            subscriptionId: "dd8c1770-d4ea-4f83-b049-3a23bebe076e",
-          });
+          const credential = new DefaultAzureCredential();
           console.log("CREDENTIAL DefaultAzureCredential");
           const url = "https://bds-prod-keyvault.vault.azure.net";
           const client = new SecretClient(url, credential);
