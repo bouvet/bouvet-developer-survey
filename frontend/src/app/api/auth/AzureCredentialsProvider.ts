@@ -53,8 +53,6 @@ const AzureCredentialsProvider =
 
           const credential = new DefaultAzureCredential({
             managedIdentityClientId: process.env.AZURE_CLIENT_ID,
-            tenantId: process.env.AZURE_TENANT_ID,
-            subscriptionId: process.env.AZURE_SUBSCRIPTION_ID,
           });
 
           console.log("CREDENTIAL DefaultAzureCredential");
