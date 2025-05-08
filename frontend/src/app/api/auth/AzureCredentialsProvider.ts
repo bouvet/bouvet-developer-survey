@@ -37,14 +37,14 @@ const AzureCredentialsProvider =
 
           console.log("STARTING CREDENTIAL");
           //https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-node?tabs=azure-cli%2Clinux&pivots=programming-language-typescript
-          // const credential = new ChainedTokenCredential(
-          //   new ManagedIdentityCredential({
-          //     clientId: "90ec55ab-ff73-4a66-9396-74f49b6784a6",
-          //   })
-          // );
-          // # client-id: 2f3f1b63-3f3d-4389-bf65-c43d09ff8aa5
-          // # tenant-id: c317fa72-b393-44ea-a87c-ea272e8d963d
-          // # subscription-id: dd8c1770-d4ea-4f83-b049-3a23bebe076e
+          
+          clientId = process.env.AZURE_CLIENT_ID as string;
+          tenantId = process.env.AZURE_TENANT_ID as string;
+          console.log("CREDENTIALS", {
+            clientId,
+            tenantId,
+            // subsID,
+          });
 
           const credential = new DefaultAzureCredential();
           console.log("CREDENTIAL DefaultAzureCredential");
