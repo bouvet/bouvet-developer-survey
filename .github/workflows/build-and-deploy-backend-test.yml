@@ -127,18 +127,3 @@ jobs:
           template: infra/container-api-test.bicep
           parameters: acrServer=${{ env.LOGIN_SERVER }} acrUsername=${{ env.LOGIN_NAME }} acrPassword=${{ env.PASSWORD }} containerImage=${{ env.IMAGE_TAG }}
           failOnStdErr: false
-
-      - name: Setup frontend .env.test WIP
-        id: create_frontend_env
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          envkey_NEXTAUTH_URL: http://localhost:3000/
-          directory: frontend/
-          file_name: .env.test
-      - name: Print env file
-        id: print_env_file
-        run: |
-          echo "Start: Frontend .env.test created"
-          echo cat frontend/.env.test
-          echo "End: Frontend .env.test created"

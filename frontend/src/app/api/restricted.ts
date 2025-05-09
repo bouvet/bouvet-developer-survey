@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth/next";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { NextApiRequest, NextApiResponse } from "next";
 
-/*TODO: needed?*/
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
