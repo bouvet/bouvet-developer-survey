@@ -16,6 +16,9 @@ param acrServer string
 @description('The name of the ACR username.')
 param acrUsername string
 
+@description('The name of the VNet.')
+param vnetName string = 'bds-prod-vnet'
+
 @secure()
 @description('The name of the ACR password.')
 param acrPassword string
@@ -26,24 +29,63 @@ param containerImage string
 module containerEnv 'modules/containerEnv.bicep' = {
   name: containerName
   params: {
+    vnetName: vnetName
     containerAppEnvironmentName: containerName
     location: location
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
 }
 
-module containerApp 'modules/containerAppFrontend.bicep' = {
+resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
   name: containerAppName
-  params: {
-    location: location
-    containerAppName: containerAppName
-    containerAppEnvironmentId: containerEnv.outputs.id
-    acrLoginServer: acrServer
-    acrUsername: acrUsername
-    acrPassword: acrPassword
-    containerImage: containerImage
-    targetPort: 3000
+  location: location
+  properties: {
+    managedEnvironmentId: containerEnv.outputs.id
+    configuration: {
+      activeRevisionsMode: 'Multiple'
+      ingress: {
+        external: true
+        targetPort: 3000
+        allowInsecure: false
+        customDomains: [
+          {
+            bindingType: 'SniEnabled'
+            certificateId: 'survey.bouvetapps.io-bds-prod-250120105916'
+            name: 'survey.bouvetapps.io'
+          }
+        ]
+      }
+      secrets: [
+        {
+          name: 'container-registry-password'
+          value: acrPassword
+        }
+      ]
+      registries: [
+        {
+          server: acrServer
+          passwordSecretRef: 'container-registry-password'
+          username: acrUsername
+        }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: containerAppName
+          image: containerImage
+          resources: {
+            cpu: json('0.5')
+            memory: '1Gi'
+          }
+        }
+      ]
+      scale: {
+        minReplicas: 0
+        maxReplicas: 2
+      }
+    }
   }
 }
 
-output fqdn string = containerApp.outputs.fqdn
+output fqdn string = containerApp.properties.configuration.ingress.fqdn
