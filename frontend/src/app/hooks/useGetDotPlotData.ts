@@ -3,9 +3,9 @@ import { Answer } from "../types/survey";
 
 const useGetDotPlotData = (data: Answer): DotPlot => {
   const plot: DotPlot = [];
-  if (!data) return plot;
+  if (!data || !data.choices) return plot;
 
-  data.choices.forEach((choice) => {
+  data?.choices.forEach((choice) => {
     const responses = choice.responses;
     if (responses.length < 2) return;
 

@@ -80,6 +80,31 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
           keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/OpenAiSecretKey'
           identity: managedIdentity.id
         }
+        {
+          name: 'AZURE-AD-CLIENT-SECRET'
+          keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/AZURE-AD-CLIENT-SECRET'
+          identity: managedIdentity.id
+        }
+        {
+          name: 'AZURE-AD-CLIENT-ID'
+          keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/AZURE-AD-CLIENT-ID'
+          identity: managedIdentity.id
+        }
+        {
+          name: 'AZURE-AD-TENANT-ID'
+          keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/AZURE-AD-TENANT-ID'
+          identity: managedIdentity.id
+        }
+        {
+          name: 'AZURE-AD-BACKEND-CLIENT-ID'
+          keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/AZURE-AD-BACKEND-CLIENT-ID'
+          identity: managedIdentity.id
+        }
+        {
+          name: 'NEXTAUTH-SECRET'
+          keyVaultUrl: 'https://${keyVaultName}.vault.azure.net/secrets/NEXTAUTH-SECRET'
+          identity: managedIdentity.id
+        }
       ]
     }
     template: {
@@ -103,6 +128,26 @@ resource containerApp 'Microsoft.App/containerApps@2023-08-01-preview' = {
             {
               name: 'OpenAiSecretKey'
               secretRef: 'open-ai-secret-key'
+            }
+            {
+              name: 'AZURE-AD-CLIENT-SECRET'
+              secretRef: 'AZURE-AD-CLIENT-SECRET'
+            }
+            {
+              name: 'AZURE-AD-CLIENT-ID'
+              secretRef: 'AZURE-AD-CLIENT-ID'
+            }
+            {
+              name: 'AZURE-AD-TENANT-ID'
+              secretRef: 'AZURE-AD-TENANT-ID'
+            }
+            {
+              name: 'AZURE-AD-BACKEND-CLIENT-ID'
+              secretRef: 'AZURE-AD-BACKEND-CLIENT-ID'
+            }
+            {
+              name: 'NEXTAUTH-SECRET'
+              secretRef: 'NEXTAUTH-SECRET'
             }
           ]
         }

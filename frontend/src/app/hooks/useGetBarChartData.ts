@@ -7,11 +7,11 @@ export interface BarChartData {
 }
 
 const useGetBarChartData = (data: Answer): BarChartData => {
-  if (!data) {
+  if (!data || !data.choices) {
     return { y: [], x: [], title: "" };
   }
 
-  const results = data.choices
+  const results = data?.choices
     .reduce(
       (acc, choice) => {
         if (data.isMultipleChoice && choice.responses.length === 2) {
