@@ -7,12 +7,6 @@ const envSchema = z.object({
         "NEXT_PUBLIC_API_URL is required in your .env.local/production file",
     })
     .url("NEXT_PUBLIC_API_URL must be an URL"),
-  /*AZURE_AD_CLIENT_SECRET: z
-    .string({
-      required_error:
-        "AZURE_AD_CLIENT_SECRET is required in your .env.local/production file",
-    })
-    .startsWith("MgE8Q"),*/
 });
 
 export const environment = envSchema.parse({
