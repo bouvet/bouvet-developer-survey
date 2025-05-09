@@ -8,10 +8,6 @@ const Login = () => {
   const searchParams = useSearchParams();
   const doSignIn = async () => {
     const callbackUrl = searchParams.get("callbackUrl") ?? "/";
-    /*console.log("########## callbackUrl ########", callbackUrl);
-    callbackUrl = callbackUrl === null || callbackUrl.includes("https://0.0.0.0:3000/")
-      ? "/"
-      : callbackUrl;*/
     await signIn("azure-ad", {
       callbackUrl,
     });
