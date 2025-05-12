@@ -96,20 +96,20 @@ const authOptions: AuthOptions = {
         }
       }
     },
-    async redirect({ url }) {
-      if (process.env.NODE_ENV === "development") {
-        return url;
-      }
-      const primaryDomain = "survey.bouvetapps.io/";
-      let newUrl = url;
-      if (url.startsWith("/")) {
-        newUrl = `https://${primaryDomain}${url}`;
-      } else if (url.startsWith("http")) {
-        newUrl = rewriteUrl(url, primaryDomain);
-      }
+    /* async redirect({ url }) {
+       if (process.env.NODE_ENV === "development") {
+         return url;
+       }
+       const primaryDomain = "survey.bouvetapps.io/";
+       let newUrl = url;
+       if (url.startsWith("/")) {
+         newUrl = `https://${primaryDomain}${url}`;
+       } else if (url.startsWith("http")) {
+         newUrl = rewriteUrl(url, primaryDomain);
+       }
 
-      return newUrl;
-    },
+       return newUrl;
+     },*/
   },
 };
 
