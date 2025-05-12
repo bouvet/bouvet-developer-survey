@@ -113,7 +113,7 @@ const authOptions: AuthOptions = {
   },
 };
 
-function rewriteUrl(url: string, domain: string) {
+/*function rewriteUrl(url: string, domain: string) {
   const parsed = new URL(url);
   const params = new URLSearchParams(parsed.search);
 
@@ -131,6 +131,6 @@ function rewriteUrl(url: string, domain: string) {
   // Reconstruct the URL without the token
   const newUrl = `https://${domain}${parsed.pathname}?${params.toString()}`;
   return newUrl;
-}
+}*/
 
 export default authOptions;
