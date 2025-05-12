@@ -96,41 +96,7 @@ const authOptions: AuthOptions = {
         }
       }
     },
-    /* async redirect({ url }) {
-       if (process.env.NODE_ENV === "development") {
-         return url;
-       }
-       const primaryDomain = "survey.bouvetapps.io/";
-       let newUrl = url;
-       if (url.startsWith("/")) {
-         newUrl = `https://${primaryDomain}${url}`;
-       } else if (url.startsWith("http")) {
-         newUrl = rewriteUrl(url, primaryDomain);
-       }
-
-       return newUrl;
-     },*/
   },
 };
-
-/*function rewriteUrl(url: string, domain: string) {
-  const parsed = new URL(url);
-  const params = new URLSearchParams(parsed.search);
-
-  // Replace the domain in the callbackUrl
-  if (params.has("callbackUrl")) {
-    const callbackUrl = params.get("callbackUrl");
-    if (callbackUrl?.startsWith("http")) {
-      const newCallBackUrl = new URL(String(callbackUrl));
-
-      const newUrl = `https://${domain}${newCallBackUrl.pathname}?${newCallBackUrl.searchParams}`;
-      params.set("callbackUrl", newUrl);
-    }
-  }
-
-  // Reconstruct the URL without the token
-  const newUrl = `https://${domain}${parsed.pathname}?${params.toString()}`;
-  return newUrl;
-}*/
 
 export default authOptions;
