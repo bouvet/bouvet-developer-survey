@@ -9,10 +9,11 @@ import { InteractionType } from "@azure/msal-browser";
 
 export default function SurveyPage() {
   const { year } = useParams<{ year: string }>();
-  if (year !== "2024") notFound();
+  console.log('year: ', year)
   return (
     <main>
       <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
+        2025
         <Hero />
         <Summary />
         <Survey />

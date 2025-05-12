@@ -5,7 +5,7 @@ namespace Bouvet.Developer.Survey.Service.Interfaces.Survey.Structure
 {
     public interface ISurveyStructureService
     {
-        Task<string?> GetSurveyStructureByYearAsync(int year);
+        Task<SurveyExportDto?> GetSurveyStructureByYearAsync(int year);
         Task UnpackSurveyStructureAsync(Stream jsonStream);
     }
 }

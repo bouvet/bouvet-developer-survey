@@ -25,7 +25,7 @@ export const YearPickerCircle = () => {
             <YearButton
               key={year}
               disabled={year === 2025}
-              onClick={() => router.push(`/${year}`)}
+              onClick={() => router.push(`/results/${year}`)}
             >
               {year}
             </YearButton>

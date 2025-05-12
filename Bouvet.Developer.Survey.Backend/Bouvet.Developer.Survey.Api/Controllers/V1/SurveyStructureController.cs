@@ -56,11 +56,11 @@ public class SurveyStructureController : ControllerBase
     [SwaggerResponse(404, "Survey structure not found")]
     public async Task<IActionResult> GetSurveyStructure(int year)
     {
-        var json = await _surveyStructureService.GetSurveyStructureByYearAsync(year);
+        var structure = await _surveyStructureService.GetSurveyStructureByYearAsync(year);
 
-        if (string.IsNullOrWhiteSpace(json))
+        if (structure == null)
             return NotFound("No structure found for that year.");
 
-        return Content(json, "application/json");
+        return Ok(structure);
     }
 }

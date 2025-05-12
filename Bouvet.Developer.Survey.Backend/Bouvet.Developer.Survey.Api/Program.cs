@@ -1,8 +1,10 @@
 using Bouvet.Developer.Survey.Api.Extensions;
 using Bouvet.Developer.Survey.Api.Swagger;
 using Bouvet.Developer.Survey.Infrastructure.Data;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results.Bouvet;
 using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structure;
 using Bouvet.Developer.Survey.Service.Services;
+using Bouvet.Developer.Survey.Service.Survey.Results;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +56,9 @@ builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddServices();
 builder.Services.AddScoped<ISurveyStructureService, SurveyStructureService>();
+builder.Services.AddScoped<ISurveyResponseService, SurveyResponseService>();
+builder.Services.AddScoped<ISurveyResultsService, SurveyResultsService>();
+
 
 builder
     .Services.AddApiVersioning(options =>
@@ -85,8 +90,12 @@ var services = scope.ServiceProvider;
 try
 {
     Console.WriteLine("Migrating database...");
-    var context = services.GetRequiredService<DeveloperSurveyContext>();
-    context.Database.Migrate();
+    //var context = services.GetRequiredService<DeveloperSurveyContext>();
+    //context.Database.Migrate();
+
+    var bouvetContext = services.GetRequiredService<BouvetSurveyContext>();
+    bouvetContext.Database.Migrate();
+
     Console.WriteLine("Database migrated.");
 }
 catch (Exception ex)
