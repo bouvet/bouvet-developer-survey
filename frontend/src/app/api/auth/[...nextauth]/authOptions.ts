@@ -96,7 +96,7 @@ const authOptions: AuthOptions = {
         }
       }
     },
-    async redirect({ url, baseUrl }) {
+    async redirect({ url }) {
       if (process.env.NODE_ENV === "development") {
         return url;
       }
