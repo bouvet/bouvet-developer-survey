@@ -19,7 +19,7 @@ export const useSurveyResult = (
   const accessToken = user?.accessToken;
   const { data, error, isLoading, isValidating } = useSWR(
     [url, accessToken],
-    ([url, accessToken]) => fetcher(url, accessToken)
+    ([url, accessToken]) => fetcher({ url, accessToken })
   );
 
   return {

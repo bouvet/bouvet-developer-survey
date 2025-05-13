@@ -16,7 +16,7 @@ export type HeaderProps = {
   simple?: boolean;
 };
 export default function Header({ simple }: HeaderProps) {
-  const { data, isLoading, isValidating } = useSurveyStructure();
+  const { data, isLoading, isValidating } = useSurveyStructure(!simple);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const technology = useMemo(
