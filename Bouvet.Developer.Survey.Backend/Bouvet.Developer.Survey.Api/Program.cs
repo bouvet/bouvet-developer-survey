@@ -90,8 +90,8 @@ var services = scope.ServiceProvider;
 try
 {
     Console.WriteLine("Migrating database...");
-    //var context = services.GetRequiredService<DeveloperSurveyContext>();
-    //context.Database.Migrate();
+    var context = services.GetRequiredService<DeveloperSurveyContext>();
+    context.Database.Migrate();
 
     var bouvetContext = services.GetRequiredService<BouvetSurveyContext>();
     bouvetContext.Database.Migrate();
