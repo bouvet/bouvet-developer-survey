@@ -15,6 +15,7 @@ export const useSurveyStructure = (
   const { data: user } = useSession();
   const url = `${environment.apiUrl}/v1/results/surveys/year/2024`;
   const accessToken = user?.accessToken;
+  console.log("user", user);
   const { data, error, isLoading, isValidating } = useSWR(
     [url, accessToken, allowFetch],
     ([url, accessToken, allowFetch]) =>
