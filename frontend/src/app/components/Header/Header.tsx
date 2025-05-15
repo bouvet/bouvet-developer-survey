@@ -16,7 +16,7 @@ export type HeaderProps = {
   simple?: boolean;
 };
 export default function Header({ simple }: HeaderProps) {
-  const { data, isLoading, isValidating } = useSurveyStructure(!simple);
+  const { data, isLoading } = useSurveyStructure(!simple);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const technology = useMemo(
@@ -71,12 +71,12 @@ export default function Header({ simple }: HeaderProps) {
         {!simple && (
           <>
             <HeaderMobileMenuButton
-              isLoading={isLoading || isValidating}
+              isLoading={isLoading}
               onClick={() => setMobileMenuOpen(true)}
             />
             <HeaderTabs
               subNavigationItems={{ technology, aboutParticipants }}
-              isLoading={isLoading || isValidating}
+              isLoading={isLoading}
             />
           </>
         )}

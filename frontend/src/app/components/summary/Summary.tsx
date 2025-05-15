@@ -5,9 +5,9 @@ import SurveyBlockRenderer from "../SurveyBlock/SurveyBlockRenderer";
 import SkeletonLoading from "@/app/components/loading/SkeletonLoading";
 
 const Summary = () => {
-  const { data, error, isLoading, isValidating } = useSurveyStructure();
+  const { data, error, isLoading } = useSurveyStructure();
 
-  if (isLoading || isValidating) return <SkeletonLoading />;
+  if (isLoading) return <SkeletonLoading />;
   if (error)
     return (
       <section id="about_participants" className="survey-section">
