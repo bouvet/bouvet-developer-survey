@@ -8,7 +8,7 @@ export default function HeaderTitle() {
   return (
     <div className="flex lg:flex-1 pr-5">
       <a href="/" className="-m-1.5 p-1.5">
-        <Logo year={year} />
+        <Logo year={year && !isNaN(Number(year)) ? year : ""} />
       </a>
     </div>
   );

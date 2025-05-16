@@ -12,9 +12,9 @@ export default function HomePage() {
         <section className="flex items-center z-10 h-full">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 sm:px-40 px-8 w-full h-full">
             <div className="flex flex-col max-w-lg ">
-              <h2 className="text-4xl font-bold mb-5 sm:text-5xl text-nowrap">
+              <h1 className="text-4xl font-bold mb-5 sm:text-5xl text-nowrap">
                 Developer Survey
-              </h2>
+              </h1>
               <p>
                 En løsning som kartlegger teknologier og erfaringer blant
                 utviklere i våre prosjekter. Denne innsikten gir oss verdifull

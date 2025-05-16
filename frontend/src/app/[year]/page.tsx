@@ -9,10 +9,10 @@ export default function SurveyPage() {
   const { year } = useParams<{ year: string }>();
   if (year !== "2024") notFound();
   return (
-    <main>
+    <>
       <Hero />
       <Summary />
       <Survey />
-    </main>
+    </>
   );
 }

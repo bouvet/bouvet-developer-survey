@@ -6,20 +6,26 @@ import { useSession } from "next-auth/react";
 
 export const useSurveyResult = (
   questionId: string
-): { data: Answer; error: { message: string }; isLoading: boolean } => {
+): {
+  data: Answer;
+  error: { message: string };
+  isLoading: boolean;
+  isValidating: boolean;
+} => {
   const { data: user } = useSession();
   const url = questionId
     ? `${environment.apiUrl}/v1/results/questions/${questionId}`
     : null;
   const accessToken = user?.accessToken;
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, isValidating } = useSWR(
     [url, accessToken],
-    ([url, accessToken]) => fetcher(url, accessToken)
+    ([url, accessToken]) => fetcher({ url, accessToken })
   );
 
   return {
     data,
     error,
     isLoading,
+    isValidating,
   };
 };
