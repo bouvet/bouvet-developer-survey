@@ -13,7 +13,7 @@ export default async function NotFound() {
 
   return (
     <>
-      <Header />
+      <Header simple />
       <main style={{ height: "calc(100dvh - 15rem)" }}>
         <section id="intro" className="survey-section">
           <h1 className="mt-10 font-bold text-left">
