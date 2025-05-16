@@ -1,18 +1,13 @@
 import React from "react";
-import { Button } from "@headlessui/react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 type YearButtonProps = {
-  disabled?: boolean;
-  children: React.ReactNode;
-  onClick: () => void;
+  year: number;
+  disabled: boolean;
 };
 
-export const YearButton = ({
-  children,
-  disabled = false,
-  onClick,
-}: YearButtonProps) => {
+export const YearButton = ({ year, disabled }: YearButtonProps) => {
   const commonStyle =
     "text-boris-orange-950 bg-boris-orange-300 px-6 py-2 rounded text-xl font-semibold";
 
@@ -22,18 +17,19 @@ export const YearButton = ({
   const disabledStyle = "cursor-not-allowed opacity-60 point";
 
   return (
-    <motion.div
+    <motion.li
       whileHover={!disabled ? { scale: 1.1 } : undefined}
       whileTap={!disabled ? { scale: 0.9 } : undefined}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
-      <Button
-        disabled={disabled}
-        onClick={onClick}
+      <Link
+        aria-disabled={disabled}
+        onClick={(e) => (disabled ? e.preventDefault() : undefined)}
+        href={`/${year}`}
         className={`${commonStyle} ${disabled ? disabledStyle : enabledStyle}`}
       >
-        {children}
-      </Button>
-    </motion.div>
+        {year}
+      </Link>
+    </motion.li>
   );
 };

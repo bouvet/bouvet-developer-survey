@@ -1,8 +1,13 @@
+permissions:
+  id-token: write
+  contents: read
+
 name: Build and deploy frontend to production
 on:
   workflow_dispatch: # manual trigger
     branches:
       - main
+      - 169-next-auth
     paths:
       - 'frontend/**'
 
@@ -15,7 +20,7 @@ jobs:
       - name: 'Azure login'
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Enable ACR Admin Account
         run: |
@@ -60,7 +65,8 @@ jobs:
           username: ${{ env.LOGIN_NAME }}
           password: ${{ env.PASSWORD }}
       - run: |
-          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}}
+          az acr login --name ${{ env.ACR_NAME }} 
+          docker build -f frontend/Dockerfile ./frontend -t ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} --build-arg NEXT_PUBLIC_API_URL=${{env.BACKEND_URL}} --build-arg NEXTAUTH_URL=https://survey.bouvetapps.io/ --build-arg AZURE_AD_CLIENT_ID=2f3f1b63-3f3d-4389-bf65-c43d09ff8aa5 --build-arg AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }} --build-arg AZURE_SUBSCRIPTION_ID=dd8c1770-d4ea-4f83-b049-3a23bebe076e --build-arg SKIP_KEYVAULT_FETCH=true
           docker push ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
           echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
@@ -69,7 +75,8 @@ jobs:
           az containerapp update \
             --name bds-prod-containerapp-frontend \
             --resource-group ${{ secrets.AZURE_RG_PROD }} \
-            --image ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }}
+            --image ${{ env.LOGIN_SERVER }}/frontend-image:${{ github.sha }} \
+            --set-env-vars NEXTAUTH_URL=https://survey.bouvetapps.io/
 
       - name: Get Container App URL
         run: |
