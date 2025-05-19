@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 import { Question, SurveyFormState, SurveyResponseAnswer, SurveyResponseDto } from "../types";
-import { useMsal } from "@azure/msal-react";
 import crypto from "crypto";
 import { surveyData } from '../surveyData';
+import { useSession } from 'next-auth/react';
 
 export const useSurveyForm = () => {
   const methods = useForm<SurveyFormState>();
-  const { accounts } = useMsal();
-
+  const { data } = useSession();
+console.log(data)
   const hashUserId = (userId: string) => {
     return crypto.createHash("sha256").update(userId).digest("hex");
   };

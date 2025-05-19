@@ -3,12 +3,10 @@
 import { Header } from "./components/Header";
 import { YearPickerCircle } from "./components/landing/YearPickerCircle";
 import { WaveFooter } from "./components/landing/WaveFooter";
-import { MsalAuthenticationTemplate } from "@azure/msal-react";
-import { InteractionType } from "@azure/msal-browser";
 
 export default function HomePage() {
   return (
-    <MsalAuthenticationTemplate interactionType={InteractionType.Redirect}>
+    <>
       <Header simple />
       <main className={`justify-center content-center h-[calc(100dvh-20rem)]`}>
         <section className="flex items-center z-10 h-full">
@@ -29,6 +27,6 @@ export default function HomePage() {
         </section>
       </main>
       <WaveFooter />
-    </MsalAuthenticationTemplate>
+    </>
   );
 }

@@ -9,10 +9,10 @@ import { UserCircleIcon } from "@heroicons/react/16/solid";
 import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import DarkModeToggle from "./DarkModeToggle";
-import { useMsal } from "@azure/msal-react";
+import { signOut, useSession } from "next-auth/react";
 
 const UserMenu = () => {
-  const { accounts, instance } = useMsal();
+  const { data: session } = useSession();
 
   return (
     <Menu>
@@ -28,7 +28,7 @@ const UserMenu = () => {
         <MenuItem as="li">
           <div className="flex px-4 gap-3 text-gray-500 select-none">
             <UserIcon className="size-6" aria-hidden="true" />
-            <span>{accounts?.[0]?.name}</span>
+            <span>{session?.user?.name}</span>
           </div>
         </MenuItem>
         <MenuItem as="li">
@@ -36,7 +36,9 @@ const UserMenu = () => {
         </MenuItem>
         <MenuItem as="li">
           <Button
-            onClick={() => instance.logout()}
+            onClick={async () =>
+              await signOut({ redirect: true, callbackUrl: "/signin" })
+            }
             className="flex px-4 gap-3 hover:bg-"
           >
             <ArrowRightStartOnRectangleIcon
