@@ -63,28 +63,31 @@ namespace Bouvet.Developer.Survey.Infrastructure.Data
                 .HasOne(r => r.User)
                 .WithMany()
                 .HasForeignKey(r => r.UserId)
-                .HasPrincipalKey(u => u.Id);
+                .HasPrincipalKey(u => u.Id)
+                .OnDelete(DeleteBehavior.Restrict); // prevent cascade
 
             modelBuilder.Entity<BouvetResponse>()
                 .HasOne(r => r.Question)
                 .WithMany(q => q.Responses)
                 .HasForeignKey(r => r.QuestionId)
-                .HasPrincipalKey(q => q.Id);
+                .HasPrincipalKey(q => q.Id)
+                .OnDelete(DeleteBehavior.Cascade); // allow cascade
 
             modelBuilder.Entity<BouvetResponse>()
                 .HasOne(r => r.Option)
                 .WithMany()
                 .HasForeignKey(r => r.OptionId)
                 .HasPrincipalKey(o => o.Id)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict); // prevent cascade
 
             modelBuilder.Entity<BouvetUser>()
                 .HasOne(u => u.Survey)
                 .WithMany()
                 .HasForeignKey(u => u.SurveyId);
 
-
             base.OnModelCreating(modelBuilder);
         }
     }
 }
+

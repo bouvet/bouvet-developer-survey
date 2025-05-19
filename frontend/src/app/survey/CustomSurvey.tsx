@@ -21,7 +21,9 @@ const CustomSurvey = ({ surveyData }: { surveyData: Survey }) => {
         <SingleChoiceQuestion question={question} />
       )}
 
-      {question.type === "dropdown" && <DropdownFormSection question={question} />}
+      {question.type === "dropdown" && (
+        <DropdownFormSection question={question} />
+      )}
 
       {question.type === "multiple-choice" && (
         <MultipleChoiceQuestion question={question} />
@@ -34,10 +36,6 @@ const CustomSurvey = ({ surveyData }: { surveyData: Survey }) => {
   const getSectionQuestions = (sectionId: string) =>
     surveyData?.questions?.filter((q) => q.sectionId === sectionId);
 
-  // const standaloneQuestions = surveyData?.questions?.filter(
-  //   (q) => !q.sectionId
-  // );
-
   if (!surveyData?.questions?.length) return <span>no data</span>;
   return (
     <FormProvider {...methods}>
@@ -46,11 +44,11 @@ const CustomSurvey = ({ surveyData }: { surveyData: Survey }) => {
         className="space-y-6 flex flex-col justify-center px-app-padding-x"
       >
         {["w-24", "w-40", "w-20"].map((width) => (
-  <li
-    key={width}
-    className={`h-4 bg-gray-400 rounded-full dark:bg-gray-50 ${width}`}
-  ></li>
-))}
+          <li
+            key={width}
+            className={`h-4 bg-gray-400 rounded-full dark:bg-gray-50 ${width}`}
+          ></li>
+        ))}
         {surveyData?.sections?.map((section) => (
           <section key={section.id} className="flex flex-col gap-2">
             <div>
@@ -62,13 +60,6 @@ const CustomSurvey = ({ surveyData }: { surveyData: Survey }) => {
             {getSectionQuestions(section.id)?.map(renderQuestion)}
           </section>
         ))}
-        {/* 
-        {standaloneQuestions.length > 0 && (
-          <div>
-            <h2 className="text-lg font-bold mt-6">Other Questions</h2>
-            {standaloneQuestions?.map(renderQuestion)}
-          </div>
-        )} */}
 
         <button
           type="submit"

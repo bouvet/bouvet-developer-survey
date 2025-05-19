@@ -21,6 +21,6 @@ export default function SurveyPage() {
 
   // if (isLoading) return <div>Laster inn skjema...</div>;
   // if (!data) return <div>Klarte ikke hente undersøkelsen.</div>;
-  console.log(data);
+
   return <CustomSurvey surveyData={data} />;
 }
