@@ -13,12 +13,14 @@ import {
 import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import DarkModeToggle from "./DarkModeToggle";
 import { signOut, useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
+import ExportToPdf from "@/app/components/Header/components/ExportToPdf";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import * as React from "react";
 
 const UserMenu = () => {
   const { data: session } = useSession();
-  const exportAsPdf = () => {
-    console.log("exportAsPdf");
-  };
+  const { year } = useParams<{ year?: string }>();
 
   return (
     <Menu>
@@ -27,7 +29,6 @@ const UserMenu = () => {
       </MenuButton>
       <MenuItems
         as="menu"
-        modal={false}
         className="z-50 bg-white dark:bg-slate-800 flex flex-col gap-4 py-4 w-52 rounded-lg shadow-lg"
         anchor="bottom"
       >
@@ -40,12 +41,32 @@ const UserMenu = () => {
         <MenuItem as="li">
           <DarkModeToggle />
         </MenuItem>
-        <MenuItem as="li">
-          <Button onClick={exportAsPdf} className="flex px-4 gap-3 hover:bg-">
-            <DocumentArrowDownIcon className="size-6" aria-hidden="true" />
-            <span>Last ned som pdf</span>
-          </Button>
-        </MenuItem>
+        {year && !isNaN(Number(year)) && (
+          <MenuItem as="li">
+            {({ close }) => (
+              <PDFDownloadLink
+                document={<ExportToPdf />}
+                fileName={`DeveloperSurvey${year}.pdf`}
+                className="flex px-4 gap-3 hover:bg-"
+                onClick={(e) => {
+                  /*TODO: fix this NASA code*/
+                  e.stopPropagation();
+                  setTimeout(() => {
+                    close();
+                  });
+                }}
+              >
+                <>
+                  <DocumentArrowDownIcon
+                    className="size-6"
+                    aria-hidden="true"
+                  />
+                  <span>Last ned som pdf</span>
+                </>
+              </PDFDownloadLink>
+            )}
+          </MenuItem>
+        )}
         <MenuItem as="li">
           <Button
             onClick={async () =>

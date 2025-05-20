@@ -1,5 +1,6 @@
 import Logo from "@/app/components/Header/Logo";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 export default function HeaderTitle() {
   // TODO: Error handling for non-existing params when we get real data from backend
@@ -7,9 +8,9 @@ export default function HeaderTitle() {
 
   return (
     <div className="flex lg:flex-1 pr-5">
-      <a href="/" className="-m-1.5 p-1.5">
+      <Link href="/" className="-m-1.5 p-1.5">
         <Logo year={year && !isNaN(Number(year)) ? year : ""} />
-      </a>
+      </Link>
     </div>
   );
 }
