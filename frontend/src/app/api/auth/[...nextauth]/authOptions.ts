@@ -43,7 +43,7 @@ const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
-      console.log('SESSION', session, token)
+      session.userId = token.userId;
       if (token.error)
         console.error(new Date(), "Error token in Session", token.error);
 
@@ -55,7 +55,6 @@ const authOptions: AuthOptions = {
         token.expiresAt = account.expires_at as number;
         token.refreshToken = account.refresh_token;
         token.userId = user.id;
-        console.log('TOKEN: ', token)
         return token;
       } else if (Date.now() < token.expiresAt! * 1000) {
         return token;

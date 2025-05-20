@@ -21,6 +21,7 @@ export const HeaderTab = ({
   return (
     <li className="group relative">
       <Link
+        prefetch={true}
         href={`#${item.id}`}
         className={`
     hover:underline 

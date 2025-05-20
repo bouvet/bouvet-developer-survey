@@ -38,10 +38,10 @@ export default function HeaderTabs({
             <li className="sr-only">
               <span>Laster...</span>
             </li>
-            {["24", "40", "20"].map((width) => (
+            {["w-24", "w-40", "w-20"].map((width) => (
               <li
                 key={width}
-                className={`h-4 bg-gray-400 rounded-full dark:bg-gray-50 w-${width}`}
+                className={`h-4 bg-gray-400 rounded-full dark:bg-gray-50 ${width}`}
               ></li>
             ))}
           </>

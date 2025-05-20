@@ -1,5 +1,13 @@
-export const fetcher = async (url: string | null, accessToken?: string) => {
-  if (url && accessToken) {
+export const fetcher = async ({
+  url,
+  accessToken,
+  allowFetch = true,
+}: {
+  url: string | null;
+  allowFetch?: boolean;
+  accessToken?: string;
+}) => {
+  if (url && accessToken && allowFetch) {
     try {
       const res = await fetch(url, {
         headers: {

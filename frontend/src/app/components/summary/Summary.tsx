@@ -6,6 +6,7 @@ import SkeletonLoading from "@/app/components/loading/SkeletonLoading";
 
 const Summary = () => {
   const { data, error, isLoading } = useSurveyStructure();
+
   if (isLoading) return <SkeletonLoading />;
   if (error)
     return (

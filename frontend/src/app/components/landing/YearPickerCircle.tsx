@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import { YearButton } from "./YearButton";
 import { Circle } from "./Circle";
-import { useRouter } from "next/navigation";
 
 export const YearPickerCircle = () => {
-  const router = useRouter();
-  const years = [2024, 2025];
+  const years = [
+    { year: 2024, disabled: false },
+    { year: 2025, disabled: true },
+  ];
 
   return (
     <motion.div
@@ -20,17 +21,15 @@ export const YearPickerCircle = () => {
 
       <div className="absolute flex flex-col items-center gap-4">
         <h3 className="text-3xl font-bold text-network-green-950 ">Velg år</h3>
-        <div className="flex flex-row gap-4">
+        <nav className="flex flex-row gap-4 list-none">
           {years.map((year) => (
             <YearButton
-              key={year}
-              disabled={year === 2025}
-              onClick={() => router.push(`/results/${year}`)}
-            >
-              {year}
-            </YearButton>
+              key={year.year}
+              disabled={year.disabled}
+              year={year.year}
+            />
           ))}
-        </div>
+        </nav>
       </div>
     </motion.div>
   );

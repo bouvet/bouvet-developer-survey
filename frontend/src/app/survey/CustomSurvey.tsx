@@ -43,12 +43,6 @@ const CustomSurvey = ({ surveyData }: { surveyData: Survey }) => {
         onSubmit={onSubmit}
         className="space-y-6 flex flex-col justify-center px-app-padding-x"
       >
-        {["w-24", "w-40", "w-20"].map((width) => (
-          <li
-            key={width}
-            className={`h-4 bg-gray-400 rounded-full dark:bg-gray-50 ${width}`}
-          ></li>
-        ))}
         {surveyData?.sections?.map((section) => (
           <section key={section.id} className="flex flex-col gap-2">
             <div>
