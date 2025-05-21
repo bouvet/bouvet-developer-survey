@@ -28,6 +28,7 @@
     "react-dom": "^18",
     "react-i18next": "^15.0.2",
     "react-plotly.js": "^2.6.0",
+    "save-file": "^2.3.1",
     "swr": "^2.3.3",
     "tailwindcss": "^3.4.17",
     "usehooks-ts": "^3.1.0",

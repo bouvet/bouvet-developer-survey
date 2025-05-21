@@ -1,4 +1,10 @@
-import { Document, Page, Text, View } from "@react-pdf/renderer";
+import { Document, Page, pdf, Text, View } from "@react-pdf/renderer";
+import saveAs from "save-file";
+
+const handleDownload = async (year?: string) => {
+  const blob = await pdf(<ExportToPdf />).toBlob();
+  await saveAs(blob, `DeveloperSurvey${year}.pdf`);
+};
 
 const ExportToPdf = () => {
   return (
@@ -15,4 +21,4 @@ const ExportToPdf = () => {
   );
 };
 
-export default ExportToPdf;
+export default handleDownload;

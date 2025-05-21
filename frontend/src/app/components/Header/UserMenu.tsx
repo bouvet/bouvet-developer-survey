@@ -14,9 +14,7 @@ import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import DarkModeToggle from "./DarkModeToggle";
 import { signOut, useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import ExportToPdf from "@/app/components/Header/components/ExportToPdf";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import * as React from "react";
+import handleDownload from "@/app/components/Header/components/ExportToPdf";
 
 const UserMenu = () => {
   const { data: session } = useSession();
@@ -43,28 +41,13 @@ const UserMenu = () => {
         </MenuItem>
         {year && !isNaN(Number(year)) && (
           <MenuItem as="li">
-            {({ close }) => (
-              <PDFDownloadLink
-                document={<ExportToPdf />}
-                fileName={`DeveloperSurvey${year}.pdf`}
-                className="flex px-4 gap-3 hover:bg-"
-                onClick={(e) => {
-                  /*TODO: fix this NASA code*/
-                  e.stopPropagation();
-                  setTimeout(() => {
-                    close();
-                  });
-                }}
-              >
-                <>
-                  <DocumentArrowDownIcon
-                    className="size-6"
-                    aria-hidden="true"
-                  />
-                  <span>Last ned som pdf</span>
-                </>
-              </PDFDownloadLink>
-            )}
+            <Button
+              onClick={() => void handleDownload(year)}
+              className="flex px-4 gap-3 hover:bg-"
+            >
+              <DocumentArrowDownIcon className="size-6" aria-hidden="true" />
+              <span>Last ned som pdf</span>
+            </Button>
           </MenuItem>
         )}
         <MenuItem as="li">
