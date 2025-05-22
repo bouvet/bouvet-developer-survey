@@ -4,12 +4,12 @@ import Survey from "@/app/components/survey/Survey";
 import Hero from "@/app/components/hero/Hero";
 import Summary from "@/app/components/summary/Summary";
 
-export default function SurveyPage() {
+export default function LegacyResultsPage() {
   return (
-    <main>
+    <>
       <Hero />
       <Summary />
       <Survey />
-    </main>
+    </>
   );
 }

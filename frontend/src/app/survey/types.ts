@@ -21,7 +21,8 @@ export type QuestionType =
   | "single-choice"
   | "dropdown"
   | "multiple-choice"
-  | "likert";
+  | "likert"
+  | "input";
 
 // Base type for all questions
 export type BaseQuestion = {
@@ -55,13 +56,18 @@ export type LikertQuestion = BaseQuestion & {
   options: Option[];
   columns: string[]; // ← new field for Admired / Desired
 };
+export type InputQuestion = BaseQuestion & {
+  type: "input";
+  options: Option[];
+};
 
 // Union type for all supported questions
 export type Question =
   | SingleChoiceQuestion
   | DropdownQuestion
   | MultipleChoiceQuestion
-  | LikertQuestion;
+  | LikertQuestion
+  | InputQuestion
 
 // Option type
 export type Option = {
