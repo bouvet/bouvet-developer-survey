@@ -229,7 +229,8 @@ public class ImportSurveyService : IImportSurveyService
         if (newUsers.Count > 0)
         {
             var newUserDtos = newUsers
-                .Select(u => new NewUserDto { SurveyId = surveyId, RespondId = u })
+                .Where(u => u != null)
+                .Select(u => new NewUserDto { SurveyId = surveyId, RespondId = u! })
                 .ToList();
 
             await _userService.CreateUserBatch(newUserDtos, surveyId);
