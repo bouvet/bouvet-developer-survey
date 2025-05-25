@@ -1,18 +1,26 @@
 import { useForm } from "react-hook-form";
-import { Question, SurveyFormState, SurveyResponseAnswer, SurveyResponseDto } from "../types";
-import { useMsal } from "@azure/msal-react";
+import {
+  Question,
+  SurveyFormState,
+  SurveyResponseAnswer,
+  SurveyResponseDto,
+} from "../types";
 import crypto from "crypto";
-import { surveyData } from '../surveyData';
+import { surveyData } from "../surveyData";
+import { useSession } from "next-auth/react";
 
 export const useSurveyForm = () => {
   const methods = useForm<SurveyFormState>();
-  const { accounts } = useMsal();
 
+  const { data } = useSession();
   const hashUserId = (userId: string) => {
     return crypto.createHash("sha256").update(userId).digest("hex");
   };
   const submitForm = async (formData: SurveyFormState) => {
-    const userId = hashUserId(accounts[0].localAccountId);
+    console.log('submit')
+    if (!data?.userId) return;
+    const userId = hashUserId(data?.userId);
+    console.log('userId:', userId)
 
     const answers: SurveyResponseAnswer[] = surveyData.questions.reduce(
       (acc: SurveyResponseAnswer[], question: Question) => {

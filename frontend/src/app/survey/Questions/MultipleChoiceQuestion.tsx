@@ -8,14 +8,14 @@ interface Props {
   question: Question;
 }
 
-export const MultipleChoiceQuestion: FC<Props> = ({ question }) => {
+const MultipleChoiceQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <div>
+    <div className='flex flex-col gap-3'>
       {question?.options?.map((option, index) => (
         <label key={index} className="block">
           <input
-            type="radio"
+            type="checkbox"
             {...register(`question_${question.id}`)}
             value={option.id}
             className="mr-2"

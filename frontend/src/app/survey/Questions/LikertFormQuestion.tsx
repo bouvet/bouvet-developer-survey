@@ -8,10 +8,10 @@ interface Props {
   question: LikertQuestion;
 }
 
-export const LikertFormQuestion: FC<Props> = ({ question }) => {
+const LikertFormQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <table className="border-collapse w-full mt-2">
+    <table className="border-collapse max-w-[70%] mt-2">
       <thead>
         <tr>
           <th className="border p-2 text-left"></th>

@@ -3,25 +3,21 @@
 import { useFormContext } from "react-hook-form";
 import { Question, SurveyFormState } from "../types";
 import { FC } from "react";
+import { Textarea } from '@headlessui/react';
 
 interface Props {
   question: Question;
 }
 
-const DropdownQuestion: FC<Props> = ({ question }) => {
+const InputQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <select
+    <Textarea
       {...register(`question_${question.id}`)}
-      className="border p-2  max-w-56"
+      className="border p-2 rounded"
     >
-      {question?.options?.map((option, index) => (
-        <option key={index} value={option.id}>
-          {option.value}
-        </option>
-      ))}
-    </select>
+    </Textarea>
   );
 };
 
-export default DropdownQuestion
+export default InputQuestion

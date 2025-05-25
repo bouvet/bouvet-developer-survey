@@ -8,10 +8,10 @@ interface Props {
   question: Question;
 }
 
-export const SingleChoiceQuestion: FC<Props> = ({ question }) => {
+const SingleChoiceQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <div>
+    <div className='flex flex-col gap-3'>
       {question?.options?.map((option, index) => (
         <label key={index} className="block">
           <input

@@ -4,6 +4,7 @@ import AzureADProvider from "next-auth/providers/azure-ad";
 declare module "next-auth" {
   interface Session {
     accessToken?: string;
+    userId?: string;
     error?: "RefreshTokenError";
   }
 }
@@ -12,6 +13,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     accessToken: string;
     expiresAt: number;
+    userId?: string;
     refreshToken?: string;
     error?: "RefreshTokenError";
   }
@@ -41,16 +43,18 @@ const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
+      session.userId = token.userId;
       if (token.error)
         console.error(new Date(), "Error token in Session", token.error);
 
       return session;
     },
-    async jwt({ token, account }) {
+    async jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token as string;
         token.expiresAt = account.expires_at as number;
         token.refreshToken = account.refresh_token;
+        token.userId = user.id;
         return token;
       } else if (Date.now() < token.expiresAt! * 1000) {
         return token;
