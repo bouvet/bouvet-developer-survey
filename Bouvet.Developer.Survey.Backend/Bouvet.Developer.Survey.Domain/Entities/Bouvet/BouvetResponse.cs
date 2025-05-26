@@ -16,6 +16,8 @@
         public bool? HasWorkedWith { get; set; } // for likert
         public bool? WantsToWorkWith { get; set; } // for likert
 
+        public string? FreeTextAnswer { get; set; } // New property for free-text
+
         public DateTimeOffset CreatedAt { get; set; }
     }
 }
