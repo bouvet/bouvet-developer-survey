@@ -2,9 +2,5 @@
 import SurveyPage from "./SurveyPage";
 
 export default function CustomSurveyPage() {
-  return (
-    <main>
-      <SurveyPage />
-    </main>
-  );
+  return <SurveyPage />;
 }
