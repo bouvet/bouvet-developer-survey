@@ -1,10 +1,10 @@
 import { useSurveyResult } from "@/app/hooks/useSurveyResult";
 import AnswerContainer from "./AnswerContainer";
 import QuestionContainer from "./QuestionContainer";
-import BarChart from "../charts/BarChart";
+import BarChart from "@/app/components/charts/BarChart";
 import useGetBarChartData from "@/app/hooks/useGetBarChartData";
 import useGetDotPlotData from "@/app/hooks/useGetDotPlotData";
-import DotPlotChart from "../charts/DotPlotChart";
+import DotPlotChart from "@/app/components/charts/DotPlotChart";
 import SkeletonLoading from "@/app/components/loading/SkeletonLoading";
 
 const SurveyBlockRenderer = ({

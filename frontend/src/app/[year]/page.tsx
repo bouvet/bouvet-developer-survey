@@ -1,9 +1,11 @@
 "use client";
 
-import Survey from "@/app/components/survey/Survey";
 import Hero from "@/app/components/hero/Hero";
 import Summary from "@/app/components/summary/Summary";
+import Survey from "@/app/components/survey/Survey";
 import { notFound, useParams } from "next/navigation";
+import { Suspense } from "react";
+import SkeletonLoading from "@/app/components/loading/SkeletonLoading";
 
 export default function SurveyPage() {
   const { year } = useParams<{ year: string }>();
@@ -11,8 +13,12 @@ export default function SurveyPage() {
   return (
     <>
       <Hero />
-      <Summary />
-      <Survey />
+      <Suspense fallback={<SkeletonLoading />}>
+        <Summary />
+      </Suspense>
+      <Suspense fallback={<SkeletonLoading />}>
+        <Survey />
+      </Suspense>
     </>
   );
 }
