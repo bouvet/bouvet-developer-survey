@@ -1,8 +1,5 @@
-import useMediaMatch, { ScreenSize } from "@/app/hooks/useMediaMatch";
-
 const SkeletonLoading = () => {
   const randomTextLength = () => Math.floor(Math.random() * (100 - 60) + 60);
-  const isLargeScreen = useMediaMatch(ScreenSize.MD);
 
   return (
     <section
@@ -19,8 +16,8 @@ const SkeletonLoading = () => {
             <div className="w-48 h-9 bg-gray-400 dark:bg-gray-50 rounded-full"></div>
             <div className="md:hidden h-5 w-5 bg-gray-400 dark:bg-gray-50 rounded-full"></div>
           </div>
-          {isLargeScreen &&
-            Array(6)
+          <div className="hidden md:flex flex-col gap-4">
+            {Array(6)
               .fill(0)
               .map((_, i) => (
                 <div
@@ -29,7 +26,6 @@ const SkeletonLoading = () => {
                   style={{ width: `${randomTextLength()}%` }}
                 ></div>
               ))}
-          {isLargeScreen && (
             <div className="w-full bg-[var(--secondary-cool-blue)] dark:bg-slate-600 p-2 flex items-center gap-3">
               <div className="h-6 w-6 bg-gray-400 dark:bg-gray-50 rounded-full"></div>
               <div className="flex flex-col w-full gap-2">
@@ -44,7 +40,7 @@ const SkeletonLoading = () => {
                   ))}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
       <div

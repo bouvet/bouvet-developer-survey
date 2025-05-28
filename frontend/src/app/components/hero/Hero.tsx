@@ -1,28 +1,30 @@
-import useMediaMatch, { ScreenSize } from "@/app/hooks/useMediaMatch";
-import { useEffect, useState } from "react";
+"use client";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import useMediaMatch, { ScreenSize } from "@/app/hooks/useMediaMatch";
 
 const Survey = () => {
-  const isSmallScreen = !useMediaMatch(ScreenSize.MD);
-  const [isOpen, setIsOpen] = useState<boolean>(!isSmallScreen);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const isSmallScreen = !useMediaMatch(ScreenSize.LG) || false;
 
   useEffect(() => {
     setIsOpen(!isSmallScreen);
   }, [isSmallScreen]);
 
   return (
-    <section id="introduction" className="survey-section">
+    <section
+      id="introduction"
+      className={`survey-section ${!isOpen && "max-2xl:bg-gradient-to-b from-background to-gray-200 dark:to-gray-700 after:content-['...']"}`}
+    >
       {/* TODO: Get text dynamically from Survey API? */}
       <div className="flex place-content-between">
         <h2 className="section-title">Introduksjon</h2>
-        {isSmallScreen && (
-          <button className="mb-5" onClick={() => setIsOpen((prev) => !prev)}>
-            <ChevronDownIcon
-              className={`text-gray-600 dark:text-[var(--foreground)] h-6 w-6 transition ${isOpen && "rotate-180"}`}
-              aria-hidden="true"
-            />
-          </button>
-        )}
+        <button className="mb-5" onClick={() => setIsOpen((prev) => !prev)}>
+          <ChevronDownIcon
+            className={`text-gray-600 dark:text-[var(--foreground)] h-6 w-6 transition ${isOpen && "rotate-180"}`}
+            aria-hidden="true"
+          />
+        </button>
       </div>
       <div
         className={`transition ${isOpen ? "h-fit" : "h-24 overflow-hidden"}`}
