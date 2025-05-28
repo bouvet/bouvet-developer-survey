@@ -1,5 +1,5 @@
 import theme from "tailwindcss/defaultTheme";
-import { useMediaQuery } from "usehooks-ts";
+import { useCallback, useEffect, useState } from "react";
 
 export const ScreenSize = {
   SM: theme.screens.sm,
@@ -9,7 +9,27 @@ export const ScreenSize = {
 };
 
 const useMediaMatch = (screenSize: string) => {
-  return useMediaQuery(`screen and (min-width: ${screenSize})`);
+  const [isMatch, setIsMatch] = useState(false);
+
+  const updateMatch = useCallback(
+    (e: MediaQueryListEvent) => {
+      setIsMatch(e.matches);
+    },
+    [setIsMatch]
+  );
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const media = window.matchMedia(`screen and (min-width: ${screenSize})`);
+      media.addEventListener("change", updateMatch);
+
+      setIsMatch(media.matches);
+
+      return () => media.removeEventListener("change", updateMatch);
+    }
+  }, [setIsMatch, updateMatch, screenSize]);
+
+  return isMatch;
 };
 
 export default useMediaMatch;
