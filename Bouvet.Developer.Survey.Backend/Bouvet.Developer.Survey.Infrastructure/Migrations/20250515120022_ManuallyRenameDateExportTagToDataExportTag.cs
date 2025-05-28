@@ -10,10 +10,10 @@ namespace Bouvet.Developer.Survey.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "DateExportTag",
-                table: "Questions",
-                newName: "DataExportTag");
+            //migrationBuilder.RenameColumn(
+            //    name: "DateExportTag",
+            //    table: "Questions",
+            //    newName: "DataExportTag");
 
         }
 

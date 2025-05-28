@@ -1,6 +1,14 @@
 using Bouvet.Developer.Survey.Api.Extensions;
 using Bouvet.Developer.Survey.Api.Swagger;
 using Bouvet.Developer.Survey.Infrastructure.Data;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Definition;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Results.Bouvet;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Structure;
+using Bouvet.Developer.Survey.Service.Services;
+using Bouvet.Developer.Survey.Service.Services.Survey.Definition;
+using Bouvet.Developer.Survey.Service.Survey.Results;
+using Bouvet.Developer.Survey.Service.Interfaces.User;
+using Bouvet.Developer.Survey.Service.Services.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +17,8 @@ using Microsoft.Identity.Web;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using Bouvet.Developer.Survey.Service.Interfaces.Survey.Response;
+using Bouvet.Developer.Survey.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,10 +55,18 @@ var connectionString = builder.Configuration["ConnectionString"];
 builder.Services.AddDbContext<DeveloperSurveyContext>(opt =>
     opt.UseLazyLoadingProxies().UseSqlServer(connectionString)
 );
+builder.Services.AddDbContext<BouvetSurveyContext>(opt =>
+    opt.UseSqlServer(connectionString));
 
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddServices();
+builder.Services.AddScoped<ISurveyStructureService, SurveyStructureService>();
+builder.Services.AddScoped<ISurveyResponseService, SurveyResponseService>();
+builder.Services.AddScoped<ISurveyResultsService, SurveyResultsService>();
+builder.Services.AddScoped<IBouvetSurveyDefinitionService, BouvetSurveyDefinitionService>();
+builder.Services.AddScoped<IBouvetUserService, BouvetUserService>();
+
 
 builder
     .Services.AddApiVersioning(options =>
@@ -82,6 +100,10 @@ try
     Console.WriteLine("Migrating database...");
     var context = services.GetRequiredService<DeveloperSurveyContext>();
     context.Database.Migrate();
+
+    var bouvetContext = services.GetRequiredService<BouvetSurveyContext>();
+    bouvetContext.Database.Migrate();
+
     Console.WriteLine("Database migrated.");
 }
 catch (Exception ex)

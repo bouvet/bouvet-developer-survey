@@ -30,7 +30,7 @@ const Survey = () => {
     );
   }
 
-  const answer = data.surveyBlocks.map((block: SurveyBlock) =>
+  const answer = data?.surveyBlocks?.map((block: SurveyBlock) =>
     block.blockElements.map((element: BlockElement) => {
       return element.questions.reduce((acc: JSX.Element[], question) => {
         if (!question.isMultipleChoice) return acc;

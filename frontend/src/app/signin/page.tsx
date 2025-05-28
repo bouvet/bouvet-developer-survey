@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Suspense } from "react";
+import React from "react";
 
 const Login = () => {
   const searchParams = useSearchParams();

@@ -51,7 +51,7 @@ body {
     }
 
     .survey-section {
-        @apply px-5 mx-auto flex flex-col max-w-8xl lg:px-app-padding-x w-full scroll-mt-32;
+        @apply px-5 mx-auto flex flex-col max-w-8xl lg:w-full scroll-mt-32;
     }
 
     .section-title {

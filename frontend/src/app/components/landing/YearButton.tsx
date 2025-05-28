@@ -25,7 +25,7 @@ export const YearButton = ({ year, disabled }: YearButtonProps) => {
       <Link
         aria-disabled={disabled}
         onClick={(e) => (disabled ? e.preventDefault() : undefined)}
-        href={`/${year}`}
+        href={`/results/${year}`}
         className={`${commonStyle} ${disabled ? disabledStyle : enabledStyle}`}
       >
         {year}
