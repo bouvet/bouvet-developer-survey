@@ -16,7 +16,7 @@ const SingleChoiceQuestion: FC<Props> = ({ question }) => {
         <label key={index} className="block">
           <input
             type="radio"
-            {...register(`question_${question.id}`)}
+            {...register(question.id)}
             value={option.id}
             className="mr-2"
           />

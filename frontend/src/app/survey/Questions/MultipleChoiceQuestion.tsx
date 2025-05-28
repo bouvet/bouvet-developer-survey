@@ -16,7 +16,7 @@ const MultipleChoiceQuestion: FC<Props> = ({ question }) => {
         <label key={index} className="block">
           <input
             type="checkbox"
-            {...register(`question_${question.id}`)}
+            {...register(question.id)}
             value={option.id}
             className="mr-2"
           />

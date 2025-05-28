@@ -1,38 +1,43 @@
 import { useForm } from "react-hook-form";
 import {
   Question,
+  Survey,
   SurveyFormState,
   SurveyResponseAnswer,
   SurveyResponseDto,
 } from "../types";
 import crypto from "crypto";
-import { surveyData } from "../surveyData";
 import { useSession } from "next-auth/react";
+import { fetcher } from "@/app/lib/fetcher";
+import useSWR from "swr";
 
 export const useSurveyForm = () => {
   const methods = useForm<SurveyFormState>();
 
-  const { data } = useSession();
+  const { data: session } = useSession();
+  const url = `https://localhost:5001/api/survey-definitions/2025`;
+
+  const accessToken = session?.accessToken;
+  const { data }: {data: Survey} = useSWR([url, accessToken], ([url, accessToken]) =>
+    fetcher({ url, accessToken })
+  );
   const hashUserId = (userId: string) => {
     return crypto.createHash("sha256").update(userId).digest("hex");
   };
   const submitForm = async (formData: SurveyFormState) => {
-    console.log('submit')
-    if (!data?.userId) return;
-    const userId = hashUserId(data?.userId);
-    console.log('userId:', userId)
-
-    const answers: SurveyResponseAnswer[] = surveyData.questions.reduce(
+    console.log("submit");
+    if (!session?.userId) return;
+    const userId = hashUserId(session?.userId);
+    const answers: SurveyResponseAnswer[] = data.questions.reduce(
       (acc: SurveyResponseAnswer[], question: Question) => {
-        const fieldName = `question_${question.id}`;
-        const value = formData[fieldName as `question_${string}`];
+        const fieldName = question.id;
+        const value = formData[fieldName];
 
         if (value === undefined) return acc;
 
         if (question.type === "likert") {
           const optionIds: string[] = [];
 
-          // value is { optionId: { column: boolean } }
           for (const optionId in value) {
             for (const colId in value[optionId]) {
               if (value[optionId][colId]) {
@@ -70,38 +75,38 @@ export const useSurveyForm = () => {
 
     const payload: SurveyResponseDto = {
       respondentId: userId,
-      surveyId: surveyData.id,
+      surveyId: data.id,
       answers,
     };
 
     console.log("✅ Final Payload:", payload);
 
-    // TODO: Send to backend
-    // try {
-    //   const account = accounts[0];
-    //   const accessToken = (await instance.acquireTokenSilent({
-    //     account: account,
-    //     scopes: scopes, // Adjust if needed
-    //   })).accessToken;
+    try {
+      const response = await fetch(
+        `https://localhost:5001/api/bouvet/survey-responses/submit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
-    //   const response = await fetch(`https://localhost:5001/api/v1/SurveyResponse`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Authorization": `Bearer ${accessToken}`, // ✅ ADD this
-    //     },
-    //     body: JSON.stringify(payload),
-    //   });
+      if (!response.ok) {
+        throw new Error("Failed to submit survey response");
+      }
 
-    //   if (!response.ok) {
-    //     throw new Error("Failed to submit survey response");
-    //   }
-
-    //   console.log("✅ Survey response submitted successfully!");
-    // } catch (error) {
-    //   console.error("❌ Error submitting survey response:", error);
-    // }
+      console.log("✅ Survey response submitted successfully!");
+    } catch (error) {
+      console.error("❌ Error submitting survey response:", error);
+    }
   };
 
-  return { methods, onSubmit: methods.handleSubmit(submitForm) };
+  return {
+    methods,
+    onSubmit: methods.handleSubmit(submitForm),
+    surveyData: data,
+  };
 };

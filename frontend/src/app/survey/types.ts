@@ -11,7 +11,7 @@ export type Survey = {
 
 // Sections within the survey
 export type SurveySection = {
-  id: string; // was externalId
+  id: string;
   title: string;
   description: string;
 };
@@ -26,26 +26,23 @@ export type QuestionType =
 
 // Base type for all questions
 export type BaseQuestion = {
-  id: string; // was externalId
+  id: string; 
   type: QuestionType;
   title: string;
   description?: string;
-  sectionId?: string | null; // matches backend: optional section reference
+  sectionId?: string | null; 
 };
 
-// Single-choice question
 export type SingleChoiceQuestion = BaseQuestion & {
   type: "single-choice";
   options: Option[];
 };
 
-// Dropdown question
 export type DropdownQuestion = BaseQuestion & {
   type: "dropdown";
   options: Option[];
 };
 
-// Multiple-choice question
 export type MultipleChoiceQuestion = BaseQuestion & {
   type: "multiple-choice";
   options: Option[];
@@ -54,7 +51,7 @@ export type MultipleChoiceQuestion = BaseQuestion & {
 export type LikertQuestion = BaseQuestion & {
   type: "likert";
   options: Option[];
-  columns: string[]; // ← new field for Admired / Desired
+  columns: string[];
 };
 export type InputQuestion = BaseQuestion & {
   type: "input";
@@ -69,15 +66,15 @@ export type Question =
   | LikertQuestion
   | InputQuestion
 
-// Option type
 export type Option = {
-  id: string; // was externalId
+  id: string; 
   value: string;
 };
 
 export type SurveyResponseAnswer = {
   questionId: string;
   optionIds: string[];
+  freeTextAnswer?: string;
 };
 
 export type SurveyResponseDto = {
@@ -86,8 +83,9 @@ export type SurveyResponseDto = {
   answers: SurveyResponseAnswer[];
 };
 export type SurveyFormState = {
-  [key: `question_${string}`]: any;
+  [key: string]: any;
 };
+
 
 
 

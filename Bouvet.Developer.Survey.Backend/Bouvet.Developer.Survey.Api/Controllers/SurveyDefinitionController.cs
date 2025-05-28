@@ -31,32 +31,24 @@ namespace Bouvet.Developer.Survey.Api.Controllers
         }
 
         [HttpPut("{year}")]
-        public async Task<IActionResult> CreateOrUpdateSurveyDefinition(int year)
+        public async Task<IActionResult> CreateOrUpdateSurveyDefinition(int year, IFormFile file)
         {
-            string jsonContent;
-            using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
+            if (file == null || file.Length == 0)
             {
-                jsonContent = await reader.ReadToEndAsync();
+                return BadRequest("A non-empty JSON file must be uploaded.");
             }
 
-            if (string.IsNullOrWhiteSpace(jsonContent))
-            {
-                return BadRequest("JSON content is required in the request body.");
-            }
+            using var reader = new StreamReader(file.OpenReadStream(), Encoding.UTF8);
+            var jsonContent = await reader.ReadToEndAsync();
 
             try
             {
                 await _surveyDefinitionService.CreateOrUpdateSurveyDefinitionAsync(year, jsonContent);
                 return NoContent();
             }
-            catch (JsonException jsonEx)
+            catch (JsonException ex)
             {
-                return BadRequest($"Invalid JSON format: {jsonEx.Message}");
-            }
-            catch (System.Exception ex)
-            {
-                // TODO: Log the exception ex
-                return StatusCode(500, "An error occurred while processing the survey definition.");
+                return BadRequest($"Invalid JSON format: {ex.Message}");
             }
         }
 

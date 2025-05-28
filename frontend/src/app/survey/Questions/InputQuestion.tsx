@@ -13,7 +13,7 @@ const InputQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
     <Textarea
-      {...register(`question_${question.id}`)}
+      {...register(question.id)}
       className="border p-2 rounded"
     >
     </Textarea>
