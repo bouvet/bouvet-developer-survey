@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server"; // API Paths to be restricted.
 
 // API Paths to be restricted.
-const protectedRoutes = ["/2024", "/"];
+const protectedRoutes = ["/survey", "/results/2024", "/results/2025", "/"];
 
 export default async function middleware(request: NextRequest) {
   const res = NextResponse.next();
