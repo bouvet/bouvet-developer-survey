@@ -15,11 +15,12 @@ export const useSurveyForm = () => {
   const methods = useForm<SurveyFormState>();
 
   const { data: session } = useSession();
-  const url = `https://localhost:5001/api/survey-definitions/2025`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/survey-definitions/2025`;
 
   const accessToken = session?.accessToken;
-  const { data }: {data: Survey} = useSWR([url, accessToken], ([url, accessToken]) =>
-    fetcher({ url, accessToken })
+  const { data }: { data: Survey } = useSWR(
+    [url, accessToken],
+    ([url, accessToken]) => fetcher({ url, accessToken })
   );
   const hashUserId = (userId: string) => {
     return crypto.createHash("sha256").update(userId).digest("hex");
