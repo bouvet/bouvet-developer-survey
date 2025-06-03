@@ -84,7 +84,7 @@ export const useSurveyForm = () => {
 
     try {
       const response = await fetch(
-        `https://localhost:5001/api/bouvet/survey-responses/submit`,
+        `${process.env.NEXT_PUBLIC_API_URL}/bouvet/survey-responses/submit`,
         {
           method: "POST",
           headers: {
