@@ -35,14 +35,16 @@ const SurveyPage = () => {
           questions={surveyData.questions}
         ></FormSection>
 
-        <div className="flex w-full justify-between max-w-8xl mx-auto">
+        <div
+          className={`flex w-full  max-w-8xl mx-auto ${isFirstStep ? "place-content-end" : "justify-between"}`}
+        >
           {!isFirstStep && (
             <button
               type="button"
               onClick={() => setCurrentStep((prev) => prev - 1)}
               className="w-20 h-12 py-2 bg-gray-300 text-black min-"
             >
-              Previous
+              Tidligere
             </button>
           )}
 
@@ -52,11 +54,11 @@ const SurveyPage = () => {
               onClick={() => setCurrentStep((prev) => prev + 1)}
               className="w-20 h-12 py-2 bg-blue-500 text-white"
             >
-              Next
+              Neste
             </button>
           ) : (
             <button type="submit" className="px-4 bg-green-600 text-white">
-              Submit
+              Svare
             </button>
           )}
         </div>
