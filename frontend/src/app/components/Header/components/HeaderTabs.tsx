@@ -3,6 +3,7 @@ import { useActiveSectionId } from "@/app/hooks/useActiveSectionId";
 import { HeaderTab } from "./HeaderTab";
 import { menuItems } from "./menuItems";
 import { HeaderDropdownNavigationProps } from "@/app/components/Header/components/HeaderDropdownNavigation";
+import { Years } from "@/app/components/landing/YearPickerCircle";
 
 export default function HeaderTabs({
   subNavigationItems,
@@ -11,6 +12,7 @@ export default function HeaderTabs({
   subNavigationItems: {
     technology: HeaderDropdownNavigationProps[];
     aboutParticipants: HeaderDropdownNavigationProps[];
+    years: Years[];
   };
   isLoading: boolean;
 }) {
@@ -46,7 +48,7 @@ export const Loading = () => (
     <li className="sr-only">
       <span>Laster...</span>
     </li>
-    {["w-24", "w-40", "w-20"].map((width) => (
+    {["w-24", "w-40", "w-20", "w-8"].map((width) => (
       <li
         key={width}
         className={`h-4 bg-gray-400 rounded-full dark:bg-gray-50 ${width}`}

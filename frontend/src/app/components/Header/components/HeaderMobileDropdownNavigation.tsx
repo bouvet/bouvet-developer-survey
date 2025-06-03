@@ -2,12 +2,13 @@ import Link from "next/link";
 import { HeaderDropdownNavigationProps } from "@/app/components/Header/components/HeaderDropdownNavigation";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { Years } from "@/app/components/landing/YearPickerCircle";
 
 export default function HeaderMobileDropdownNavigation({
   items,
   onClick,
 }: {
-  items: HeaderDropdownNavigationProps[];
+  items: HeaderDropdownNavigationProps[] | Years[];
   onClick: (bool: boolean) => void;
 }) {
   return (
@@ -28,18 +29,22 @@ export default function HeaderMobileDropdownNavigation({
             aria-orientation="vertical"
             className="flex flex-col transition gap-2 w-fit z-20 p-4 dark:bg-slate-800 bg-white rounded-lg shadow-lg border dark:border-gray-600"
           >
-            {items.map((item: HeaderDropdownNavigationProps) => (
-              <MenuItem as="li" key={item.id}>
+            {items.map((item: HeaderDropdownNavigationProps | Years) => (
+              <MenuItem as="li" key={"id" in item ? item.id : item.year}>
                 {({ close }) => (
                   <Link
-                    href={`#${item?.text?.replaceAll(/\s/g, "-")}`}
+                    href={
+                      "text" in item
+                        ? `#${item?.text?.replaceAll(/\s/g, "-")}`
+                        : `/results/${item.year}`
+                    }
                     className="hover:underline decoration-2 underline-offset-4"
                     onClick={() => {
                       close();
                       onClick(false);
                     }}
                   >
-                    {item.text}
+                    {"text" in item ? item.text : item.year}
                   </Link>
                 )}
               </MenuItem>

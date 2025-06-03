@@ -8,6 +8,7 @@ import UserMenu from "./UserMenu";
 import { useSurveyStructure } from "@/app/hooks/useSurveyStructure";
 import { BlockElement, Question, SurveyBlock } from "@/app/types/survey";
 import { HeaderDropdownNavigationProps } from "@/app/components/Header/components/HeaderDropdownNavigation";
+import { years } from "@/app/components/landing/YearPickerCircle";
 
 export type HeaderProps = {
   /**
@@ -75,7 +76,7 @@ export default function Header({ simple }: HeaderProps) {
               onClick={() => setMobileMenuOpen(true)}
             />
             <HeaderTabs
-              subNavigationItems={{ technology, aboutParticipants }}
+              subNavigationItems={{ technology, aboutParticipants, years }}
               isLoading={isLoading}
             />
           </>
@@ -86,7 +87,7 @@ export default function Header({ simple }: HeaderProps) {
         <HeaderMobileMenu
           mobileMenuOpen={mobileMenuOpen}
           onClick={() => setMobileMenuOpen(false)}
-          subNavigationItems={{ technology, aboutParticipants }}
+          subNavigationItems={{ technology, aboutParticipants, years }}
         />
       )}
     </header>

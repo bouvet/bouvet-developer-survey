@@ -6,6 +6,7 @@ import HeaderDropdownNavigation, {
 import { MenuItemId } from "@/app/components/Header/components/menuItems";
 import { Loading } from "@/app/components/Header/components/HeaderTabs";
 import { Suspense } from "react";
+import { Years } from "@/app/components/landing/YearPickerCircle";
 
 export type HeaderTabProps = {
   item: { id: string; label: string };
@@ -13,6 +14,7 @@ export type HeaderTabProps = {
   subNavigationItems: {
     technology: HeaderDropdownNavigationProps[];
     aboutParticipants: HeaderDropdownNavigationProps[];
+    years: Years[];
   };
 };
 export const HeaderTab = ({
@@ -24,8 +26,7 @@ export const HeaderTab = ({
     <Suspense fallback={<Loading />}>
       <li className="group relative">
         <Link
-          prefetch={true}
-          href={`#${item.id}`}
+          href={item.id !== MenuItemId.YEARS ? `#${item.id}` : ""}
           className={`
     hover:underline 
     decoration-2
@@ -43,6 +44,9 @@ export const HeaderTab = ({
           <HeaderDropdownNavigation
             items={subNavigationItems.aboutParticipants}
           />
+        )}
+        {item.id === MenuItemId.YEARS && (
+          <HeaderDropdownNavigation items={subNavigationItems.years} />
         )}
       </li>
     </Suspense>

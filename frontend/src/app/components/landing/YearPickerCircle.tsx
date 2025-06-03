@@ -4,12 +4,17 @@ import { motion } from "framer-motion";
 import { YearButton } from "./YearButton";
 import { Circle } from "./Circle";
 
-export const YearPickerCircle = () => {
-  const years = [
-    { year: 2024, disabled: false },
-    { year: 2025, disabled: true },
-  ];
+export interface Years {
+  year: number;
+  disabled: boolean;
+}
 
+export const years: Years[] = [
+  { year: 2024, disabled: false },
+  { year: 2025, disabled: true },
+];
+
+export const YearPickerCircle = () => {
   return (
     <motion.div
       className="inline-flex justify-center items-center relative"

@@ -4,6 +4,7 @@ import { MenuItemId, menuItems } from "./menuItems";
 import { HeaderDropdownNavigationProps } from "@/app/components/Header/components/HeaderDropdownNavigation";
 import HeaderMobileDropdownNavigation from "@/app/components/Header/components/HeaderMobileDropdownNavigation";
 import Link from "next/link";
+import { Years } from "@/app/components/landing/YearPickerCircle";
 
 export default function MobileMenu({
   mobileMenuOpen,
@@ -15,6 +16,7 @@ export default function MobileMenu({
   subNavigationItems: {
     technology: HeaderDropdownNavigationProps[];
     aboutParticipants: HeaderDropdownNavigationProps[];
+    years: Years[];
   };
 }) {
   const activeId = useActiveSectionId();
@@ -32,7 +34,7 @@ export default function MobileMenu({
             {menuItems.map((item) => (
               <li key={item.id} className="flex gap-x-1.5">
                 <Link
-                  href={`#${item.id}`}
+                  href={item.id !== MenuItemId.YEARS ? `#${item.id}` : ""}
                   onClick={() => {
                     onClick(false);
                   }}
@@ -63,6 +65,12 @@ export default function MobileMenu({
                 {item.id === MenuItemId.ABOUT_PARTICIPANTS && (
                   <HeaderMobileDropdownNavigation
                     items={subNavigationItems.aboutParticipants}
+                    onClick={onClick}
+                  />
+                )}
+                {item.id === MenuItemId.YEARS && (
+                  <HeaderMobileDropdownNavigation
+                    items={subNavigationItems.years}
                     onClick={onClick}
                   />
                 )}
