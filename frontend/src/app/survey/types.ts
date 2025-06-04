@@ -17,12 +17,13 @@ export type SurveySection = {
 };
 
 // Enum for question types
-export type QuestionType =
-  | "single-choice"
-  | "dropdown"
-  | "multiple-choice"
-  | "likert"
-  | "input";
+export enum QuestionType {
+  SINGLE_CHOICE = "single-choice",
+  DROPDOWN = "dropdown",
+  MULTIPLE_CHOICE = "multiple-choice",
+  LIKERT = "likert",
+  INPUT = "input",
+}
 
 // Base type for all questions
 export type BaseQuestion = {
@@ -34,27 +35,27 @@ export type BaseQuestion = {
 };
 
 export type SingleChoiceQuestion = BaseQuestion & {
-  type: "single-choice";
+  type: QuestionType.SINGLE_CHOICE;
   options: Option[];
 };
 
 export type DropdownQuestion = BaseQuestion & {
-  type: "dropdown";
+  type: QuestionType.DROPDOWN;
   options: Option[];
 };
 
 export type MultipleChoiceQuestion = BaseQuestion & {
-  type: "multiple-choice";
+  type: QuestionType.MULTIPLE_CHOICE;
   options: Option[];
 };
 
 export type LikertQuestion = BaseQuestion & {
-  type: "likert";
+  type: QuestionType.LIKERT;
   options: Option[];
   columns: string[];
 };
 export type InputQuestion = BaseQuestion & {
-  type: "input";
+  type: QuestionType.INPUT;
   options: Option[];
 };
 

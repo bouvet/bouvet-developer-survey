@@ -24,7 +24,8 @@ const SurveyPage = () => {
       >
         <div className="max-w-5xl w-full bg-gray-300 h-3 rounded mx-auto">
           <div
-            className="h-3 bg-blue-500"
+            role="progressbar"
+            className="h-3 bg-blue-500 rounded-l"
             style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
           ></div>
         </div>
@@ -33,7 +34,7 @@ const SurveyPage = () => {
           key={section.id}
           section={section}
           questions={surveyData.questions}
-        ></FormSection>
+        />
 
         <div
           className={`flex w-full  max-w-8xl mx-auto ${isFirstStep ? "place-content-end" : "justify-between"}`}
