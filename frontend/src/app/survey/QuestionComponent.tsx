@@ -1,6 +1,6 @@
 "use client";
 
-import { Question } from "./types";
+import { Question, QuestionType } from "./types";
 import { FC } from "react";
 import DropdownQuestion from "./Questions/DropdownQuestion";
 import MultipleChoiceQuestion from "./Questions/MultipleChoiceQuestion";
@@ -26,17 +26,23 @@ const QuestionComponent: FC<Props> = ({ question }: Props) => (
         <SingleChoiceQuestion question={question} />
       )} */}
 
-    {question.type === "single-choice" && (
+    {question.type === QuestionType.SINGLE_CHOICE && (
       <DropdownQuestion question={question} />
     )}
-    {question.type === "dropdown" && <DropdownQuestion question={question} />}
+    {question.type === QuestionType.DROPDOWN && (
+      <DropdownQuestion question={question} />
+    )}
 
-    {question.type === "multiple-choice" && (
+    {question.type === QuestionType.MULTIPLE_CHOICE && (
       <MultipleChoiceQuestion question={question} />
     )}
-    {question.type === "input" && <InputQuestion question={question} />}
+    {question.type === QuestionType.INPUT && (
+      <InputQuestion question={question} />
+    )}
 
-    {question.type === "likert" && <LikertFormQuestion question={question} />}
+    {question.type === QuestionType.LIKERT && (
+      <LikertFormQuestion question={question} />
+    )}
   </fieldset>
 );
 
