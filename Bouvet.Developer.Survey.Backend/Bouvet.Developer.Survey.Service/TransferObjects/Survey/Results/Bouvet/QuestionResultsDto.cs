@@ -7,6 +7,8 @@
         public string Type { get; set; } = ""; // "single-choice", "multiple-choice", or "likert"
         public List<OptionResultDto> Options { get; set; } = new();
         public LikertStatsDto? LikertStats { get; set; } // for dumbbell graph only if likert
+        public int TotalResponses { get; set; } = 0;
+
     }
 
 }

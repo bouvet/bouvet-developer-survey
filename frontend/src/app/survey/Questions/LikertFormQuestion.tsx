@@ -10,32 +10,42 @@ interface Props {
 
 const LikertFormQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
-  console.log(question)
+
+  const columnKeys = ["Admired", "Desired"];
+
   return (
     <table className="border-collapse max-w-[70%] mt-2">
       <thead>
         <tr>
-          <th className="border p-2 text-left"></th>
-          {question?.columns?.map((col, colIndex) => (
-            <th key={colIndex} className="border p-2 text-center">
+          <th className="p-2 text-left"></th>
+          {columnKeys.map((col) => (
+            <th key={col} className="p-2 text-center">
               {col}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {question?.options?.map((option, rowIndex) => (
-          <tr key={rowIndex}>
-            <td className="border p-2">{option.value || ""}</td>
-            {question?.columns?.map((col, colIndex) => (
-              <td key={colIndex} className="border p-2 text-center">
+        {question.options.map((option, optionIndex) => (
+          <tr key={option.id}>
+            <td className="p-2">{option.value}</td>
+            {columnKeys.map((col) => (
+              <td key={col} className="p-2 text-center">
                 <input
                   type="checkbox"
-                  {...register(`${question.id}.${option.id}.${col}`)}
-                  className="mr-2"
+                  {...register(
+                    `${question.id}.likertAnswers.${optionIndex}.${col.toLowerCase()}` as const
+                  )}
                 />
               </td>
             ))}
+            <input
+              type="hidden"
+              value={option.id}
+              {...register(
+                `${question.id}.likertAnswers.${optionIndex}.optionId` as const
+              )}
+            />
           </tr>
         ))}
       </tbody>

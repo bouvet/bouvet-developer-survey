@@ -84,6 +84,8 @@ public class SurveyResultsService : ISurveyResultsService
                 AdmiredPercentage = total > 0 ? (int)Math.Round((double)admired / total * 100) : 0,
                 DesiredPercentage = total > 0 ? (int)Math.Round((double)desired / total * 100) : 0
             };
+
+            dto.TotalResponses = total;
         }
 
         if (question.Type == "single-choice" || question.Type == "multiple-choice")
@@ -98,9 +100,13 @@ public class SurveyResultsService : ISurveyResultsService
                     Count = count
                 });
             }
+
+            // Sum all counts from options
+            dto.TotalResponses = dto.Options.Sum(o => o.Count);
         }
 
         return dto;
     }
+
 
 }

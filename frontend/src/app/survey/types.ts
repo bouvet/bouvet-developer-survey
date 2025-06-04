@@ -26,11 +26,11 @@ export type QuestionType =
 
 // Base type for all questions
 export type BaseQuestion = {
-  id: string; 
+  id: string;
   type: QuestionType;
   title: string;
   description?: string;
-  sectionId?: string | null; 
+  sectionId?: string | null;
 };
 
 export type SingleChoiceQuestion = BaseQuestion & {
@@ -64,28 +64,32 @@ export type Question =
   | DropdownQuestion
   | MultipleChoiceQuestion
   | LikertQuestion
-  | InputQuestion
+  | InputQuestion;
 
 export type Option = {
-  id: string; 
+  id: string;
   value: string;
 };
 
-export type SurveyResponseAnswer = {
-  questionId: string;
-  optionIds: string[];
+export type LikertAnswer = {
+  optionId: string;
+  admired: boolean;
+  desired: boolean;
+};
+
+export type SurveyQuestionAnswer = {
+  optionIds?: string[];
+  likertAnswers?: LikertAnswer[];
   freeTextAnswer?: string;
 };
 
 export type SurveyResponseDto = {
   respondentId: string;
   surveyId: string;
-  answers: SurveyResponseAnswer[];
+  answers: SurveyQuestionAnswer[];
 };
+
+// React Hook Form state type
 export type SurveyFormState = {
-  [key: string]: any;
+  [questionId: string]: SurveyQuestionAnswer;
 };
-
-
-
-

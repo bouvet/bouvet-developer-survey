@@ -23,4 +23,19 @@ public class BouvetAnswerDto
 
     [JsonPropertyName("freeTextAnswer")]
     public string? FreeTextAnswer { get; set; }
+
+    [JsonPropertyName("likertAnswers")]
+    public List<LikertAnswerDto>? LikertAnswers { get; set; }
+}
+
+public class LikertAnswerDto
+{
+    [JsonPropertyName("optionId")]
+    public string OptionId { get; set; } = default!;
+
+    [JsonPropertyName("admired")]
+    public bool Admired { get; set; }
+
+    [JsonPropertyName("desired")]
+    public bool Desired { get; set; }
 }
