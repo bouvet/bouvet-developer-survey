@@ -11,10 +11,7 @@ interface Props {
 const DropdownQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <select
-      {...register(question.id)}
-      className="border p-2  max-w-56"
-    >
+    <select {...register(question.id)} className="border p-2 max-w-56">
       {question?.options?.map((option, index) => (
         <option key={index} value={option.id}>
           {option.value}
@@ -24,4 +21,4 @@ const DropdownQuestion: FC<Props> = ({ question }) => {
   );
 };
 
-export default DropdownQuestion
+export default DropdownQuestion;
