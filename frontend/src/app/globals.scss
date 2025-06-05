@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Bouvet colors */
+  --primary-colossus: #11133c;
+  --primary-nerdy-off-white: #f9ead4;
+  --primary-black: #030504;
+  --primary-white: #ffffff;
+  --contrast-boris-orange: #f9a86f;
+  --contrast-hal-red: #eb1d4b;
+  --contrast-network-green: #79fe9d;
+  --secondary-cloak-blue: #0617bf;
+  --secondary-blue: #1d43c6;
+  --secondary-worp-blue: #c3d5e1;
+  --secondary-cool-blue: #eef5f9;
+  --secondary-collins-gray: #f2f2f2;
+  --darkmode-black: #1a1b26;
+  --darkmode-white: #e4e4e4;
+
+  --background: var(--primary-nerdy-off-white);
+  --foreground: var(--primary-colossus);
+}
+
+[data-mode="dark"] {
+  --background: var(--darkmode-black);
+  --foreground: var(--darkmode-white);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Inter", Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  /* Survey section */
+  main {
+    @apply flex flex-col gap-14 md:gap-20 lg:gap-40 pt-40 flex-1;
+  }
+
+  .survey-section {
+    @apply px-5 mx-auto flex flex-col max-w-8xl lg:w-full scroll-mt-32;
+  }
+
+  .section-title {
+    @apply w-full text-5xl font-bold mb-5;
+  }
+
+  .chart-container {
+    @apply w-full h-full relative px-8 flex flex-col justify-between;
+  }
+}
+
+.chart-container.dotplot .ytick text {
+  text-anchor: start;
+}

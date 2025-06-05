@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "./globals.scss";
 import { ThemeProvider } from "next-themes";
 import SessionWrapper from "@/app/api/auth/[...nextauth]/SessionWrapper";
 

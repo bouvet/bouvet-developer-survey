@@ -12,13 +12,19 @@ export const useSurveyForm = () => {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/survey-definitions/2025`;
 
   const accessToken = session?.accessToken;
-  const { data }: { data: Survey } = useSWR(
+  const {
+    data,
+    isLoading,
+    isValidating,
+  }: { data: Survey; isLoading: boolean; isValidating: boolean } = useSWR(
     [url, accessToken],
     ([url, accessToken]) => fetcher({ url, accessToken })
   );
+
   const hashUserId = (userId: string) => {
     return crypto.createHash("sha256").update(userId).digest("hex");
   };
+
   const submitForm = async (formData: SurveyFormState) => {
     if (!session?.userId) return;
 
@@ -62,5 +68,7 @@ export const useSurveyForm = () => {
     methods,
     onSubmit: methods.handleSubmit(submitForm),
     surveyData: data,
+    isLoading,
+    isValidating,
   };
 };
