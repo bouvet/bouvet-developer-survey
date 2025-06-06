@@ -70,7 +70,12 @@ body {
     grid-auto-rows: 20px minmax(200px, 1fr) 50px;
     grid-auto-columns: 100%;
     grid-row-gap: 2rem;
-    height: calc(100dvh - 21.5rem);
+    height: calc(100dvh - 16rem);
+
+    @media (width >= 48rem) { // "md" dont know how to import it fml
+      height: calc(100dvh - 21.5rem);
+    }
+
     @apply justify-center md:px-app-padding-x;
 
     .progress-bar {
