@@ -24,7 +24,7 @@ const FormSection: FC<Props> = ({ section, questions }) => {
   return (
     <section
       key={section?.id}
-      className="flex flex-col gap-2 survey-section bg-white dark:bg-slate-800"
+      className="flex flex-col gap-2 survey-section bg-white dark:bg-slate-800 form-section"
     >
       <div className="mt-10">
         <h1 className="section-title">{section?.title}</h1>
@@ -32,7 +32,7 @@ const FormSection: FC<Props> = ({ section, questions }) => {
           {section?.description}
         </p>
       </div>
-      <div className="flex flex-col w-full h-[875px] overflow-auto">
+      <div className="flex flex-col w-full overflow-auto">
         {sectionQuestions}
       </div>
     </section>

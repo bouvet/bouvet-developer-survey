@@ -24,10 +24,7 @@ const SurveyPage = () => {
   return (
     <Suspense fallback={<Spinner />}>
       <FormProvider {...methods}>
-        <form
-          onSubmit={onSubmit}
-          className="space-y-6 flex flex-col justify-center px-app-padding-x "
-        >
+        <form onSubmit={onSubmit} className="survey-wrapper">
           <div className="max-w-5xl w-full bg-gray-300 h-3 rounded mx-auto">
             <div
               role="progressbar"
@@ -41,7 +38,7 @@ const SurveyPage = () => {
             questions={surveyData?.questions}
           />
           <div
-            className={`flex w-full  max-w-8xl mx-auto ${isFirstStep ? "place-content-end" : "justify-between"}`}
+            className={`flex w-full max-w-8xl mx-auto button-wrapper ${isFirstStep ? "place-content-end" : "justify-between"}`}
           >
             {!isFirstStep && (
               <button

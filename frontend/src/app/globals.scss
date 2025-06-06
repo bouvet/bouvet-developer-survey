@@ -55,11 +55,37 @@ body {
   }
 
   .section-title {
-    @apply w-full text-5xl font-bold mb-5;
+    word-wrap: break-word;
+    @apply w-full text-5xl font-bold mb-5 break-words hyphens-auto;
+
   }
 
   .chart-container {
     @apply w-full h-full relative px-8 flex flex-col justify-between;
+  }
+
+  .survey-wrapper {
+    display: grid;
+    grid-template-areas: "progress-bar" "form-section" "button-wrapper";
+    grid-auto-rows: 20px minmax(200px, 1fr) 50px;
+    grid-auto-columns: 100%;
+    grid-row-gap: 2rem;
+    height: calc(100dvh - 21.5rem);
+    @apply justify-center md:px-app-padding-x;
+
+    .progress-bar {
+      grid-area: progress-bar;
+    }
+
+    .form-section {
+      grid-area: form-section;
+      overflow: auto;
+      max-width: 100dvh;
+    }
+
+    .button-wrapper {
+      grid-area: button-wrapper;
+    }
   }
 }
 

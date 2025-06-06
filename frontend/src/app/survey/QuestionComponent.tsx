@@ -14,7 +14,7 @@ interface Props {
 const QuestionComponent: FC<Props> = ({ question }: Props) => (
   <fieldset
     key={question.id}
-    className="mt-4 bg-white dark:bg-slate-800 py-6 px-10 flex flex-col gap-2"
+    className="mt-4 bg-white dark:bg-slate-800 py-6 md-px-10 flex flex-col gap-2"
   >
     <legend>
       <h2 className="md:text-4xl font-bold md:mb-5 break-words text-2xl">
