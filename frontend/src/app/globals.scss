@@ -70,7 +70,7 @@ body {
     grid-auto-rows: 20px minmax(200px, 1fr) 50px;
     grid-auto-columns: 100%;
     grid-row-gap: 2rem;
-    height: calc(100dvh - 16rem);
+    height: calc(100dvh - 16.5rem);
 
     @media (width >= 48rem) { // "md" dont know how to import it fml
       height: calc(100dvh - 21.5rem);
@@ -85,7 +85,6 @@ body {
     .form-section {
       grid-area: form-section;
       overflow: auto;
-      max-width: 100dvh;
     }
 
     .button-wrapper {

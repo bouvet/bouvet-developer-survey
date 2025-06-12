@@ -11,7 +11,7 @@ interface Props {
 const DropdownQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <select {...register(question.id)} className="border p-2 max-w-56">
+    <select {...register(question.id)} className="border p-2 w-fit min-w-32">
       {question?.options?.map((option, index) => (
         <option key={index} value={option.id}>
           {option.value}
