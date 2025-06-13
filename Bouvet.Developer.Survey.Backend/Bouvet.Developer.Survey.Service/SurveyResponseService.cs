@@ -101,45 +101,16 @@ namespace Bouvet.Developer.Survey.Service
                 }
 
                 // Handle option-based answers (including Likert)
-                if (answerDto.OptionExternalIds != null && answerDto.OptionExternalIds.Any())
+                // Handle likertAnswers (preferred over parsing optionIds for likert data)
+                if (answerDto.LikertAnswers != null && answerDto.LikertAnswers.Any())
                 {
-                    foreach (var optionInputString in answerDto.OptionExternalIds)
+                    foreach (var likertAnswer in answerDto.LikertAnswers)
                     {
-                        string optionExternalIdToLookup = optionInputString;
-                        bool? hasWorkedWithValue = null;
-                        bool? wantsToWorkWithValue = null;
-
-                        if (questionEntity.Type != null && questionEntity.Type.Equals("likert", StringComparison.OrdinalIgnoreCase))
-                        {
-                            var parts = optionInputString.Split('-');
-                            if (parts.Length == 2)
-                            {
-                                optionExternalIdToLookup = parts[0];
-                                string likertAspect = parts[1];
-                                if (likertAspect.Equals("Admired", StringComparison.OrdinalIgnoreCase)) // Consider making these constants
-                                    hasWorkedWithValue = true;
-                                else if (likertAspect.Equals("Desired", StringComparison.OrdinalIgnoreCase)) // Consider making these constants
-                                    wantsToWorkWithValue = true;
-                                else
-                                {
-                                    _logger.LogWarning("SubmitResponseAsync: Invalid Likert aspect '{LikertAspect}' for option '{OptionExternalIdToLookup}' on question '{QuestionExternalId}'. RespondentId: {RespondentId}. Skipping.",
-                                        likertAspect, optionExternalIdToLookup, questionEntity.ExternalId, dto.RespondentId);
-                                    continue;
-                                }
-                            }
-                            else
-                            {
-                                _logger.LogWarning("SubmitResponseAsync: Invalid Likert format '{OptionInputString}' for question '{QuestionExternalId}'. RespondentId: {RespondentId}. Skipping.",
-                                    optionInputString, questionEntity.ExternalId, dto.RespondentId);
-                                continue;
-                            }
-                        }
-
-                        var optionEntity = questionEntity.Options.FirstOrDefault(o => o.ExternalId == optionExternalIdToLookup);
+                        var optionEntity = questionEntity.Options.FirstOrDefault(o => o.ExternalId == likertAnswer.OptionId);
                         if (optionEntity == null)
                         {
-                            _logger.LogWarning("SubmitResponseAsync: Option with ExternalId '{OptionExternalIdToLookup}' not found for question '{QuestionExternalId}'. RespondentId: {RespondentId}. Skipping option.",
-                                optionExternalIdToLookup, questionEntity.ExternalId, dto.RespondentId);
+                            _logger.LogWarning("Likert option not found: OptionId={OptionId}, Question={QuestionExternalId}, Respondent={RespondentId}",
+                                likertAnswer.OptionId, questionEntity.ExternalId, dto.RespondentId);
                             continue;
                         }
 
@@ -148,15 +119,16 @@ namespace Bouvet.Developer.Survey.Service
                             UserId = user.Id,
                             QuestionId = questionEntity.Id,
                             OptionId = optionEntity.Id,
-                            HasWorkedWith = hasWorkedWithValue,
-                            WantsToWorkWith = wantsToWorkWithValue,
-                            FreeTextAnswer = null, // Explicitly null for option-based answers
+                            HasWorkedWith = likertAnswer.Admired,
+                            WantsToWorkWith = likertAnswer.Desired,
+                            FreeTextAnswer = null,
                             CreatedAt = utcNow
                         });
                         hasProcessedAnswerForQuestion = true;
                     }
                 }
-                
+
+
                 if (!hasProcessedAnswerForQuestion)
                 {
                      _logger.LogWarning("SubmitResponseAsync: Answer for question '{QuestionExternalId}' had no options and no free-text. RespondentId: {RespondentId}. Skipping.", 
@@ -210,8 +182,10 @@ namespace Bouvet.Developer.Survey.Service
                 {
                     Id = q.ExternalId,
                     Title = q.Title,
+                    Required = q.Required,
                     Description = q.Description,
                     Type = q.Type,
+                    
                     SectionId = q.Section?.ExternalId, 
                     Options = q.Options?.Select(opt => new OptionExportDto
                     {

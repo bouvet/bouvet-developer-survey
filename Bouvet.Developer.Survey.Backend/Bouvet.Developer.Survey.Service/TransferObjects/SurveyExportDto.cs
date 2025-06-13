@@ -23,6 +23,7 @@ public class QuestionExportDto
     public string Type { get; set; } = "";
     public string Description { get; set; } = "";
     public string? SectionId { get; set; }
+    public bool? Required = false;
     public List<OptionExportDto> Options { get; set; } = new();
     public List<string>? Columns { get; set; } // <–– NEW for likert
 }

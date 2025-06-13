@@ -45,6 +45,7 @@ namespace Bouvet.Developer.Survey.Service.Services
                     Id = q.ExternalId,
                     Title = q.Title,
                     Type = q.Type,
+                    Required = q.Required ?? false,
                     Description = q.Description,
                     SectionId = q.Section?.ExternalId,
                     Options = q.Options.Select(o => new OptionExportDto
@@ -144,6 +145,7 @@ namespace Bouvet.Developer.Survey.Service.Services
                         ExternalId = questionExternalId,
                         Type = q.Type,
                         Title = q.Title,
+                        Required = q.Required ?? false,
                         Description = q.Description,
                         Survey = existingSurvey,
                         Section = q.SectionId != null && sectionMap.ContainsKey(q.SectionId)
@@ -156,6 +158,7 @@ namespace Bouvet.Developer.Survey.Service.Services
                 {
                     existingQuestion.Type = q.Type;
                     existingQuestion.Title = q.Title;
+                    existingQuestion.Required = q.Required;
                     existingQuestion.Description = q.Description;
                     existingQuestion.Section = q.SectionId != null && sectionMap.ContainsKey(q.SectionId)
                         ? sectionMap[q.SectionId]

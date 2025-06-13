@@ -75,18 +75,53 @@ public class SurveyResultsService : ISurveyResultsService
 
         if (question.Type == "likert")
         {
-            var total = question.Responses.Count;
-            var admired = question.Responses.Count(r => r.HasWorkedWith == true);
-            var desired = question.Responses.Count(r => r.WantsToWorkWith == true);
+            var totalUsers = question.Responses
+                .Select(r => r.UserId)
+                .Distinct()
+                .Count();
+
+            var admiredTotal = question.Responses.Count(r => r.HasWorkedWith == true);
+            var desiredTotal = question.Responses.Count(r => r.WantsToWorkWith == true);
 
             dto.LikertStats = new LikertStatsDto
             {
-                AdmiredPercentage = total > 0 ? (int)Math.Round((double)admired / total * 100) : 0,
-                DesiredPercentage = total > 0 ? (int)Math.Round((double)desired / total * 100) : 0
+                AdmiredPercentage = totalUsers > 0 ? (int)Math.Round((double)admiredTotal / totalUsers * 100) : 0,
+                DesiredPercentage = totalUsers > 0 ? (int)Math.Round((double)desiredTotal / totalUsers * 100) : 0
             };
 
-            dto.TotalResponses = total;
+            dto.TotalResponses = totalUsers;
+
+            foreach (var option in question.Options)
+            {
+                var optionResponses = question.Responses
+                    .Where(r => r.OptionId == option.Id)
+                    .ToList();
+
+                var admiredRespondents = optionResponses.Count(r => r.HasWorkedWith == true);
+                var desiredOnly = optionResponses.Count(r => r.WantsToWorkWith == true && r.HasWorkedWith != true);
+                var admiredAndDesired = optionResponses.Count(r => r.HasWorkedWith == true && r.WantsToWorkWith == true);
+                var totalOptionResponses = optionResponses.Count;
+
+                var admiredPercentage = admiredRespondents > 0
+                    ? (int)Math.Ceiling((double)admiredAndDesired / admiredRespondents * 100)
+                    : 0;
+
+                var desiredPercentage = totalOptionResponses > 0
+                    ? (int)Math.Ceiling((double)desiredOnly / totalOptionResponses * 100)
+                    : 0;
+
+                dto.Options.Add(new OptionResultDto
+                {
+                    Id = option.ExternalId,
+                    Label = option.Value,
+                    AdmiredPercentage = admiredPercentage,
+                    DesiredPercentage = desiredPercentage
+                });
+            }
         }
+
+
+
 
         if (question.Type == "single-choice" || question.Type == "multiple-choice")
         {

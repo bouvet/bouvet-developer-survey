@@ -6,6 +6,7 @@ public class BouvetQuestion
     public string ExternalId { get; set; } = default!;
     public string Title { get; set; } = default!;
     public string Type { get; set; } = default!;
+    public bool? Required = false;
     public string Description { get; set; } = default!;
 
     public int SurveyId { get; set; }

@@ -11,6 +11,8 @@ namespace Bouvet.Developer.Survey.Service.TransferObjects.Survey.Results.Bouvet
         public string Id { get; set; } = "";
         public string Label { get; set; } = "";
         public int Count { get; set; }
+        public int AdmiredPercentage { get; set; }
+        public int DesiredPercentage { get; set; }
     }
 
 }
