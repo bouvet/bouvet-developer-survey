@@ -7,14 +7,16 @@ import FormSection from "./FormSection";
 import Spinner from "@/app/components/loading/Spinner";
 
 const SurveyPage = () => {
-  const { methods, onSubmit, surveyData, isLoading, isValidating } =
+  const { methods, onSubmit, surveyData, isLoading, isValidating, formState } =
     useSurveyForm();
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = surveyData?.sections?.length || 0;
-
-  const isLastStep = currentStep === totalSteps - 1;
   const isFirstStep = currentStep === 0;
+  const isLastStep = currentStep === totalSteps - 1;
   const section = surveyData?.sections?.[currentStep];
+  const sectionQuestions = surveyData?.questions?.filter(
+    (q) => q.sectionId === section.id
+  );
 
   if (isLoading) return <Spinner />;
 
@@ -31,11 +33,12 @@ const SurveyPage = () => {
               className="h-3 bg-blue-500 rounded-l"
               style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
             ></div>
+            formstate: {JSON.stringify(formState.isValid)}
           </div>
           <FormSection
             key={section?.id}
             section={section}
-            questions={surveyData?.questions}
+            questions={sectionQuestions}
           />
           <div
             className={`flex w-full max-w-8xl mx-auto button-wrapper ${isFirstStep ? "place-content-end" : "justify-between"}`}

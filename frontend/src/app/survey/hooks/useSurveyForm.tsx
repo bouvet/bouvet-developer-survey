@@ -1,13 +1,22 @@
 import { useForm } from "react-hook-form";
-import { Survey, SurveyFormState, SurveyResponseDto } from "../types";
+import {
+  LikertAnswer,
+  LikertFormValue,
+  QuestionType,
+  Survey,
+  SurveyFormState,
+  SurveyQuestionAnswer,
+  SurveyResponseDto,
+} from "../types";
 import crypto from "crypto";
 import { useSession } from "next-auth/react";
 import { fetcher } from "@/app/lib/fetcher";
 import useSWR from "swr";
 
 export const useSurveyForm = () => {
-  const methods = useForm<SurveyFormState>();
-
+  const methods = useForm<SurveyFormState>({defaultValues: {}});
+  const { formState } = methods;
+  console.log(formState)
   const { data: session } = useSession();
   const url = `${process.env.NEXT_PUBLIC_API_URL}/survey-definitions/2025`;
 
@@ -22,7 +31,7 @@ export const useSurveyForm = () => {
   );
 
   const hashUserId = (userId: string) => {
-    return crypto.createHash("sha256").update(userId).digest("hex");
+    return "17da6c9d-3f33-4521-91c2-8963ab3b4f22";
   };
 
   const submitForm = async (formData: SurveyFormState) => {
@@ -30,13 +39,46 @@ export const useSurveyForm = () => {
 
     const userId = hashUserId(session.userId);
 
+    const answers: SurveyQuestionAnswer[] = Object.entries(formData).map(
+      ([questionId, answer]) => {
+        const type = data.questions.find((q) => q.id === questionId)?.type;
+        if (type === QuestionType.INPUT) {
+          return {
+            questionId,
+            freeTextAnswer: answer,
+          } as SurveyQuestionAnswer;
+        }
+        if (type === QuestionType.SINGLE_CHOICE) {
+          return {
+            questionId,
+            optionIds: [answer],
+          } as SurveyQuestionAnswer;
+        }
+
+        if (type === QuestionType.MULTIPLE_CHOICE) {
+          return {
+            questionId,
+            optionIds: answer,
+          } as SurveyQuestionAnswer;
+        }
+
+        if (type === QuestionType.LIKERT) {
+          return {
+            questionId,
+            likertAnswers:
+              (answer as { likertAnswers: LikertAnswer[] })?.likertAnswers ||
+              [],
+          } as SurveyQuestionAnswer;
+        }
+
+        return { questionId } as SurveyQuestionAnswer;
+      }
+    );
+
     const payload: SurveyResponseDto = {
       respondentId: userId,
       surveyId: data.id,
-      answers: Object.entries(formData).map(([questionId, answer]) => ({
-        questionId,
-        ...answer,
-      })),
+      answers,
     };
 
     console.log("✅ Final Payload:", payload);
@@ -70,5 +112,6 @@ export const useSurveyForm = () => {
     surveyData: data,
     isLoading,
     isValidating,
+    formState,
   };
 };

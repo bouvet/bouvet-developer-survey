@@ -29,6 +29,7 @@ export enum QuestionType {
 export type BaseQuestion = {
   id: string;
   type: QuestionType;
+  required?: boolean;
   title: string;
   description?: string;
   sectionId?: string | null;
@@ -79,6 +80,13 @@ export type LikertAnswer = {
 };
 
 export type SurveyQuestionAnswer = {
+  questionId: string;
+  optionIds?: string[];
+  likertAnswers?: LikertAnswer[];
+  freeTextAnswer?: string;
+};
+
+export type FormQuestionAnswer = {
   optionIds?: string[];
   likertAnswers?: LikertAnswer[];
   freeTextAnswer?: string;
@@ -91,6 +99,8 @@ export type SurveyResponseDto = {
 };
 
 // React Hook Form state type
+export type LikertFormValue = Record<string, { admired?: boolean; desired?: boolean }>;
+
 export type SurveyFormState = {
-  [questionId: string]: SurveyQuestionAnswer;
+  [questionId: string]: string | string[] | LikertFormValue;
 };

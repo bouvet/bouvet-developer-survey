@@ -15,8 +15,7 @@ const InputQuestion: FC<Props> = ({ question }) => {
     <Textarea
       {...register(question.id)}
       className="border p-2 rounded"
-    >
-    </Textarea>
+    ></Textarea>
   );
 };
 
