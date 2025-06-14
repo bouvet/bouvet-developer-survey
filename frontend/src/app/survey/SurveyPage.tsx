@@ -57,12 +57,17 @@ const SurveyPage = () => {
               <button
                 type="button"
                 onClick={() => setCurrentStep((prev) => prev + 1)}
-                className="w-20 h-12 py-2 bg-blue-500 text-white"
+                className={`w-20 h-12 py-2 ${!formState.isValid && !isFirstStep ? "bg-blue-300" : "bg-blue-500"} text-white`}
+                disabled={!formState.isValid && !isFirstStep}
               >
                 Neste
               </button>
             ) : (
-              <button type="submit" className="px-4 bg-green-600 text-white">
+              <button
+                type="submit"
+                className="px-4 bg-green-600 text-white"
+                disabled={!formState.isValid}
+              >
                 Svare
               </button>
             )}

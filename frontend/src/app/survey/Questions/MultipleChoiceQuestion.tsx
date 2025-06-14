@@ -11,12 +11,12 @@ interface Props {
 const MultipleChoiceQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <div className='flex flex-col gap-3'>
-      {question?.options?.map((option, index) => (
-        <label key={index} className="block">
+    <div className="flex flex-col gap-3">
+      {question?.options?.map((option) => (
+        <label key={option.id} className="block">
           <input
             type="checkbox"
-            {...register(question.id)}
+            {...register(question.id, { required: question.required })}
             value={option.id}
             className="mr-2"
           />

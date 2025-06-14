@@ -34,7 +34,8 @@ const LikertFormQuestion: FC<Props> = ({ question }) => {
                 <input
                   type="checkbox"
                   {...register(
-                    `${question.id}.likertAnswers.${optionIndex}.${col.toLowerCase()}` as const
+                    `${question.id}.likertAnswers.${optionIndex}.${col.toLowerCase()}` as const,
+                    { required: question.required }
                   )}
                 />
               </td>

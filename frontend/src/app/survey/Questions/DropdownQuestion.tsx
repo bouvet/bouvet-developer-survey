@@ -11,9 +11,18 @@ interface Props {
 const DropdownQuestion: FC<Props> = ({ question }) => {
   const { register } = useFormContext<SurveyFormState>();
   return (
-    <select {...register(question.id)} className="border p-2 w-fit min-w-32">
-      {question?.options?.map((option, index) => (
-        <option key={index} value={option.id}>
+    <select
+      {...register(question.id, { required: question.required })}
+      className="border p-2 w-fit min-w-32"
+    >
+      {/*TODO: should always be there?*/}
+      {question.required && (
+        <option key="empty" value="">
+          Velg fra listen
+        </option>
+      )}
+      {question?.options?.map((option) => (
+        <option key={option.id} value={option.id}>
           {option.value}
         </option>
       ))}
