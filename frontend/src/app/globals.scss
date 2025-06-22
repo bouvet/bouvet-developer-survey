@@ -45,7 +45,6 @@ body {
 }
 
 @layer components {
-  /* Survey section */
   main {
     @apply flex flex-col gap-14 md:gap-20 lg:gap-40 pt-40 flex-1;
   }
@@ -56,8 +55,11 @@ body {
 
   .section-title {
     word-wrap: break-word;
-    @apply w-full text-5xl font-bold mb-5 break-words hyphens-auto;
+    @apply w-full text-4xl font-bold mb-5 break-words hyphens-auto;
 
+    @media (width >= 64rem) { // "lg" dont know how to import it fml
+      @apply text-5xl;
+    }
   }
 
   .chart-container {
@@ -72,7 +74,7 @@ body {
     grid-row-gap: 2rem;
     height: calc(100dvh - 16.5rem);
 
-    @media (width >= 48rem) { // "md" dont know how to import it fml
+    @media (width >= 64rem) { // "lg" dont know how to import it fml
       height: calc(100dvh - 21.5rem);
     }
 
@@ -99,7 +101,7 @@ body {
     appearance: none;
     border: none;
     @apply bg-gray-300 rounded;
-    
+
     &::-webkit-progress-bar {
       @apply bg-gray-300 rounded;
     }
