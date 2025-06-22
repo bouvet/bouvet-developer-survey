@@ -27,14 +27,11 @@ const SurveyPage = () => {
     <Suspense fallback={<Spinner />}>
       <FormProvider {...methods}>
         <form onSubmit={onSubmit} className="survey-wrapper">
-          <div className="max-w-5xl w-full bg-gray-300 h-3 rounded mx-auto">
-            <div
-              role="progressbar"
-              className="h-3 bg-blue-500 rounded-l"
-              style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
-            ></div>
-            formstate: {JSON.stringify(formState.isValid)}
-          </div>
+          <progress
+            max={totalSteps}
+            value={currentStep + 1}
+            className="h-3 max-w-5xl w-full rounded mx-auto"
+          />
           <FormSection
             key={section?.id}
             section={section}
