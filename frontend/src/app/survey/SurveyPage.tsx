@@ -5,6 +5,7 @@ import { useSurveyForm } from "./hooks/useSurveyForm";
 import { Suspense, useState } from "react";
 import FormSection from "./FormSection";
 import Spinner from "@/app/components/loading/Spinner";
+import Link from "next/link";
 
 const SurveyPage = () => {
   const { methods, onSubmit, surveyData, isLoading, isValidating, formState } =
@@ -38,9 +39,9 @@ const SurveyPage = () => {
             questions={sectionQuestions}
           />
           <div
-            className={`flex w-full max-w-8xl mx-auto button-wrapper ${isFirstStep ? "place-content-end" : "justify-between"}`}
+            className={`flex w-full max-w-8xl mx-auto button-wrapper ${isFirstStep || formState.isSubmitSuccessful ? "place-content-end" : "justify-between"}`}
           >
-            {!isFirstStep && (
+            {!isFirstStep && !formState.isSubmitSuccessful && (
               <button
                 type="button"
                 onClick={() => setCurrentStep((prev) => prev - 1)}
@@ -50,7 +51,7 @@ const SurveyPage = () => {
               </button>
             )}
 
-            {!isLastStep ? (
+            {!isLastStep && (
               <button
                 type="button"
                 onClick={() => setCurrentStep((prev) => prev + 1)}
@@ -59,7 +60,8 @@ const SurveyPage = () => {
               >
                 Neste
               </button>
-            ) : (
+            )}
+            {isLastStep && !formState.isSubmitSuccessful && (
               <button
                 type="submit"
                 className="px-4 bg-green-600 text-white"
@@ -67,6 +69,14 @@ const SurveyPage = () => {
               >
                 Svare
               </button>
+            )}
+            {formState.isSubmitSuccessful && (
+              <Link
+                href="/"
+                className="h-12 p-2 bg-gray-300 text-black min- self-end"
+              >
+                Tillbake til startsidan
+              </Link>
             )}
           </div>
         </form>
