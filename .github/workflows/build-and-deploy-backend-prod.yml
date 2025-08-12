@@ -24,7 +24,7 @@ jobs:
       image: mcr.microsoft.com/dotnet/sdk:8.0
     steps:
       - name: Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
@@ -54,7 +54,7 @@ jobs:
         working-directory: ./Bouvet.Developer.Survey.Backend
     steps:
       - name: Checkout GitHub Action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Login via Azure CLI
         uses: azure/login@v1
